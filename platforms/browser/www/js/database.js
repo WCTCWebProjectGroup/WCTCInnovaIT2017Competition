@@ -20,6 +20,15 @@ var database = new function () {
         });
     })();
 
+    // Generates random uid
+    function GenerateRandomUID () {
+        return db.Entries
+            .toArray()
+            .then(function (arrayOfEntries) {
+                return arrayOfEntries.length + 1;
+            });
+    }
+
     // Adds an entry to the db
     this.AddEntryToDB = function (entry) {
         if (entry.uid == null)
@@ -31,15 +40,18 @@ var database = new function () {
         if (entry.tags == null)
             throw "Error: entry._tags was invalid!";
 
-        return db.Entries.add({
-            uid: entry.uid,
-            date: entry.date,
-            body: entry.body,
-            tags: entry.tags
-        }).then(function () {
-            console.log("Added user to the db");
-        }).catch(function (error) {
-            throw "Error occured while adding an entry to the db!";
+        return GenerateRandomUID()
+            .then(function(value) {
+                db.Entries.add({
+                    uid: value,
+                    date: entry.date,
+                    body: entry.body,
+                    tags: entry.tags
+                }).then(function () {
+                    console.log("Added user to the db");
+                }).catch(function (error) {
+                    throw "Error occured while adding an entry to the db!";
+                })
         });
     }
 
