@@ -5,6 +5,18 @@
 // *The database currently has the tables; 'Entries'
 
 var database = new function () {
+
+    // ----- Constructors ----- //
+
+    function Entry () {
+        this.uid = Date.now();
+        this.date = new Date();
+        this.body = {};
+        this.tags = [];
+    }
+
+    // ----- End Constructors ----- //
+
     var db;
 
     function DB_name () {
@@ -63,7 +75,8 @@ var database = new function () {
     this.GetEntryInDB = function (uid) {
         return db.Entries
             .where('uid')
-            .equals(uid);
+            .equals(uid)
+            .first();
     };
 
     // Updates an entry from the db based on the uid
@@ -120,17 +133,6 @@ var database = new function () {
             });
     }
 }
-
-// ----- Constructors ----- //
-
-function Entry () {
-    this.uid = Date.now();
-    this.date = new Date();
-    this.body = {};
-    this.tags = [];
-}
-
-// ----- End Constructors ----- //
 
 // Dummy data generator
 
@@ -189,4 +191,6 @@ function RandTag () {
     ];
 
     var rnd = Math.round(Math.random() * tags.length) - 1;
+
+    return tags[rnd];
 }
