@@ -25,9 +25,16 @@ var database = new function () {
         return db.Entries
             .toArray()
             .then(function (arrayOfEntries) {
-                return arrayOfEntries.length + 1;
+                return arrayOfEntries[arrayOfEntries.length - 1].uid + 1;
             });
     }
+
+    function* idMaker() {
+        var index = 0;
+        while(true)
+            yield index++;
+    }
+
 
     // Adds an entry to the db
     this.AddEntryToDB = function (entry) {
@@ -181,4 +188,16 @@ function CreateRandEntries (numToCreate) {
     }
 
     console.log("Finished adding entries to the db");
+}
+
+// ----- Connectors ----- //
+
+var connector = {
+    
+    GetNextEntries: function () {
+        console.log("GetEntries()");
+    },
+    GetPreviousEntries: function () {
+        console.log("GetPreviousEntries()");
+    }
 }

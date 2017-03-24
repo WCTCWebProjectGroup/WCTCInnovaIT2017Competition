@@ -189,3 +189,15 @@ function CreateRandEntries (numToCreate) {
 
     console.log("Finished adding entries to the db");
 }
+
+// ----- Connectors ----- //
+
+var connector = {
+    
+    GetNextEntries: function () {
+        console.log("GetEntries()");
+    },
+    GetPreviousEntries: function () {
+        console.log("GetPreviousEntries()");
+    }
+}
