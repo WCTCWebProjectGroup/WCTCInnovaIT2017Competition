@@ -71,6 +71,16 @@ var database = new function () {
         return db.Entries.toArray();
     };
 
+    // Gets x entries from the db
+    this.GetEntriesFromDB = function (limit, startingPoint) {
+        return db
+            .Entries
+            .orderBy("date")
+            .reverse()
+            .limit(limit)
+            .toArray();
+    };
+
     // Gets one entry from the db based on the uid
     this.GetEntryInDB = function (uid) {
         return db.Entries
@@ -194,3 +204,69 @@ function RandTag () {
 
     console.log("Finished adding entries to the db");
 }
+
+// ----- Connectors ----- //
+
+var connector = (new function(){
+    let increment = 1;
+    this.GetIncrement = function () {
+        return increment;
+    };
+
+    this.SetIncrement = function (x) {
+        increment = x;
+    };
+    
+    let position = 0;
+    this.GetPosition = function () {
+        return position;
+    };
+
+    this.SetPosition = function (x) {
+        position = x;
+    };
+
+    let min = -1;
+    let max = -1;
+    database.GetAllEntriesFromDB().then(function (arr) {
+        min = 0;
+        max = arr.length;
+    });
+
+    this.GetNextEntries = function () {
+        if (min != -1 && max != -1)
+            database
+                .GetEntriesFromDB(increment, position)
+                .then(function (entries) {
+                    connector.position += connector.increment;
+                    entriesContainer.innerHTML = "";
+                    entries.forEach(function (entry) {
+                        var row = document.createElement("li");
+                        row.innerHTML = JSON.stringify(entry);
+                        entriesContainer.appendChild(row);
+                    });
+                });
+    };
+
+    this.GetPrevEntries = function () {
+        if (min != -1 && max != -1)
+            database
+                .GetEntriesFromDB(
+                    increment, 
+                    position - (increment * 2) < max ? position - (increment * 2) : max)
+                .then(function (entries) {
+                    connector.position += connector.increment;
+                    entriesContainer.innerHTML = "";
+                    entries.forEach(function (entry) {
+                        var row = document.createElement("li");
+                        row.innerHTML = JSON.stringify(entry);
+                        entriesContainer.appendChild(row);
+                    });
+                });
+    }
+});
+
+(function(){
+    var nextBtn = document.getElementById("viewNextEntries");
+    var prevBtn = document.getElementById("viewPrevEntries");
+})();

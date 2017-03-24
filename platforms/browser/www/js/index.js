@@ -30,6 +30,7 @@ var app = {
         this.receivedEvent('deviceready');
         initEvents();
         HasInternetCapabilities();
+        connector.GetNextEntries();
     },
 
     // Update DOM on a Received Event

@@ -37,32 +37,49 @@
     </head>
     <body>
         <header>
-
+            <h1>
+                WCTC 2017 InnovaIT Competition
+            </h1>
+            <hr>
         </header>
 
         <main>
-            <ul class="entriesContainer">
+            <div class="simpleContainer">
+                <h2>Journal Entries</h2>
+                <ul id="entriesContainer">
 
-            </ul>
-
-            <div id="viewEntryContainer">
-            
+                </ul>
+                <button id="viewPrevEntries" value="">
+                    <
+                </button>
+                <button id="viewNextEntries" value="">
+                    >
+                </button>
             </div>
-<<<<<<< HEAD
+
+            <div class="simpleContainer">
+                <h2>View/Edit Entry</h2>
+                <div id="viewEntryContainer">
+                    <input id="entryTitle" type="text">
+                    <input id="entryDate" type="datetime-local">
+                    <textarea id="entryBody"></textarea>
+                    <ul id="entryTags">
+                        <li>
+                            <input class="entryTag" type="text">
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </main>
 
         <footer>
 
         </footer>
         <script type="text/javascript" src="cordova.js"></script>
-=======
-        </div>
->>>>>>> 5c1b237a9b68da81f1cde364e6c3e347bc817bfe
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/connection.js"></script>
+        <script type="text/javascript" src="js/notifications.js"></script>
         <script type="text/javascript" src="js/dexie.js"></script>
         <script type="text/javascript" src="js/database.js"></script>
-        <script type="text/javascript" src="js/notifications.js"></script>
-        <script type="text/javascript" src="js/connection.js"></script>
-        <script type="text/javascript" src="cordova.js"></script>
     </body>
 </html>

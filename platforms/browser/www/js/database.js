@@ -37,20 +37,9 @@ var database = new function () {
         return db.Entries
             .toArray()
             .then(function (arrayOfEntries) {
-<<<<<<< HEAD
-                return arrayOfEntries[arrayOfEntries.length - 1].uid + 1;
-=======
                 return arrayOfEntries.length > 0 ? arrayOfEntries[arrayOfEntries.length - 1].uid + 1 : 1;
->>>>>>> 5c1b237a9b68da81f1cde364e6c3e347bc817bfe
             });
     }
-
-    function* idMaker() {
-        var index = 0;
-        while(true)
-            yield index++;
-    }
-
 
     // Adds an entry to the db
     this.AddEntryToDB = function (entry) {
@@ -80,6 +69,16 @@ var database = new function () {
     // Gets all entries from the db
     this.GetAllEntriesFromDB = function () {
         return db.Entries.toArray();
+    };
+
+    // Gets x entries from the db
+    this.GetEntriesFromDB = function (limit, startingPoint) {
+        return db
+            .Entries
+            .orderBy("date")
+            .reverse()
+            .limit(limit)
+            .toArray();
     };
 
     // Gets one entry from the db based on the uid
@@ -203,21 +202,72 @@ function RandTag () {
 
     var rnd = Math.round(Math.random() * tags.length) - 1;
 
-<<<<<<< HEAD
     console.log("Finished adding entries to the db");
 }
 
 // ----- Connectors ----- //
 
-var connector = {
+var connector = (new function(){
+    let increment = 1;
+    this.GetIncrement = function () {
+        return increment;
+    };
+
+    this.SetIncrement = function (x) {
+        increment = x;
+    };
     
-    GetNextEntries: function () {
-        console.log("GetEntries()");
-    },
-    GetPreviousEntries: function () {
-        console.log("GetPreviousEntries()");
+    let position = 0;
+    this.GetPosition = function () {
+        return position;
+    };
+
+    this.SetPosition = function (x) {
+        position = x;
+    };
+
+    let min = -1;
+    let max = -1;
+    database.GetAllEntriesFromDB().then(function (arr) {
+        min = 0;
+        max = arr.length;
+    });
+
+    this.GetNextEntries = function () {
+        if (min != -1 && max != -1)
+            database
+                .GetEntriesFromDB(increment, position)
+                .then(function (entries) {
+                    connector.position += connector.increment;
+                    entriesContainer.innerHTML = "";
+                    entries.forEach(function (entry) {
+                        var row = document.createElement("li");
+                        row.innerHTML = JSON.stringify(entry);
+                        entriesContainer.appendChild(row);
+                    });
+                });
+    };
+
+    this.GetPrevEntries = function () {
+        if (min != -1 && max != -1)
+            database
+                .GetEntriesFromDB(
+                    increment, 
+                    position - (increment * 2) < max ? position - (increment * 2) : max)
+                .then(function (entries) {
+                    connector.position += connector.increment;
+                    entriesContainer.innerHTML = "";
+                    entries.forEach(function (entry) {
+                        var row = document.createElement("li");
+                        row.innerHTML = JSON.stringify(entry);
+                        entriesContainer.appendChild(row);
+                    });
+                });
     }
-=======
-    return tags[rnd];
->>>>>>> 5c1b237a9b68da81f1cde364e6c3e347bc817bfe
-}
+});
+
+(function(){
+    var nextBtn = document.getElementById("viewNextEntries");//.addEventListener("click", connector.GetNextEntries())
+    var prevBtn = document.getElementById("viewPrevEntries");
+    console.log("test");
+})();

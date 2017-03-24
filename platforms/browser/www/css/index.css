@@ -101,3 +101,8 @@ h1 {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
 }
+
+.simpleContainer {
+    outline: 2px solid black;
+    display: block;
+}
