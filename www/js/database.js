@@ -5,6 +5,18 @@
 // *The database currently has the tables; 'Entries'
 
 var database = new function () {
+
+    // ----- Constructors ----- //
+
+    function Entry () {
+        this.uid = Date.now();
+        this.date = new Date();
+        this.body = {};
+        this.tags = [];
+    }
+
+    // ----- End Constructors ----- //
+
     var db;
 
     function DB_name () {
@@ -25,32 +37,24 @@ var database = new function () {
         return db.Entries
             .toArray()
             .then(function (arrayOfEntries) {
-                return arrayOfEntries[arrayOfEntries.length - 1].uid + 1;
+                return arrayOfEntries.length > 0 ? arrayOfEntries[arrayOfEntries.length - 1].uid + 1 : 1;
             });
     }
 
-    function* idMaker() {
-        var index = 0;
-        while(true)
-            yield index++;
-    }
-
-
     // Adds an entry to the db
     this.AddEntryToDB = function (entry) {
+        if (entry.date == null)
+            throw "Error: entry.date was invalid!";
+        if (entry.body == null)
+            throw "Error: entry.body was invalid!";
+        if (entry.tags == null)
+            throw "Error: entry.tags was invalid!";
         if (entry.uid == null)
             throw "Error: entry.uid was invalid!";
-        if (entry.date == null)
-            throw "Error: entry._date was invalid!";
-        if (entry.body == null)
-            throw "Error: entry_body was invalid!";
-        if (entry.tags == null)
-            throw "Error: entry._tags was invalid!";
 
-        return GenerateRandomUID()
-            .then(function(value) {
+        return db.transaction('rw', db.Entries, function () {
                 db.Entries.add({
-                    uid: value,
+                    uid: entry.uid,
                     date: entry.date,
                     body: entry.body,
                     tags: entry.tags
@@ -58,7 +62,7 @@ var database = new function () {
                     console.log("Added user to the db");
                 }).catch(function (error) {
                     throw "Error occured while adding an entry to the db!";
-                })
+                });
         });
     }
 
@@ -71,7 +75,8 @@ var database = new function () {
     this.GetEntryInDB = function (uid) {
         return db.Entries
             .where('uid')
-            .equals(uid);
+            .equals(uid)
+            .first();
     };
 
     // Updates an entry from the db based on the uid
@@ -88,7 +93,7 @@ var database = new function () {
 
     // Removes all entries from the db
     this.RemoveAllEntriesInDB = function () {
-        return db.Entries
+        db.Entries
             .clear()
             .then(function () {
                 console.log("Finished clearing the db");
@@ -103,18 +108,31 @@ var database = new function () {
                 console.log("Deleted entry");
             });
     }
+
+    // Enters dummy entries into the database
+    this.CreateRandEntries = function (numToCreate) {
+        let promises = [];
+    
+        GenerateRandomUID()
+            .then(function (newUid) {
+                for (var i = 0; i < numToCreate; i++) {
+                    let entry = new Entry();
+                    entry.body.text = RandFirstName() + " " + RandLastName() + " " + RandBody();
+                    entry.tags[0] = RandTag();
+                    entry.tags[1] = RandTag();
+                    entry.uid = i + newUid;
+
+                    promises.push(database.AddEntryToDB(entry).then(function () {
+                        console.log("Added entry");
+                    }));
+                }
+            }).then(function () {
+                Promise.all(promises).then(function () {
+                    console.log("Finished adding entries to the db");
+                });
+            });
+    }
 }
-
-// ----- Constructors ----- //
-
-function Entry () {
-    this.uid = Date.now();
-    this.date = new Date();
-    this.body = {};
-    this.tags = [];
-}
-
-// ----- End Constructors ----- //
 
 // Dummy data generator
 
@@ -173,31 +191,6 @@ function RandTag () {
     ];
 
     var rnd = Math.round(Math.random() * tags.length) - 1;
-}
-
-function CreateRandEntries (numToCreate) {
-    for (var i = 0; i < numToCreate; i++) {
-        let entry = new Entry();
-        entry.body.text = RandFirstName() + " " + RandLastName() + " " + RandBody();
-        entry.tags[0] = RandTag();
-        entry.tags[1] = RandTag();
-
-        database.AddEntryToDB(entry).then(function () {
-            console.log("Added entry");
-        });
-    }
 
     console.log("Finished adding entries to the db");
-}
-
-// ----- Connectors ----- //
-
-var connector = {
-    
-    GetNextEntries: function () {
-        console.log("GetEntries()");
-    },
-    GetPreviousEntries: function () {
-        console.log("GetPreviousEntries()");
-    }
 }
