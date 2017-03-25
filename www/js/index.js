@@ -28,9 +28,14 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
-        initEvents();
-        HasInternetCapabilities();
-        connector.GetNextEntries();
+        initialize.forEach(function (init) {
+            init();
+        });
+        connector
+            .GetNextEntries()
+            .then(function () {
+                common.HidePrimaryLoading();
+            });
     },
 
     // Update DOM on a Received Event

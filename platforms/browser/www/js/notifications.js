@@ -1,10 +1,10 @@
 var events = {};
 
-function initEvents() {
+initialize.push(function () {
     if (cordova != null) {
         if (cordova.plugins.notification != null)
         {
-            console.log("Found notifcations plugin!");
+            //console.log("Found notifcations plugin!");
 
             function NotificationObject() {
                 // Create a new event
@@ -44,4 +44,4 @@ function initEvents() {
             events = new NotificationObject();// cordova.plugins.notification.local;
         }
     }
-}
+});

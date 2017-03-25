@@ -1,3 +1,4 @@
+initialize.push(HasInternetCapabilities);
 function HasInternetCapabilities () {
     document.addEventListener("offline", () => {
         console.log("No internet connection");

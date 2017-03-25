@@ -16,6 +16,89 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+/*
+ * --------------- CSS RULES ---------------
+ * 1) Loading images have a z-index of 999
+ * 
+ * ----- General Z-Index Guidelines! -----
+ * NOTE: Style shadows to reflect relative height
+ * 
+ * - Less than or equal to -1: 
+ *  - Background images
+ *  - backgrounds
+ * 
+ * - 0 or 1:
+ *  - Switch
+ * 
+ * - 2:
+ *  - Card (resting)
+ *  - Button (raised & resting)
+ *  - Search bar (resting)
+ * 
+ * - 3:
+ *  - Refresh indicator
+ *  - Search bar scrolled state?
+ * 
+ * - 4:
+ *  - App bar
+ *
+ * - 6:
+ *  - Snackbar
+ *  - Floating action button (resting)
+ * 
+ * - 8:
+ *  - Raised button (pressed)
+ *  - Menu
+ *  - Card (active)
+ *  - Bottom nav bar
+ *
+ * - 9:
+ *  - Submenu
+ *
+ * - 12:
+ *  - Floating action (pressed)
+ * 
+ * - 16:
+ *  - Nav drawer
+ *  - Right drawer
+ *  - Modal bottom sheet
+ *  - Secondary loading gif
+ *
+ * - 24:
+ *  - Dialog Picker / Modal
+ *  - Primary loading gif
+ *
+ * ----- Color Scheme (WIP) -----
+ * main-bg-color: rgb(216, 216, 216)
+ * secondary-bg-color: rgb()
+ * primary-color-main: rgb(0,153,153)
+ *  primary-color-lighter-1: rgb(51,204,204)
+ *  primary-color-lighter-2: rgb(92,204,204)
+ *  primary-color-darker-1: rgb(29,115,115)
+ *  primary-color-darker-2: rgb(0,99,99)
+ * secondary-color-main: rgb(18,64,171)
+ *  secondary-color-lighter-1: rgb(70,113,213)
+ *  secondary-color-lighter-2: rgb(108,140,213)
+ *  secondary-color-darker-1: rgb(42,68,128)
+ *  secondary-color-darker-2: rgb(6,38,111)
+ * tertiary-color-main: rgb(255,170,0)
+ *  tertiary-color-lighter-1: rgb(255,191,64)
+ *  tertiary-color-lighter-2: rgb(255,208,115)
+ *  tertiary-color-darker-1: rgb(191,143,48)
+ *  tertiary-color-darker-2: rgb(166,111,0)
+ * quaternary-color-main: rgb(255,116,0)
+ *  quaternary-color-lighter-1: rgb(255,150,64)
+ *  quaternary-color-lighter-2: rgb(255,178,115)
+ *  quaternary-color-darker-1: rgb(191,113,48)
+ *  quaternary-color-darker-2: rgb(166,75,0)
+ * text-light: rgba(236,237,242, .95)
+ *  text-light-faint: rgba(236,237,242, .75)
+ * text-dark: rgba(14,19,33, .95)
+ *  text-dark-faint: rgba(14,19,33, .75)
+ * background-shadow-default: 0 4px 8px 0 rgba(0,0,0,0.4)
+ */
+
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
 }
@@ -24,24 +107,13 @@ body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
-    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #A7A7A7),
-        color-stop(0.51, #E4E4E4)
-    );
+    background-color:rgb(216, 216, 216);
     background-attachment:fixed;
-    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-size:12px;
     height:100%;
     margin:0px;
     padding:0px;
-    text-transform:uppercase;
     width:100%;
 }
 
@@ -57,6 +129,13 @@ body {
     }
 }
 
+button {
+    margin: 8px;
+    min-height: 30px;
+    min-width: 30px;
+    text-align: center;
+}
+
 h1 {
     font-size:24px;
     font-weight:normal;
@@ -64,6 +143,15 @@ h1 {
     overflow:visible;
     padding:0px;
     text-align:center;
+}
+
+header {
+    color: rgba(236,367,242,.95);
+    background-color: rgb(0,153,153);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: center;
 }
 
 .event {
@@ -102,7 +190,113 @@ h1 {
     -webkit-animation:fade 3000ms infinite;
 }
 
+.pagination-button {
+    background-color: rgb(255,170,0);
+    border-radius: 50%;
+    color: rgba(236,237,242, .95);
+    border: 2px solid rgb(255,191,64);
+    outline: none;
+
+    height: 45px;
+    width: 45px;
+}
+
+.pagination-button:active:hover {
+    background-color: rgb(255,208,115);
+    border: 2px solid rgb(166,111,0);
+}
+
 .simpleContainer {
-    outline: 2px solid black;
+    background: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
     display: block;
+    border: 2px solid rgb(0,153,153);
+    margin: auto;
+    margin-top: 4px;
+    margin-left: 5%;
+    margin-right: 5%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.simpleContainer > * {
+    display: block;
+}
+
+#alertBg {
+    background-color: rgba(14,19,33, .25);
+    visibility: hidden;
+
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#alert {
+    color: rgba(236,237,242, .95);
+    background-color: rgb(255,116,0);
+    border: 2px solid rgb(166,75,0);
+    overflow-y: auto;
+    
+    margin-left: 10%;
+    position: fixed;
+
+    top: 8px;
+    width: 80%;
+    max-height: 100%;
+
+    /*transition: visibility .8s;*/
+}
+
+#alert > #closeAlert {
+    background-color: rgba(236,237,242, .45);;
+    background-image: url("../img/ic_close_white_24dp_2x.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    min-width: 45px;
+    min-height: 45px;
+}
+
+#alert > #alertMessage {
+    margin: auto;
+    margin-top: 45px;
+    padding: 8px;
+    text-align: center;
+    font-size: 16;
+}
+
+#calendar {
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+#calendar ul,
+#calendar ol,
+#calendar li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#loadingGif {
+    background-color: rgb(42,40,38);
+    background-image: url("../img/LoadingGif.gif");
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 24;
+
+    /*transition: visibility 2s;*/
 }

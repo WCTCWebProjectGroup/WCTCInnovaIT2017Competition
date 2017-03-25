@@ -4,6 +4,8 @@
 
 // *The database currently has the tables; 'Entries'
 
+initialize.push(TestFunctions);
+
 var database = new function () {
 
     // ----- Constructors ----- //
@@ -17,7 +19,14 @@ var database = new function () {
 
     // ----- End Constructors ----- //
 
-    var db;
+    var _db = {};
+    function _createCalendar() {
+        // Default Calendar
+        $('.calendar').pignoseCalendar({
+            select: onClickHandler,
+            enabledDates: goodDates
+        });
+    }
 
     function DB_name () {
         return "TripMySchoolJournalDB";
@@ -25,16 +34,16 @@ var database = new function () {
 
     // Setup database
     (function () {
-        db = new Dexie(DB_name());
+        _db = new Dexie(DB_name());
 
-        return db.version(1).stores({
+        return _db.version(1).stores({
             Entries: 'uid, date, body, tags'
         });
     })();
 
     // Generates random uid
     function GenerateRandomUID () {
-        return db.Entries
+        return _db.Entries
             .toArray()
             .then(function (arrayOfEntries) {
                 return arrayOfEntries.length > 0 ? arrayOfEntries[arrayOfEntries.length - 1].uid + 1 : 1;
@@ -52,8 +61,8 @@ var database = new function () {
         if (entry.uid == null)
             throw "Error: entry.uid was invalid!";
 
-        return db.transaction('rw', db.Entries, function () {
-                db.Entries.add({
+        return _db.transaction('rw', _db.Entries, function () {
+                _db.Entries.add({
                     uid: entry.uid,
                     date: entry.date,
                     body: entry.body,
@@ -68,12 +77,12 @@ var database = new function () {
 
     // Gets all entries from the db
     this.GetAllEntriesFromDB = function () {
-        return db.Entries.toArray();
+        return _db.Entries.toArray();
     };
 
     // Gets x entries from the db
-    this.GetEntriesFromDB = function (limit, startingPoint) {
-        return db
+    this.GetEntriesFromDB = function (limit) {
+        return _db
             .Entries
             .orderBy("date")
             .reverse()
@@ -83,7 +92,7 @@ var database = new function () {
 
     // Gets one entry from the db based on the uid
     this.GetEntryInDB = function (uid) {
-        return db.Entries
+        return _db.Entries
             .where('uid')
             .equals(uid)
             .first();
@@ -91,7 +100,7 @@ var database = new function () {
 
     // Updates an entry from the db based on the uid
     this.UpdateEntryInDB = function (entry) {
-        return db.Entries
+        return _db.Entries
             .where('uid')
             .equals(entry._uid)
             .modify({
@@ -103,7 +112,7 @@ var database = new function () {
 
     // Removes all entries from the db
     this.RemoveAllEntriesInDB = function () {
-        db.Entries
+        return _db.Entries
             .clear()
             .then(function () {
                 console.log("Finished clearing the db");
@@ -112,7 +121,7 @@ var database = new function () {
 
     // Removes one entry from the db based on the uid
     this.RemoveEntryFromDB = function (uid) {
-        return db.Entries
+        return _db.Entries
             .delete(uid)
             .then(function () {
                 console.log("Deleted entry");
@@ -122,8 +131,9 @@ var database = new function () {
     // Enters dummy entries into the database
     this.CreateRandEntries = function (numToCreate) {
         let promises = [];
+        let newEntries = [];
     
-        GenerateRandomUID()
+        return GenerateRandomUID()
             .then(function (newUid) {
                 for (var i = 0; i < numToCreate; i++) {
                     let entry = new Entry();
@@ -132,14 +142,17 @@ var database = new function () {
                     entry.tags[1] = RandTag();
                     entry.uid = i + newUid;
 
+                    newEntries.push(entry);
                     promises.push(database.AddEntryToDB(entry).then(function () {
                         console.log("Added entry");
                     }));
                 }
             }).then(function () {
-                Promise.all(promises).then(function () {
+                return Promise.all(promises).then(function () {
                     console.log("Finished adding entries to the db");
                 });
+            }).then(function () {
+                return newEntries;
             });
     }
 }
@@ -208,65 +221,158 @@ function RandTag () {
 // ----- Connectors ----- //
 
 var connector = (new function(){
-    let increment = 1;
-    this.GetIncrement = function () {
-        return increment;
-    };
+    var _increment = 10;
+    var _position = 0;
+    var _min = -1;
+    var _max = -1;
+    var _allEntries = [];
+    var _prevEntries = [];
+    var _currentEntries = [];
+    var _afterEntries = [];
+    var _ready = false;
 
+    function _GetNextEntry () {
+        if (_afterEntries.length > 0) {
+            _currentEntries.push(_afterEntries.shift());
+        }
+    }
+
+    function _GetPrevEntry () {
+        if (_prevEntries.length > 0) {
+            _currentEntries.unshift(_prevEntries.pop());
+        }
+    }
+
+    function _RemoveLastEntry () {
+        if (_currentEntries.length > 0) {
+            _afterEntries.unshift(_currentEntries.pop());
+        }
+    }
+
+    function _RemoveFirstEntry () {
+        if (_currentEntries.length > 0) {
+            _prevEntries.push(_currentEntries.shift());
+        }
+    }
+
+    this.GetIncrement = function () {
+        return _increment;
+    };
     this.SetIncrement = function (x) {
-        increment = x;
+        _increment = x;
     };
     
-    let position = 0;
     this.GetPosition = function () {
-        return position;
+        return _position;
     };
-
     this.SetPosition = function (x) {
-        position = x;
+        _position = x;
     };
 
-    let min = -1;
-    let max = -1;
-    database.GetAllEntriesFromDB().then(function (arr) {
-        min = 0;
-        max = arr.length;
-    });
+    this.UpdateEntries = _UpdateEntries;
+    function _UpdateEntries () {
+        _ready = false;
+        database
+            .GetAllEntriesFromDB()
+            .then(function (newEntries) {
+                _allEntries = newEntries;
+                _min = 0;
+                _max = arr.length;
+                // TODO: Check to see if any new entries need to be added to the screen
+            });
+    };
 
     this.GetNextEntries = function () {
-        if (min != -1 && max != -1)
-            database
-                .GetEntriesFromDB(increment, position)
-                .then(function (entries) {
-                    connector.position += connector.increment;
-                    entriesContainer.innerHTML = "";
-                    entries.forEach(function (entry) {
-                        var row = document.createElement("li");
-                        row.innerHTML = JSON.stringify(entry);
-                        entriesContainer.appendChild(row);
-                    });
-                });
+        _ready = false;
+        _currentEntries.forEach(function () {
+            _RemoveFirstEntry();
+            _GetNextEntry();
+        });
+
+        while (_currentEntries.length > increment && _afterEntries.length > 0) {
+            _GetNextEntry();
+        }
+
+        _ready = true;
     };
 
     this.GetPrevEntries = function () {
-        if (min != -1 && max != -1)
+        if (_min != -1 && _max != -1)
             database
-                .GetEntriesFromDB(
-                    increment, 
-                    position - (increment * 2) < max ? position - (increment * 2) : max)
+                .GetEntriesFromDB(_increment)
                 .then(function (entries) {
                     connector.position += connector.increment;
                     entriesContainer.innerHTML = "";
                     entries.forEach(function (entry) {
-                        var row = document.createElement("li");
-                        row.innerHTML = JSON.stringify(entry);
+                        var row = CreateEntryElement(entry);
                         entriesContainer.appendChild(row);
                     });
                 });
+
+        function CreateEntryElement (entry) {
+            var liElement = document.createElement("li");
+            var aElement = document.createElement("a");
+            
+            aElement.innerHTML = `[${entry.uid}] - ${entry.date.toLocaleString()}`;
+            liElement.appendChild(aElement);
+            
+            return liElement;
+        }
     }
+
+    // Initialize _min, _max, and _allEntries. Also hide loading screen
+    UpdateEntries();
 });
 
+// WIP: This anon function will attach the needed event listeners that will paginate
+// the entries list
 (function(){
     var nextBtn = document.getElementById("viewNextEntries");
     var prevBtn = document.getElementById("viewPrevEntries");
 })();
+
+// ----- Test functions ------
+
+// Creating rand entries connector
+function TestFunctions () {
+    if (document.querySelectorAll("#testFunctionContainer").length > 0) {
+
+        // Create random entries input
+        document
+            .getElementById("startCreatingRandEntries")
+            .addEventListener("click", () => {
+                var input = document.getElementById("createRandomEntries").value;
+                common.ShowPrimaryLoading();
+                database.CreateRandEntries(input)
+                    .then(function (entries) {
+                        common.DisplayAlert(JSON.stringify(entries));
+                        common.HidePrimaryLoading();
+                    });
+            });
+
+        // Clear out the database
+        document
+            .getElementById("removeAllEntries")
+            .addEventListener("click", () => {
+                common.ShowPrimaryLoading();
+                database.RemoveAllEntriesInDB()
+                    .then(function () {
+                        common.HidePrimaryLoading();
+                        common.DisplayAlert("Removed all entries in the db");
+                    });
+            });
+
+        // View all entries
+        document
+            .getElementById("viewAllEntries")
+            .addEventListener("click", () => {
+                database
+                    .GetAllEntriesFromDB()
+                    .then(function (entries) {
+                        document.getElementById("allEntries").innerHTML = (JSON.stringify(entries, null, 2));
+                    });
+            });
+    }
+}
+
+// ----- END Test functions ------
