@@ -31,11 +31,11 @@ var app = {
         initialize.forEach(function (init) {
             init();
         });
-        connector
-            .GetNextEntries()
-            .then(function () {
-                common.HidePrimaryLoading();
-            });
+        // connector
+        //     .GetNextEntries()
+        //     .then(function () {
+        //         common.HidePrimaryLoading();
+        //     });
     },
 
     // Update DOM on a Received Event

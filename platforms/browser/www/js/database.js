@@ -23,10 +23,12 @@ var database = new function () {
     function _createCalendar() {
         // Default Calendar
         $('.calendar').pignoseCalendar({
-            select: onClickHandler,
-            enabledDates: goodDates
+            //select: onClickHandler,
+            //enabledDates: goodDates
         });
     }
+
+    initialize.push(_createCalendar);
 
     function DB_name () {
         return "TripMySchoolJournalDB";
@@ -226,7 +228,57 @@ var connector = (new function(){
     var _min = -1;
     var _max = -1;
     var _allEntries = [];
+    var _prevEntries = [];
+    var _currentEntries = [];
+    var _afterEntries = [];
     var _ready = false;
+
+    function CreateEntryElement (entry) {
+        var liElement = document.createElement("li");
+        var aElement = document.createElement("a");
+        
+        aElement.setAttribute("id", "entry-" + entry.uid);
+        aElement.innerHTML = `[${entry.uid}] - ${entry.date.toLocaleString()}`;
+        liElement.appendChild(aElement);
+        
+        return liElement;
+    }
+
+    function _GetNextEntry () {
+        if (_afterEntries.length > 0) {
+            _currentEntries.push(_afterEntries.shift());
+            _position++;
+
+            // Create the element and append it to the list
+            var nextEntry = CreateEntryElement(_currentEntries[_currentEntries.length - 1]);
+            document.getElementById("entriesContainer").appendChild(nextEntry);
+        }
+    }
+
+    function _GetPrevEntry () {
+        if (_prevEntries.length > 0) {
+            _currentEntries.unshift(_prevEntries.pop());
+            _position--;
+
+            // Create the element and prepend it to the list
+            var prevEntry = CreateEntryElement(_currentEntries[0]);
+            document.getElementById("entriesContainer").prepend(prevEntry);
+        }
+    }
+
+    function _RemoveLastEntry () {
+        if (_currentEntries.length > 0) {
+            _afterEntries.unshift(_currentEntries.pop());
+            document.getElementById("entriesContainer").removeChild(document.querySelector("#entriesContainer li:last-child"));
+        }
+    }
+
+    function _RemoveFirstEntry () {
+        if (_currentEntries.length > 0) {
+            _prevEntries.push(_currentEntries.shift());
+            document.getElementById("entriesContainer").removeChild(document.querySelector("#entriesContainer li:first-child"));
+        }
+    }
 
     this.GetIncrement = function () {
         return _increment;
@@ -242,57 +294,75 @@ var connector = (new function(){
         _position = x;
     };
 
-    this.UpdateEntries = function () {
+    this.UpdateEntries = _UpdateEntries;
+    function _UpdateEntries () {
         _ready = false;
         database
             .GetAllEntriesFromDB()
             .then(function (newEntries) {
                 _allEntries = newEntries;
+                
+                // Set max & min
+                _min = 0;
+                _max = _allEntries.length;
+                
                 // TODO: Check to see if any new entries need to be added to the screen
+
+                // Update _prevEntries, _currentEntries, and _afterEntries
+                _prevEntries = _allEntries.slice(0, _position);
+                _currentEntries = _allEntries.slice(_position, _increment);
+                _afterEntries = _allEntries.slice(_position + _increment)
+
+                // Clear the current entry elements
+                document.getElementById("entriesContainer").innerHTML = "";
+
+                // Create the elements in _currentEntries
+                _currentEntries.forEach(function (entry) {
+                    var entryEl = CreateEntryElement(entry);
+                    document.getElementById("entriesContainer").appendChild(entryEl);
+                });
             });
     };
 
-    // Initialize _min, _max, and _allEntries. Also hide loading screen
-    database.GetAllEntriesFromDB().then(function (arr) {
-        _min = 0;
-        _max = arr.length;
-    });
-
     this.GetNextEntries = function () {
-        return database
-            .GetEntriesFromDB(_increment)
-            .then(function (entries) {
-                connector.position += connector.increment;
-                entriesContainer.innerHTML = "";
-                entries.forEach(function (entry) {
-                    var row = document.createElement("li");
-                    row.innerHTML = entry.date.toLocaleString();
-                    entriesContainer.appendChild(row);
-                });
-            });
+        _ready = false;
+        var limit = _currentEntries.length;
+        for (var i = 0; i < limit; i++) {
+            _RemoveFirstEntry();
+            _GetNextEntry();
+        };
+
+        while (_currentEntries.length < _increment && _afterEntries.length > 0) {
+            _GetNextEntry();
+        }
+
+        _ready = true;
     };
 
     this.GetPrevEntries = function () {
-        if (_min != -1 && _max != -1)
-            database
-                .GetEntriesFromDB(_increment)
-                .then(function (entries) {
-                    connector.position += connector.increment;
-                    entriesContainer.innerHTML = "";
-                    entries.forEach(function (entry) {
-                        var row = document.createElement("li");
-                        row.innerHTML = entry.date.toLocaleString();
-                        entriesContainer.appendChild(row);
-                    });
-                });
+         _ready = false;
+        var limit = _currentEntries.length;
+        for (var i = 0; i < limit; i++) {
+            _RemoveLastEntry();
+            _GetPrevEntry();
+        };
+
+        while (_currentEntries.length < _increment && _afterEntries.length > 0) {
+            _GetNextEntry();
+        }
+
+        _ready = true;
     }
+
+    // Initialize _min, _max, and _allEntries. Also hide loading screen
+    _UpdateEntries();
 });
 
 // WIP: This anon function will attach the needed event listeners that will paginate
 // the entries list
 (function(){
-    var nextBtn = document.getElementById("viewNextEntries");
-    var prevBtn = document.getElementById("viewPrevEntries");
+    var nextBtn = document.getElementById("viewNextEntries").addEventListener("click", connector.GetNextEntries);
+    var prevBtn = document.getElementById("viewPrevEntries").addEventListener("click", connector.GetPrevEntries);
 })();
 
 // ----- Test functions ------
@@ -300,7 +370,7 @@ var connector = (new function(){
 // Creating rand entries connector
 function TestFunctions () {
     if (document.querySelectorAll("#testFunctionContainer").length > 0) {
-        
+
         // Create random entries input
         document
             .getElementById("startCreatingRandEntries")
