@@ -31,6 +31,9 @@ var app = {
         initialize.forEach(function (init) {
             init();
         });
+
+        // Once all initializer functions have run, hide the primary loading gif
+        common.HidePrimaryLoading();
         // connector
         //     .GetNextEntries()
         //     .then(function () {
