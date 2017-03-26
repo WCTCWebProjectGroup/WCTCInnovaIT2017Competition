@@ -286,6 +286,10 @@ header {
     margin: 0;
 }
 
+#entriesContainer {
+    list-style: none;
+}
+
 #loadingGif {
     background-color: rgb(42,40,38);
     background-image: url("../img/LoadingGif.gif");

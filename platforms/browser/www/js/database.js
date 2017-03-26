@@ -235,11 +235,11 @@ var connector = (new function(){
 
     function CreateEntryElement (entry) {
         var liElement = document.createElement("li");
-        var aElement = document.createElement("a");
+        var btnElement = document.createElement("button");
         
-        aElement.setAttribute("id", "entry-" + entry.uid);
-        aElement.innerHTML = `[${entry.uid}] - ${entry.date.toLocaleString()}`;
-        liElement.appendChild(aElement);
+        btnElement.setAttribute("id", "entry-" + entry.uid);
+        btnElement.innerHTML = `[${entry.uid}] - ${entry.date.toLocaleString()}`;
+        liElement.appendChild(btnElement);
         
         return liElement;
     }
