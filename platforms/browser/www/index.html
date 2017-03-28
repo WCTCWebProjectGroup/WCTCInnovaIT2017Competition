@@ -69,6 +69,11 @@
 
             <div class="simpleContainer">
                 <h2>Journal Entries</h2>
+
+                <button id="createNewEntry">
+                    Create New Entry
+                </button>
+
                 <ul id="entriesContainer">
 
                 </ul>
@@ -85,12 +90,15 @@
             <div class="simpleContainer">
                 <h2>View/Edit Entry</h2>
                 <div id="viewEntryContainer">
-                    <h3>Title</h3>
+                    <h3>Title - Removing this...</h3>
                     <input id="entryTitle" type="text">
+                    
                     <h3>Date</h3>
                     <input id="entryDate" type="datetime-local">
+                    
                     <h3>Entry</h3>
                     <textarea id="entryBody"></textarea>
+                    
                     <h3>Tags</h3>
                     <select>
                         <option></option>
@@ -98,6 +106,7 @@
                     <input class="entryTag" type="text"><button id="addTag">+Tag</button>
                     <ul id="entryTags">
                     </ul>
+                    
                     <input id="deleteEntry" type="button" value="Delete Entry">
                     <input id="discardChanges" type="button" value="Discard Changes">
                     <input id="saveChanges" type="button" value="Save Changes">

@@ -28,15 +28,16 @@ var database = new function () {
         });
     }
 
+    // Initialize the calendar when ready
     initialize.push(_createCalendar);
 
-    function DB_name () {
+    function _DB_name () {
         return "TripMySchoolJournalDB";
     }
 
     // Setup database
     (function () {
-        _db = new Dexie(DB_name());
+        _db = new Dexie(_DB_name());
 
         return _db.version(1).stores({
             Entries: 'uid, date, body, tags'
@@ -44,7 +45,7 @@ var database = new function () {
     })();
 
     // Generates random uid
-    function GenerateRandomUID () {
+    function _GenerateRandomUID () {
         return _db.Entries
             .toArray()
             .then(function (arrayOfEntries) {
@@ -135,7 +136,7 @@ var database = new function () {
         let promises = [];
         let newEntries = [];
     
-        return GenerateRandomUID()
+        return _GenerateRandomUID()
             .then(function (newUid) {
                 for (var i = 0; i < numToCreate; i++) {
                     let entry = new Entry();
@@ -233,6 +234,7 @@ var connector = (new function(){
     var _afterEntries = [];
     var _ready = false;
 
+    // TODO: Setup event listeners
     function CreateEntryElement (entry) {
         var liElement = document.createElement("li");
         var btnElement = document.createElement("button");
@@ -240,6 +242,11 @@ var connector = (new function(){
         btnElement.setAttribute("id", "entry-" + entry.uid);
         btnElement.innerHTML = `[${entry.uid}] - ${entry.date.toLocaleString()}`;
         liElement.appendChild(btnElement);
+
+        // Event listener for updating the event
+        liElement.addEventListener("click", () => {
+            _GoToUpdateEntry(entry);
+        });
         
         return liElement;
     }
@@ -354,6 +361,66 @@ var connector = (new function(){
         _ready = true;
     }
 
+    // ----- CRUD Functions for entries ----- //
+
+    // Create new entry
+    this.GoToCreateNewEntry = _GoToCreateNewEntry;
+    function _GoToCreateNewEntry () {
+
+    }
+
+    // Retrieve entry - Don't think i need this...
+    this.RetrieveEntry = _RetrieveEntry;
+    function _RetrieveEntry () {
+
+    }
+
+    // Update entry
+    this.GoToUpdateEntry = _GoToUpdateEntry;
+    function _GoToUpdateEntry (entryUID) {
+        // TODO: Display secondary loading screen for this functions duration
+
+        var titleEl = document.getElementById("entryTitle");
+        var dateEl = document.getElementById("entryDate");
+        var bodyEl = document.getElementById("entryBody");
+        var tagsEls = document.getElementById("entryTags");
+        var updateBtn = document.getElementById("saveChanges");
+
+        function createTagElement (tag) {
+            // TODO: Set event listeners for removing/updating the tag
+            var tagBtnEl = document.createElement("button");
+
+            tagBtnEl.innerHTML = tag;
+
+            return tagBtnEl;
+        }
+
+        database
+            .GetEntryInDB(entryUID)
+            .then(function (entry) {
+                // Set title, date, body
+                titleEl.value = `[${entry.uid}] - ${entry.date}`;
+                dateEl.value = entry.date;
+                bodyEl.value = entry.body;
+
+                // Set tags
+                entry.tags.forEach(function (tag) {
+                    var tagEl = createTagElement(tag);
+                    tagsEls.appendChild(tagEl);
+                });
+
+                updateBtn.setAttribute("data-bind", entry.uid);
+            });
+    }
+
+    // Delete entry
+    this.DeleteEntry = _DeleteEntry;
+    function _DeleteEntry () {
+
+    }
+
+    // ----- END CRUD Functions for entries ----- //
+
     // Initialize _min, _max, and _allEntries. Also hide loading screen
     _UpdateEntries();
 });
@@ -361,8 +428,19 @@ var connector = (new function(){
 // WIP: This anon function will attach the needed event listeners that will paginate
 // the entries list
 (function(){
-    var nextBtn = document.getElementById("viewNextEntries").addEventListener("click", connector.GetNextEntries);
-    var prevBtn = document.getElementById("viewPrevEntries").addEventListener("click", connector.GetPrevEntries);
+    // View previous/next entries
+    document.getElementById("viewNextEntries").addEventListener("click", connector.GetNextEntries);
+    document.getElementById("viewPrevEntries").addEventListener("click", connector.GetPrevEntries);
+
+    // Create new entry
+    document.getElementById("createNewEntry").addEventListener("click", connector.GoToCreateNewEntry);
+
+    // Retrieve entry?
+
+    // Update entry
+    document.getElementById("saveChanges").addEventListener("click", () => {
+        
+    });
 })();
 
 // ----- Test functions ------

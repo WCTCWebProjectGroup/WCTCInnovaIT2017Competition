@@ -16,10 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var cordova;
 var app = {
     // Application Constructor
-    initialize: function() {
+    initialize: cordova != null ? function() {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    } : function () {
+        document.addEventListener('DOMContentLoaded', this.onDeviceReady.bind(this), false);
     },
 
     // deviceready Event Handler

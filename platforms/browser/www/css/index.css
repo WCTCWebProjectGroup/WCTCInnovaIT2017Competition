@@ -195,6 +195,7 @@ header {
     border-radius: 50%;
     color: rgba(236,237,242, .95);
     border: 2px solid rgb(255,191,64);
+    font-size: 24px;
     outline: none;
 
     height: 45px;
