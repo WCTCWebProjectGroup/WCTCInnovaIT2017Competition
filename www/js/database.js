@@ -287,6 +287,10 @@ var connector = (new function(){
         }
     }
 
+    function _viewEntry (entry) {
+        document.getElementById("").value = entry;
+    }
+
     this.GetIncrement = function () {
         return _increment;
     };
@@ -326,6 +330,9 @@ var connector = (new function(){
                 // Create the elements in _currentEntries
                 _currentEntries.forEach(function (entry) {
                     var entryEl = CreateEntryElement(entry);
+                    entryEl.addEventListener("click", () => {
+                        viewEntry();
+                    });
                     document.getElementById("entriesContainer").appendChild(entryEl);
                 });
             });
@@ -443,7 +450,7 @@ var connector = (new function(){
     });
 })();
 
-// ----- Test functions ------
+// ----- Test functions ------ //
 
 // Creating rand entries connector
 function TestFunctions () {
