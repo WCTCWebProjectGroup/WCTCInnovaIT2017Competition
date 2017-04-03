@@ -128,6 +128,26 @@
                 <button id="createNewEntry" class="MButton">
                     Create New Entry
                 </button>
+                
+                <hr>
+                <ul class="listNoBullet">
+                    <li>
+                        <label class="MLabel" for="filterByTag">Filter by Tag</label>
+                        <div id="filterableTags"></div>
+                        <!--<input id="filterByTag" class="MInput" type="text">-->
+                    </li>
+                    <li>
+                        <label class="MLabel" for="filterAfterDate">Filter After Date</label>
+                        <input id="filterAfterDate" class="MInput" type="datetime">
+                    </li>
+                        <label class="MLabel" for="filterBeforeDate">Filter Before Date</label>
+                        <input id="filterBeforeDate" class="MInput" type="datetime">
+                    <li>
+                    <li>
+                        <input id="applyFilters" class="MButton" type="button" value="Search">
+                    </li>
+
+                </ul>
 
                 <ul id="entriesContainer">
 
@@ -146,7 +166,7 @@
                 <h2 class="gname">View/Edit Entry</h2>
                 <div id="viewEntryContainer">
                     <h3>Date</h3>
-                    <input id="entryDate" type="datetime-local">
+                    <input id="entryDate" class="MInput" type="datetime-local">
                     
                     <h3>Entry</h3>
                     <textarea id="entryBody"></textarea>
@@ -154,7 +174,7 @@
                     <h3>Tags</h3>
                     <select id="existingEntryTags">
                     </select>
-                    <input class="entryTag" type="text"><button id="addTag" class="MButton">+Tag</button>
+                    <input class="entryTag MInput" type="text"><button id="addTag" class="MButton">+Tag</button>
                     <ul id="entryTags">
                     </ul>
                     
@@ -171,7 +191,7 @@
                     <h3>
                         <label for="createRandomEntries">Create X random entries</label>
                     </h3>
-                    <input id="createRandomEntries" type="number">
+                    <input id="createRandomEntries" class="MInput" type="number">
                     <input id="startCreatingRandEntries" class="MButton" type="button" value="Create X random entries">
 
                     <h3>
@@ -201,7 +221,6 @@
         </footer>
         <script type="text/javascript" src="js/init.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/connection.js"></script>
         <script type="text/javascript" src="js/notifications.js"></script>
@@ -215,5 +234,6 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
         <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
+        <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

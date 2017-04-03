@@ -34,7 +34,7 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
         <link rel="stylesheet" href="css/pignose.calendar.min.css"> <!-- Calendar Css -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css"> <!-- Whysiwyg Css -->
@@ -60,23 +60,94 @@
         </div>
 
         <header>
-            <h1>
-                WCTC 2017 InnovaIT Competition
-            </h1>
+            <table>
+                <tr>
+                    <td>
+                        <div id="openDrawerContainer">
+                            <div id="openDrawer"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <h1>
+                            WCTC 2017 InnovaIT Competition
+                        </h1>
+                    </td>
+
+                    <td>
+                        <div id="openAlertContainer">
+                            <div id="openAlert"></div>
+                        </div>
+                    </td>
+            </table>
         </header>
 
+        <nav id="sideNav" class="MNavDrawer">
+            <table>
+                <tr>
+                    <td id="sideNavClickable">
+                        <div id="drawerContent">
+                            <a id="clsBtn" href="javascript:void(0)" class="closeDrawer"></a>
+                            <div class="VCenter">
+                                <a href="calendar.html">Calendar</a>
+                                <a href="journal.html">Journal</a>
+                                <a href="settings.html">Settings</a>
+                                <div class="testingNav">
+                                    <a href="login.html">login</a>
+                                    <a href="testV2.html">testV2</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alerts">
+                            <div class="MCard">
+                                <h2>Alert 1</h2>
+                            </div>
+                            <div class="MCard">
+                                <h2>Alert 2</h2>
+                            </div>
+                            <div class="MCard">
+                                <h2>Alert 2</h2>
+                            </div>
+                        </div>
+                    </td>
+                    <td id="sideNavNotClickable">
+
+                    </td>
+                </tr>
+            </table>
+        </nav>
+
         <main>
-            <div class="simpleContainer">
-                <h2>Calendar</h2>
+            <div class="MCard">
+                <h2 class="gname">Calendar</h2>
                 <div class="calendar"></div>
             </div>
 
-            <div class="simpleContainer">
-                <h2>Journal Entries</h2>
+            <div class="MCard">
+                <h2 class="gname">Journal Entries</h2>
 
-                <button id="createNewEntry">
+                <button id="createNewEntry" class="MButton">
                     Create New Entry
                 </button>
+                
+                <hr>
+                <ul class="listNoBullet">
+                    <li>
+                        <label class="MLabel" for="filterByTag">Filter by Tag</label>
+                        <div id="filterableTags"></div>
+                        <!--<input id="filterByTag" class="MInput" type="text">-->
+                    </li>
+                    <li>
+                        <label class="MLabel" for="filterAfterDate">Filter After Date</label>
+                        <input id="filterAfterDate" class="MInput" type="datetime">
+                    </li>
+                        <label class="MLabel" for="filterBeforeDate">Filter Before Date</label>
+                        <input id="filterBeforeDate" class="MInput" type="datetime">
+                    <li>
+                    <li>
+                        <input id="applyFilters" class="MButton" type="button" value="Search">
+                    </li>
+
+                </ul>
 
                 <ul id="entriesContainer">
 
@@ -91,11 +162,11 @@
                 </div>
             </div>
 
-            <div class="simpleContainer">
-                <h2>View/Edit Entry</h2>
+            <div class="MCard">
+                <h2 class="gname">View/Edit Entry</h2>
                 <div id="viewEntryContainer">
                     <h3>Date</h3>
-                    <input id="entryDate" type="datetime-local">
+                    <input id="entryDate" class="MInput" type="datetime-local">
                     
                     <h3>Entry</h3>
                     <textarea id="entryBody"></textarea>
@@ -103,35 +174,35 @@
                     <h3>Tags</h3>
                     <select id="existingEntryTags">
                     </select>
-                    <input class="entryTag" type="text"><button id="addTag">+Tag</button>
+                    <input class="entryTag MInput" type="text"><button id="addTag" class="MButton">+Tag</button>
                     <ul id="entryTags">
                     </ul>
                     
-                    <input id="deleteEntry" type="button" value="Delete Entry">
-                    <input id="discardChanges" type="button" value="Discard Changes">
-                    <input id="saveChanges" type="button" value="Save Changes">
+                    <input id="deleteEntry" class="MButton" type="button" value="Delete Entry">
+                    <input id="discardChanges" class="MButton" type="button" value="Discard Changes">
+                    <input id="saveChanges" class="MButton" type="button" value="Save Changes">
                 </div>
             </div>
 
-            <div class="simpleContainer">
-                <h2>Test Functions</h2>
+            <div class="MCard">
+                <h2 class="gname">Test Functions</h2>
                 
                 <div id="testFunctionContainer">
                     <h3>
                         <label for="createRandomEntries">Create X random entries</label>
                     </h3>
-                    <input id="createRandomEntries" type="number">
-                    <input id="startCreatingRandEntries" type="button" value="Create X random entries">
+                    <input id="createRandomEntries" class="MInput" type="number">
+                    <input id="startCreatingRandEntries" class="MButton" type="button" value="Create X random entries">
 
                     <h3>
                         <label for="removeAllEntries">Remove all entries</label>
                     </h3>
-                    <input id="removeAllEntries" type="button" value="Remove all entries">
+                    <input id="removeAllEntries" class="MButton" type="button" value="Remove all entries">
 
                     <h3>
                         <label for="viewAllEntries">View all entries</label>
                     </h3>
-                    <input id="viewAllEntries" type="button" value="View all entries">
+                    <input id="viewAllEntries" class="MButton" type="button" value="View all entries">
                     <pre>
                         <code id="allEntries">
                         </code>
@@ -139,8 +210,8 @@
                 </div>
             </div>
 
-            <div class="simpleContainer">
-                <h2>WYSIWYG</h2>
+            <div class="MCard">
+                <h2 class="gname">WYSIWYG</h2>
                 <textarea id="froala-editor"></textarea>
             </div>
         </main>
@@ -150,7 +221,6 @@
         </footer>
         <script type="text/javascript" src="js/init.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/connection.js"></script>
         <script type="text/javascript" src="js/notifications.js"></script>
@@ -164,5 +234,6 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
         <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
+        <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

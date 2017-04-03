@@ -140,7 +140,7 @@
 	box-shadow: 3px 3px 6px rgba(0,0,0,.5);
 }
 
-.MCard, .MButton, .MCheckBoxButton, .MSearchBar {
+.MCard, .MButton, .MCheckBoxButton, .MSearchBar, .MInput {
 	box-shadow: 2px 2px 4px rgba(0,0,0,.5);
 }
 
@@ -221,6 +221,14 @@
     width: 80%;
 }
 
+.MCheckbox {
+	background-color: rgb(255, 255, 255);
+	border: 2px rgb(0, 153, 153);
+
+	height: 30px;
+	width: 30px;
+}
+
 .MFloatingActionButton {
     background-color: rgb(1,202,202);
     border-radius: 50%;
@@ -232,9 +240,18 @@
     width: 96px;
 }
 
+.MInput {
+	background-color: rgb(255, 255, 255);
+	border: none;
+	border-bottom: 2px solid rgb(255, 170, 0);
+	/*display: block;*/
+	outline: none;
+	padding: 8px;
+}
+
 .MLabel {
 	background-color: rgba(0,0,0,0);
-	color: rgba(236,237,242, .95);
+	color: rgba(14,19,33, .95);
 	display: block;
 	font-weight: bold;
 	line-height: 30px;
@@ -330,6 +347,11 @@ header tr > td:nth-child(2) {
     padding:2px 0px;
 }
 
+.fill {
+	height: 100%;
+	width: 100%;
+}
+
 .gcard {
 	background-color: #e7e7e7;
 	box-shadow: 0px 6px 12px rgba(0,0,0,.5);
@@ -390,6 +412,14 @@ header tr > td:nth-child(2) {
 
     transition: .4s ease-in-out, height .4s ease-in-out;
     -webkit-transition: .4s ease-in-out .4s ease-in-out;
+}
+
+.noOpacity {
+	opacity: 0;
+}
+
+.listNoBullet {
+	list-style: none;
 }
 
 .pagination-button {

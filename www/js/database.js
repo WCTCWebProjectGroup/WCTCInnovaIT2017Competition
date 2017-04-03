@@ -141,8 +141,7 @@ var database = new function () {
                 for (var i = 0; i < numToCreate; i++) {
                     let entry = new Entry();
                     entry.body.text = RandFirstName() + " " + RandLastName() + " " + RandBody();
-                    entry.tags[0] = RandTag();
-                    entry.tags[1] = RandTag();
+                    entry.tags = RandTag();
                     entry.uid = i + newUid;
 
                     newEntries.push(entry);
@@ -156,6 +155,23 @@ var database = new function () {
                 });
             }).then(function () {
                 return newEntries;
+            });
+    }
+
+    this.GetAllTags = function () {
+        return _db.Entries
+            .toCollection()
+            .toArray()
+            .then(function (array) {
+                var uniqueTags = [];
+                array.forEach(function (entry) {
+                    entry.tags.forEach(function (tag) {
+                        if (!uniqueTags.includes(tag))
+                            uniqueTags.push(tag);
+                    });
+                });
+
+                return uniqueTags;
             });
     }
 }
@@ -218,7 +234,7 @@ function RandTag () {
 
     var rnd = Math.round(Math.random() * tags.length) - 1;
 
-    console.log("Finished adding entries to the db");
+    return tags.slice(0, rnd);
 }
 
 // ----- Connectors ----- //
@@ -240,6 +256,7 @@ var connector = (new function(){
         var btnElement = document.createElement("button");
         
         btnElement.setAttribute("id", "entry-" + entry.uid);
+        btnElement.setAttribute("class", "MButton");
         btnElement.innerHTML = `[${entry.uid}] - ${entry.date.toLocaleString()}`;
         liElement.appendChild(btnElement);
 
@@ -412,11 +429,11 @@ var connector = (new function(){
         database
             .GetEntryInDB(entryObj.uid)
             .then(function (entry) {
-                // Set title, date, body
-                titleEl.value = `[${entry.uid}] - ${entry.date}`;
+                console.log(entry);
+                // Set tags, date, body
                 var d = new Date(entry.date).toISOString().slice(0, -5);
                 dateEl.value = d;
-                bodyEl.value = entry.body;
+                bodyEl.value = entry.body.text;
 
                 // Set tags
                 entry.tags.forEach(function (tag) {
@@ -436,8 +453,26 @@ var connector = (new function(){
 
     // ----- END CRUD Functions for entries ----- //
 
+    this.UpdateTagFilters = function () {
+        database
+        .GetAllTags()
+        .then(function (uniqueTags) {
+            var tagEls = document.getElementById("filterableTags");
+            uniqueTags.forEach(function (tag) {
+                let liEl = document.createElement("li");
+                var checkboxEl = common.CreateMCheckbox(tag);
+                
+                liEl.innerText = tag;
+                
+                liEl.appendChild(checkboxEl);
+                tagEls.appendChild(liEl);
+            });
+        });
+    }
+
     // Initialize _min, _max, and _allEntries. Also hide loading screen
     _UpdateEntries();
+    initialize.push(this.UpdateTagFilters);
 });
 
 // WIP: This anon function will attach the needed event listeners that will paginate
