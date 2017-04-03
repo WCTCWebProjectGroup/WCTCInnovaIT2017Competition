@@ -287,6 +287,17 @@ var connector = (new function(){
         }
     }
 
+    function _viewEntry (entry) {
+        document.getElementById("entryDate").value = entry.date.toISOString().slice(0, -5);
+        document.getElementById("entryBody").value = entry.body;
+        // TODO: Setup seperate table for tracking tags and functions for adding removing tags from that table
+        var select = document.getElementById("existingEntryTags");
+        entry.tags.forEach(function (tag) {
+            let option = document.createElement("option");
+            option.innerHTML = tag;
+        });
+    }
+
     this.GetIncrement = function () {
         return _increment;
     };
@@ -326,6 +337,9 @@ var connector = (new function(){
                 // Create the elements in _currentEntries
                 _currentEntries.forEach(function (entry) {
                     var entryEl = CreateEntryElement(entry);
+                    entryEl.addEventListener("click", () => {
+                        _viewEntry(entry);
+                    });
                     document.getElementById("entriesContainer").appendChild(entryEl);
                 });
             });
@@ -377,7 +391,7 @@ var connector = (new function(){
 
     // Update entry
     this.GoToUpdateEntry = _GoToUpdateEntry;
-    function _GoToUpdateEntry (entryUID) {
+    function _GoToUpdateEntry (entryObj) {
         // TODO: Display secondary loading screen for this functions duration
 
         var titleEl = document.getElementById("entryTitle");
@@ -396,11 +410,12 @@ var connector = (new function(){
         }
 
         database
-            .GetEntryInDB(entryUID)
+            .GetEntryInDB(entryObj.uid)
             .then(function (entry) {
                 // Set title, date, body
                 titleEl.value = `[${entry.uid}] - ${entry.date}`;
-                dateEl.value = entry.date;
+                var d = new Date(entry.date).toISOString().slice(0, -5);
+                dateEl.value = d;
                 bodyEl.value = entry.body;
 
                 // Set tags
@@ -443,7 +458,7 @@ var connector = (new function(){
     });
 })();
 
-// ----- Test functions ------
+// ----- Test functions ------ //
 
 // Creating rand entries connector
 function TestFunctions () {

@@ -112,3 +112,29 @@ var common = new function () {
 
     // ----- END Alerts -----
 };
+
+// ----- Attach Common Event Listeners ----- //
+(function () {
+    var _boxShadow = document.getElementById("sideNav").style.boxShadow;
+    document.getElementById("sideNav").style.boxShadow = "none";
+
+    function _openAlerts () {
+
+    }
+
+    function _openNav () {
+        document.querySelector("#sideNav .alerts").style.display = "none";
+        document.getElementById("drawerContent").style.display = "block";
+        document.getElementById("sideNav").style.left = "0";
+        document.getElementById("sideNav").style.boxShadow = _boxShadow;
+    }
+
+    function _closeDrawer () {
+        document.getElementById("sideNav").style.left = "100%";
+        document.getElementById("sideNav").style.boxShadow = "none";;
+    }
+
+    document.getElementById("openDrawer").addEventListener("click", _openNav);
+    document.getElementById("openAlert").addEventListener("click", _openAlerts)
+    document.getElementById("clsBtn").addEventListener("click", _closeDrawer);
+})();

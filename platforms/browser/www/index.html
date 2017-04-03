@@ -34,8 +34,12 @@
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-        <link rel="stylesheet" href="css/pignose.calendar.min.css">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" href="css/pignose.calendar.min.css"> <!-- Calendar Css -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css"> <!-- Whysiwyg Css -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_style.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
         
         <title>Index</title>
     </head>
@@ -90,9 +94,6 @@
             <div class="simpleContainer">
                 <h2>View/Edit Entry</h2>
                 <div id="viewEntryContainer">
-                    <h3>Title - Removing this...</h3>
-                    <input id="entryTitle" type="text">
-                    
                     <h3>Date</h3>
                     <input id="entryDate" type="datetime-local">
                     
@@ -100,8 +101,7 @@
                     <textarea id="entryBody"></textarea>
                     
                     <h3>Tags</h3>
-                    <select>
-                        <option></option>
+                    <select id="existingEntryTags">
                     </select>
                     <input class="entryTag" type="text"><button id="addTag">+Tag</button>
                     <ul id="entryTags">
@@ -138,6 +138,11 @@
                     </pre>
                 </div>
             </div>
+
+            <div class="simpleContainer">
+                <h2>WYSIWYG</h2>
+                <textarea id="froala-editor"></textarea>
+            </div>
         </main>
 
         <footer>
@@ -151,8 +156,13 @@
         <script type="text/javascript" src="js/notifications.js"></script>
         <script type="text/javascript" src="js/dexie.js"></script>
         <script type="text/javascript" src="js/database.js"></script>
-        <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+        <!--<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
+        <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
     </body>
 </html>

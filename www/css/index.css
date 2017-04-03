@@ -70,34 +70,187 @@
  *  - Primary loading gif
  *
  * ----- Color Scheme (WIP) -----
- * main-bg-color: rgb(216, 216, 216)
- * secondary-bg-color: rgb()
- * primary-color-main: rgb(0,153,153)
- *  primary-color-lighter-1: rgb(51,204,204)
- *  primary-color-lighter-2: rgb(92,204,204)
- *  primary-color-darker-1: rgb(29,115,115)
- *  primary-color-darker-2: rgb(0,99,99)
- * secondary-color-main: rgb(18,64,171)
- *  secondary-color-lighter-1: rgb(70,113,213)
- *  secondary-color-lighter-2: rgb(108,140,213)
- *  secondary-color-darker-1: rgb(42,68,128)
- *  secondary-color-darker-2: rgb(6,38,111)
- * tertiary-color-main: rgb(255,170,0)
- *  tertiary-color-lighter-1: rgb(255,191,64)
- *  tertiary-color-lighter-2: rgb(255,208,115)
- *  tertiary-color-darker-1: rgb(191,143,48)
- *  tertiary-color-darker-2: rgb(166,111,0)
- * quaternary-color-main: rgb(255,116,0)
- *  quaternary-color-lighter-1: rgb(255,150,64)
- *  quaternary-color-lighter-2: rgb(255,178,115)
- *  quaternary-color-darker-1: rgb(191,113,48)
- *  quaternary-color-darker-2: rgb(166,75,0)
- * text-light: rgba(236,237,242, .95)
- *  text-light-faint: rgba(236,237,242, .75)
- * text-dark: rgba(14,19,33, .95)
- *  text-dark-faint: rgba(14,19,33, .75)
- * background-shadow-default: 0 4px 8px 0 rgba(0,0,0,0.4)
+ * main-bg-color: rgb(216, 216, 216);
+ * secondary-bg-color: rgb();
+ * primary-color-main: rgb(0,153,153);
+ *  primary-color-lighter-1: rgb(1,202,202);
+ *  primary-color-lighter-2: rgb(1,232,232);
+ *  primary-color-darker-1: rgb(29,132,132);
+ *  primary-color-darker-2: rgb(0,66,66);
+ * secondary-color-main: rgb(18,64,171);
+ *  secondary-color-lighter-1: rgb(70,113,213);
+ *  secondary-color-lighter-2: rgb(108,140,213);
+ *  secondary-color-darker-1: rgb(42,68,128);
+ *  secondary-color-darker-2: rgb(6,38,111);
+ * tertiary-color-main: rgb(255,170,0);
+ *  tertiary-color-lighter-1: rgb(255,191,64);
+ *  tertiary-color-lighter-2: rgb(255,208,115);
+ *  tertiary-color-darker-1: rgb(191,143,48);
+ *  tertiary-color-darker-2: rgb(166,111,0);
+ * quaternary-color-main: rgb(255,116,0);
+ *  quaternary-color-lighter-1: rgb(255,150,64);
+ *  quaternary-color-lighter-2: rgb(255,178,115);
+ *  quaternary-color-darker-1: rgb(191,113,48);
+ *  quaternary-color-darker-2: rgb(166,75,0);
+ * text-light: rgba(236,237,242, .95);
+ *  text-light-faint: rgba(236,237,242, .75);
+ * text-dark: rgba(14,19,33, .95);
+ *  text-dark-faint: rgba(14,19,33, .75);
+ * background-shadow-default: 0 4px 8px 0 rgba(0,0,0,0.4);
  */
+
+/* ------ Material Designs ------ */
+
+.MDialog, .MPicker {
+	box-shadow: 24px 24px 48px rgba(0,0,0,.5);
+}
+
+.MNavDrawer, .MRightDrawer, .MModalBottomSheet {
+	box-shadow: 16px 16px 32px rgba(0,0,0,.5);
+    z-index: 16;
+}
+
+.MFloatingActionButton:focus {
+	box-shadow: 14px 14px 28px rgba(0,0,0,.5);
+}
+
+.MFloatingActionButton:hover {
+	box-shadow: 12px 12px 24px rgba(0,0,0,.5);
+}
+
+/* +1 depth for each sub-menu */
+.MSubMenu {
+	box-shadow: 9px 9px 18px rgba(0,0,0,.5);
+}
+
+/*.MCard:active,*/
+.MBottomNavBar, .MMenu, .MButton:active {
+	box-shadow: 8px 8px 16px rgba(0,0,0,.5);
+}
+
+.MFloatingActionButton, .MSnackbar {
+	box-shadow: 6px 6px 12px rgba(0,0,0,.5);
+}
+
+.MAppBar, .MSearchBar:focus {
+	box-shadow: 4px 4px 8px rgba(0,0,0,.5);
+}
+
+.MRefreshIndicator {
+	box-shadow: 3px 3px 6px rgba(0,0,0,.5);
+}
+
+.MCard, .MButton, .MCheckBoxButton, .MSearchBar {
+	box-shadow: 2px 2px 4px rgba(0,0,0,.5);
+}
+
+.MSwitch {
+	box-shadow: 1px 1px 2px rgba(0,0,0,.5);
+}
+
+.MAppBar {
+    z-index: 6;
+}
+
+.MCheckBoxButton {
+	padding: 8px;
+
+	height: 25px;
+	width: 25px;
+}
+
+.MButton {
+    background-color: rgb(0,153,153);
+	border: none;
+	border-radius: 2px;
+    box-shadow: 4px 4px 8px rgba(0,0,0,.5);
+	color: rgba(236,237,242, .95);
+    display: inline-block;
+	font-size: 18px;
+	line-height: 40px;
+	margin-bottom: 8px;
+	outline: none;
+    text-align: center;
+    
+    padding: 8px;
+
+	min-height: 40px;
+}
+
+.MButton:hover {
+	background-color: rgb(1,202,202);
+	box-shadow: 8px 8px 16px rgba(0,0,0,.5);
+}
+
+.MButtonFaint {    
+	background-color: rgba(0,0,0,0);
+	border: none;
+	border-radius: 2px;
+	box-shadow: none;
+	color: rgba(236,237,242, .95);
+	display: block;
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 30px;
+	outline: none;
+	text-align: center;
+
+	margin: auto;
+	padding: 8px;
+
+	min-height: 30px;
+}
+
+.MButtonFaint:active:hover {
+	background-color: #C7CBD9;
+	box-shadow: 4px 4px 8px rgba(0,0,0,.5);
+	color: rgba(14,19,33, .95);
+}
+
+.MCard {
+    background-color: #e7e7e7;
+	border: 4px solid rgba(0,0,0,.25);
+    display: block;
+    text-align: center;
+
+    margin: auto;
+	margin-bottom: 12px;
+    padding: 16px 16px;
+
+    height: auto;
+    width: 80%;
+}
+
+.MFloatingActionButton {
+    background-color: rgb(1,202,202);
+    border-radius: 50%;
+	border-width: 4px;
+    color: rgba(236,237,242, .95);
+	outline: none;
+
+    height: 96px;
+    width: 96px;
+}
+
+.MLabel {
+	background-color: rgba(0,0,0,0);
+	color: rgba(236,237,242, .95);
+	display: block;
+	font-weight: bold;
+	line-height: 30px;
+	text-align: center;
+
+	margin: 8px;
+
+	min-height: 30px;
+}
+
+.MLabel:focus:hover:active {
+	background-color: rgb(1,232,232);
+	color: rgba(14,19,33, .95);
+}
+
+/* ------ End Material Designs ------ */
 
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
@@ -107,8 +260,10 @@ body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    user-select: none;
     background-color:rgb(216, 216, 216);
     background-attachment:fixed;
+    color: rgba(14,19,33, .95);
     font-family: 'Noto Sans', sans-serif;
     font-size:12px;
     height:100%;
@@ -138,7 +293,7 @@ button {
 
 h1 {
     font-size:24px;
-    font-weight:normal;
+    font-weight:bold;
     margin:0px;
     overflow:visible;
     padding:0px;
@@ -149,9 +304,21 @@ header {
     color: rgba(236,367,242,.95);
     background-color: rgb(0,153,153);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
+    font-weight: bold;
+    margin-bottom: 32px;
     padding-top: 8px;
     padding-bottom: 8px;
     text-align: center;
+}
+
+header tr > td:first-child,
+header tr > td:last-child {
+    min-width: 60px;
+    width: 80px;
+}
+
+header tr > td:nth-child(2) {
+    width: 99%;
 }
 
 .event {
@@ -163,38 +330,73 @@ header {
     padding:2px 0px;
 }
 
-.event.listening {
-    background-color:#333333;
-    display:block;
+.gcard {
+	background-color: #e7e7e7;
+	box-shadow: 0px 6px 12px rgba(0,0,0,.5);
+	color: black;
+	
+	margin: 16px auto;
+	padding: 8px 12px;
+
+	height: auto;
+	width: 90%;
 }
 
-.event.received {
-    background-color:#4B946A;
-    display:none;
+.gcontent {
+	display: block;
+	outline-style: none;
+	overflow: hidden;
+
+	max-height: 0px;
+	padding: 0px;
+
+	transition: .4s ease-in-out;
+	transition-delay: .2s;
+	transition-property: max-height;
+	-webkit-transition: .4s ease-in-out;
+	-webkit-transition-delay: .2s;
+	-webkit-transition-property: max-height;
 }
 
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
+.group:hover .gcontent {
+	max-height: 300px;
+
+	overflow-y: scroll;
 }
- 
-@-webkit-keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
+
+.gdesc {
+	color: rgba(14,19,33, .95);
 }
- 
-.blink {
-    animation:fade 3000ms infinite;
-    -webkit-animation:fade 3000ms infinite;
+
+.gfooter {
+	background-color: rgb(255,170,0);
+
+	height: 12px;
+	width: 100%;
+}
+
+.gname {
+	background-color: rgb(255,170,0);
+    box-shadow: 0px 8px 16px rgba(0,0,0,0);
+	color: rgba(236,237,242, .95);
+    font-size: 24px;
+    text-align: center;
+    text-transform: uppercase;
+
+    padding: 8px 0px;
+
+	height: auto; 
+	width: 100%;
+
+    transition: .4s ease-in-out, height .4s ease-in-out;
+    -webkit-transition: .4s ease-in-out .4s ease-in-out;
 }
 
 .pagination-button {
-    background-color: rgb(255,170,0);
+    background-color: rgb(255, 255, 255);
     border-radius: 50%;
-    color: rgba(236,237,242, .95);
-    border: 2px solid rgb(255,191,64);
+    color: rgb(0,153,153);
+    border: 2px solid rgb(0,153,153);
     font-size: 24px;
     outline: none;
 
@@ -203,8 +405,9 @@ header {
 }
 
 .pagination-button:active:hover {
-    background-color: rgb(255,208,115);
-    border: 2px solid rgb(166,111,0);
+    background-color: rgb(1,202,202);
+    border: 2px solid rgb(29,132,132);
+    color:rgba(236,237,242, .75);
 }
 
 .simpleContainer {
@@ -218,10 +421,6 @@ header {
     margin-right: 5%;
     max-width: 1200px;
     text-align: center;
-}
-
-.simpleContainer > * {
-    display: block;
 }
 
 #alertBg {
@@ -304,4 +503,231 @@ header {
     z-index: 24;
 
     /*transition: visibility 2s;*/
+}
+
+#openAlert {
+	background-color: rgb(255,170,0);
+	background-image: url("../img/ic_notifications_white_24dp_2x.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 50%;
+	border-style: solid;
+	border-width: 0;
+	box-shadow: 4px 4px 8px rgba(0,0,0,.5);
+
+	/*display: none;*/
+    margin: auto;
+
+	z-index: 8;
+
+	height: 48px;
+	width: 48px;
+
+	transition: .2s;
+	transition-property: background-color;
+	-webkit-transition: .2s;
+	-webkit-transition-property: background-color;
+}
+
+#openAlert:hover {
+	background-color: var(--100);
+	box-shadow: 2px 2px 4px rgba(0,0,0,.5);
+}
+
+#openAlert::before {
+	background-color: rgb(255,170,0);
+	border-radius: 50%;
+	box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+	content: "";
+	opacity: 0;
+	z-index: -1;
+
+	position: absolute;
+	/*margin-top: -4px;
+	margin-right: -4px;*/
+	top: -4px;
+	left: -4px;
+
+	height: 56px;
+	width: 56px;
+
+	transition: .2s;
+	transition-property: opacity;
+	-webkit-transition: .2s;
+	-webkit-transition-property: opacity;
+}
+
+#openAlert:hover::before {
+	display: block;
+	opacity: .75;
+
+	z-index: -1;
+}
+
+#openAlertContainer {
+	display: flex;
+    margin: auto;
+	position: relative;
+}
+
+#openDrawer {
+	background-color: rgb(255,170,0);
+	background-image: url("../img/ic_menu_white_24dp_1x.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 50%;
+	border-style: solid;
+	border-width: 0;
+	box-shadow: 4px 4px 8px rgba(0,0,0,.5);
+	z-index: 8;
+
+	/*padding: 8px;*/
+	margin: auto;
+
+	height: 48px;
+	width: 48px;
+
+	transition: .2s;
+	transition-property: background-color;
+	-webkit-transition: .2s;
+	-webkit-transition-property: background-color;
+}
+
+#openDrawer:hover {
+	background-color: var(--100);
+	box-shadow: 2px 2px 4px rgba(0,0,0,.5);
+}
+
+#openDrawer::before {
+	background-color: rgb(255,255,255);
+	border-radius: 50%;
+	box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+	content: "";
+	opacity: 0;
+	z-index: 7;
+
+	margin-top: -4px;
+	margin-left: -4px;
+
+	height: 56px;
+	width: 56px;
+
+	transition: .2s;
+	transition-property: opacity;
+	-webkit-transition: .2s;
+	-webkit-transition-property: opacity;
+}
+
+#openDrawer:hover::before {
+	display: block;
+	opacity: .75;
+}
+
+#openDrawerContainer {
+	display: flex;
+	position: relative;
+	float: left;
+
+	margin-left: 8px;
+}
+
+#sideNav {
+	background-color: rgba(250,250,250,0);
+	background-size: 100% 100%;
+	overflow-x: hidden;
+	text-align: center;
+
+	position: fixed;
+	top: 0;
+	left: -100%;
+	height: 100%;
+	width: 100%;
+
+	transition: 0.4s ease-in-out;
+	/*transition-property: width;*/
+	-webkit-transition: 0.4s ease-in-out;
+	/*-webkit-transition-property: width;*/
+}
+
+#sideNav table {
+    height: 100%;
+    width: 100%;
+}
+
+#sideNavClickable {
+    background-color: rgb(250,250,250);
+
+    max-width: 500px;
+    width: 80%;
+}
+
+#sideNavNotClickable {
+    background-color: rgba(0,0,0,.35);
+    
+    width: 20%;
+}
+
+#sideNav a {
+	color: var(--light-text);
+	display: block;
+	font-size: 25px;
+	text-decoration: none;
+
+	padding: 8px 8px 8px 8px;
+
+	transition: 0s ease-in-out;
+}
+
+#sideNav label {
+	color: var(--light-text);
+	font-size: 25px;
+
+	padding: 8px 8px 8px 8px;
+
+	transition: 0.4s ease-in-out;
+}
+
+#sideNav  a:hover {
+	color: var(--200);
+}
+
+#sideNav .VCenter > a:not(:last-child)::after {
+	background-color: white;
+	content: "";
+	display: block;
+
+	margin: auto;
+
+	width: 80%;
+	height: 1px;
+}
+
+#sideNav .closeDrawer {
+	background-image: url("../img/ic_close_black_24dp_2x.png");
+	background-position: center;
+	background-repeat: no-repeat; 
+	
+	position: absolute;
+	top: 0px;
+	right: 25px;
+	margin-left: 50px;
+
+	height: 48px;
+	width: 48px;
+}
+
+#sideNav .closeDrawer:hover::before {
+	background-color: var(--A400);
+	border: 4px solid var(--A400);
+	border-radius: 50%;
+	content: "";
+	opacity: .75;
+
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: -1;
+
+	height: 56px;
+	width: 56px;
 }
