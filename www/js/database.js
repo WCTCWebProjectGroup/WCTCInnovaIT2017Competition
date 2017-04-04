@@ -509,6 +509,7 @@ function TestFunctions () {
                     .then(function (entries) {
                         common.DisplayAlert(JSON.stringify(entries));
                         common.HidePrimaryLoading();
+                        database.UpdateEntries();
                     });
             });
 

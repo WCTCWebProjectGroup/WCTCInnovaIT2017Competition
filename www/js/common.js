@@ -108,18 +108,13 @@ var common = new function () {
     function _CreateMCheckBox (labeltext) {
         let checkboxContainerEl = document.createElement("div");
         let checkboxtagEl = document.createElement("input");
-        let checkboxMatEl = document.createElement("div");
 
-        checkboxMatEl.setAttribute("class", "MCheckbox fill");
-
-        checkboxtagEl.setAttribute("class", "noOpacity");
         checkboxtagEl.setAttribute("type", "checkbox");
         checkboxtagEl.setAttribute("data-tagname", labeltext);
 
         checkboxContainerEl.setAttribute("class", "MCheckbox");
 
         checkboxContainerEl.appendChild(checkboxtagEl);
-        checkboxContainerEl.appendChild(checkboxMatEl);
 
         return checkboxContainerEl;
     }

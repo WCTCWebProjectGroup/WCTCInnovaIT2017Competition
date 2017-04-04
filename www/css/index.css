@@ -221,13 +221,42 @@
     width: 80%;
 }
 
+/* ----- Checkboxes ----- */
+
 .MCheckbox {
 	background-color: rgb(255, 255, 255);
 	border: 2px rgb(0, 153, 153);
 
+	position: relative;
+
 	height: 30px;
 	width: 30px;
 }
+
+.MCheckbox > input[type='checkbox'] {
+	position: absolute;
+	margin: 0;
+	opacity: 0;
+	padding: 0;
+
+	left: 0px;
+	top: 0px;
+
+	height: 100%;
+	width: 100%;
+}
+
+.MCheckbox > input[type='checkbox']:checked::before {
+	background-color: rgb(0, 153, 153);
+	border-radius: 50%;
+	margin: auto;
+	opacity: 1;
+
+	height: 80%;
+	width: 80%;
+}
+
+/* ----- END Checkboxes ----- */
 
 .MFloatingActionButton {
     background-color: rgb(1,202,202);
