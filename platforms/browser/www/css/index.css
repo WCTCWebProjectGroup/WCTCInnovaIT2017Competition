@@ -276,6 +276,9 @@
 	/*display: block;*/
 	outline: none;
 	padding: 8px;
+
+	max-width: 300px;
+	width: 90%;
 }
 
 .MLabel {
@@ -294,6 +297,14 @@
 .MLabel:focus:hover:active {
 	background-color: rgb(1,232,232);
 	color: rgba(14,19,33, .95);
+}
+
+.MSelect {
+	background-color: rgb(216, 216, 216);
+	border-bottom: 2px solid rgb(0,153,153);
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
+	margin: 8px;
+	padding: 8px;
 }
 
 /* ------ End Material Designs ------ */
@@ -365,6 +376,17 @@ header tr > td:last-child {
 
 header tr > td:nth-child(2) {
     width: 99%;
+}
+
+main > * {
+	display: block;
+	margin: auto;
+	text-align: center;
+}
+
+.centeredText,
+.centeredText * {
+	text-align: center;
 }
 
 .event {
@@ -449,6 +471,15 @@ header tr > td:nth-child(2) {
 
 .listNoBullet {
 	list-style: none;
+}
+
+.margin {
+	margin: 8px;
+}
+
+.noBorders,
+.noBorders * {
+	border: none;
 }
 
 .pagination-button {
@@ -545,6 +576,18 @@ header tr > td:nth-child(2) {
     margin: 0;
 }
 
+#contextModal {
+	display: none;
+	
+	position: absolute;
+	
+	top: 0;
+	left: 0;
+	height: auto;
+	width: 60px;
+
+}
+
 #entriesContainer {
     list-style: none;
 }
@@ -564,10 +607,17 @@ header tr > td:nth-child(2) {
     /*transition: visibility 2s;*/
 }
 
+#openAlert {
+	background-image: url("../img/ic_notifications_white_24dp_2x.png");
+}
+
+#openDrawer {
+	background-image: url("../img/ic_menu_white_24dp_1x.png");
+}
+
 #openAlert, 
 #openDrawer {
 	background-color: rgb(255,170,0);
-	background-image: url("../img/ic_notifications_white_24dp_2x.png");
 	background-repeat: no-repeat;
 	background-position: center;
 	border-radius: 50%;
@@ -631,7 +681,6 @@ header tr > td:nth-child(2) {
 
 /*#openDrawer {
 	background-color: rgb(255,170,0);
-	background-image: url("../img/ic_menu_white_24dp_1x.png");
 	background-repeat: no-repeat;
 	background-position: center;
 	border-radius: 50%;

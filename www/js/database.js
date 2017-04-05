@@ -29,16 +29,18 @@ var database = new function () {
     // ----- End Constructors ----- //
 
     var _db = {};
-    function _createCalendar() {
-        // Default Calendar
-        $('.calendar').pignoseCalendar({
-            //select: onClickHandler,
-            //enabledDates: goodDates
-        });
-    }
+    
+    // This was moved to calendar.js
+    // function _createCalendar() {
+    //     // Default Calendar
+    //     $('.calendar').pignoseCalendar({
+    //         //select: onClickHandler,
+    //         //enabledDates: goodDates
+    //     });
+    // }
 
     // Initialize the calendar when ready
-    initialize.push(_createCalendar);
+    //initialize.push(_createCalendar);
 
     function _DB_name () {
         return "TripMySchoolJournalDB";

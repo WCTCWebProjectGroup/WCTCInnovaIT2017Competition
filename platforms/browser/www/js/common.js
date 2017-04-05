@@ -166,4 +166,10 @@ var common = new function () {
             common.DisplayAlert("Sharing is still a WIP!");
         });
     });
+
+    if (document.querySelectorAll("#froala-editor").length > 0) {
+        $(function() { $("#froala-editor").froalaEditor({
+            height: 200
+        }) });
+    }
 })();

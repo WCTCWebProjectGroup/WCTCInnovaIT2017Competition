@@ -121,8 +121,22 @@
         <!--NAVEND-->
 
         <main>
-            <div id="panel">
-                <a href="javascript:void(0)" id="closePanel"></a>
+            <div id="contextModal">
+                <!--<a href="javascript:void(0)" id="closePanel"></a>-->
+                <ul>
+                    <li>
+                        Edit/View Entry
+                    </li>
+                    <li>
+                        Delete Entry
+                    </li>
+                    <li>
+                        Share Entry
+                    </li>
+                </ul>
+            </div>
+
+            <div id="sidePanel">
             </div>
 
             <h2 class="gname">Calendar</h2>
@@ -147,8 +161,9 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
         <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
-        <script type="text/javascript" src="js/index.js"></script>
         <!--IGNORESTART-->
+        <script type="text/javascript" src="js/calendar.js"></script>
         <!--IGNOREEND-->
+        <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

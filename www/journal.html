@@ -121,22 +121,43 @@
         <!--NAVEND-->
 
         <main>
-            <h2 class="gname">Journal Entry</h2>
-            <label for="entryDate">Date</label>
-            <input id="entryDate" class="MInput" type="date">
-            <label for="entryTime">Time</label>
-            <input id="entryTime" class="MInput" type="time">
-            <textarea id="froala-editor"></textarea>
-            
-            <input id="deleteEntry" class="MButton" type="button" value="Delete Entry">
-            <input id="discardChanges" class="MButton" type="button" value="Discard Changes">
-            <input id="saveChanges" class="MButton" type="button" value="Save Changes">
-            <input id="shareEntry" class="MButton" type="button" value="Share Entry">
+            <h2 class="gname">View/Edit Journal Entry</h2>
+            <div class="margin centeredText">
+                <label class="MLabel"for="entryDate">Date</label>
+                <input id="entryDate" class="MInput" type="date">
+            </div>
+            <div class="margin centeredText">
+                <label class="MLabel" for="entryTime">Time</label>
+                <input id="entryTime" class="MInput" type="time">
+            </div>
+
+            <div>
+                <label class="MLabel">Entry</label>
+                <textarea id="froala-editor"></textarea>
+            </div>
+            <div>
+                <label class="MLabel">Add/Remove/Edit Tags</label>
+                <select id="existingTags" class="MSelect">
+                    <option>Add existing tag</option>
+                </select>
+                <input class="entryTag MInput" type="text"><button id="addTag" class="MButton">+Tag</button>
+                <ul id="entryTags"></ul>
+            </div>
+
+            <div class="margin">
+                <hr>
+                <input id="deleteEntry" class="MButton" type="button" value="Delete Entry">
+                <input id="discardChanges" class="MButton" type="button" value="Discard Changes">
+                <hr>
+                <input id="saveChanges" class="MButton" type="button" value="Save Changes">
+                <input id="shareEntry" class="MButton" type="button" value="Share Entry">
+            </div>
         </main>
 
         <footer>
 
         </footer>
+        <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
         <script type="text/javascript" src="js/init.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
@@ -144,14 +165,13 @@
         <script type="text/javascript" src="js/notifications.js"></script>
         <script type="text/javascript" src="js/dexie.js"></script>
         <script type="text/javascript" src="js/database.js"></script>
-        <!--<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
-        <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
+        <script type="text/javascript" src="js/journal.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>
