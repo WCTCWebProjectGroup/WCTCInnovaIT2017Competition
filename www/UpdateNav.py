@@ -8,38 +8,47 @@ updates = []
 filesToUpdate = []
 for file in listdir():
     if isfile(file) and file.endswith(".html") and not file.startswith("index.html"):
-        filesToUpdate.push(file)
+        filesToUpdate.append(file)
+        print('Found file: {0}'.format(file))
 
 # Get the nav html and store in updates
 with open('./index.html', 'r') as inputfile:
     foundNavStart = False
     for line in inputfile:
         if foundNavStart:
-            if line.startswith("<!--NAVEND-->"):
+            if "<!--NAVEND-->" in line:
+                print("found navend!")
                 break;
             else:
-                updates.push(line)
-        elif line.startsWith("<!--NAVSTART-->"):
+                updates.append(line)
+        elif "<!--NAVSTART-->" in line:
             foundNavStart = True
+            print("found navstart!")
+    print("Updated html:")
+    print(updates)
 
 # Then replace the html in filesToUpdate between the <!--NAVSTART--> 
 # and <!--NAVEND-->
 for file in filesToUpdate:
     filelines = []
+    print("in file {0}".format(file))
     with open(file, 'r+') as inputfile:
         navStart = False
         for line in inputfile:
             if navStart:
-                if line.startsWith("<!--NAVEND-->")
+                if ("<!--NAVEND-->") in line:
+                    filelines.append(line)
+                    print("found navend!")
                     navStart = False
-                continue
-            else
-                if line.startsWith("<!--NAVSTART-->")
+            else:
+                if "<!--NAVSTART-->" in line:
+                    print("found navstart")
                     navStart = True
-                    filelines = filelines + updates
-                else
-                    filelines.push(line)
+                    filelines.append(line)
+                    filelines += updates
+                else:
+                    filelines.append(line)
 
-        inputfile.truncate()
-        for line in filelines
-            file.write(line);
+    with open(file, 'w') as inputfile:
+        for line in filelines:
+            inputfile.write(line);

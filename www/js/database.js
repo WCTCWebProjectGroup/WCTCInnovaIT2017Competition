@@ -478,19 +478,21 @@ var connector = (new function(){
 // WIP: This anon function will attach the needed event listeners that will paginate
 // the entries list
 (function(){
-    // View previous/next entries
-    document.getElementById("viewNextEntries").addEventListener("click", connector.GetNextEntries);
-    document.getElementById("viewPrevEntries").addEventListener("click", connector.GetPrevEntries);
+    if (document.querySelectorAll("#viewNextEntries").length > 0) {
+        // View previous/next entries
+        document.getElementById("viewNextEntries").addEventListener("click", connector.GetNextEntries);
+        document.getElementById("viewPrevEntries").addEventListener("click", connector.GetPrevEntries);
 
-    // Create new entry
-    document.getElementById("createNewEntry").addEventListener("click", connector.GoToCreateNewEntry);
+        // Create new entry
+        document.getElementById("createNewEntry").addEventListener("click", connector.GoToCreateNewEntry);
 
-    // Retrieve entry?
+        // Retrieve entry?
 
-    // Update entry
-    document.getElementById("saveChanges").addEventListener("click", () => {
-        
-    });
+        // Update entry
+        document.getElementById("saveChanges").addEventListener("click", () => {
+            
+        });
+    }
 })();
 
 // ----- Test functions ------ //
@@ -509,7 +511,7 @@ function TestFunctions () {
                     .then(function (entries) {
                         common.DisplayAlert(JSON.stringify(entries));
                         common.HidePrimaryLoading();
-                        database.UpdateEntries();
+                        connector.UpdateEntries();
                     });
             });
 

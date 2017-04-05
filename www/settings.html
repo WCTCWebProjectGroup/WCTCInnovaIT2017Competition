@@ -121,102 +121,37 @@
         <!--NAVEND-->
 
         <main>
+            <h2 class="gname">Settings</h2>
             <div class="MCard">
-                <h2 class="gname">Calendar</h2>
-                <div class="calendar"></div>
-            </div>
-
-            <div class="MCard">
-                <h2 class="gname">Journal Entries</h2>
-
-                <button id="createNewEntry" class="MButton">
-                    Create New Entry
-                </button>
-                
-                <hr>
-                <ul class="listNoBullet">
-                    <li>
-                        <label class="MLabel" for="filterByTag">Filter by Tag</label>
-                        <div id="filterableTags"></div>
-                        <!--<input id="filterByTag" class="MInput" type="text">-->
-                    </li>
-                    <li>
-                        <label class="MLabel" for="filterAfterDate">Filter After Date</label>
-                        <input id="filterAfterDate" class="MInput" type="datetime">
-                    </li>
-                        <label class="MLabel" for="filterBeforeDate">Filter Before Date</label>
-                        <input id="filterBeforeDate" class="MInput" type="datetime">
-                    <li>
-                    <li>
-                        <input id="applyFilters" class="MButton" type="button" value="Search">
-                    </li>
-
-                </ul>
-
-                <ul id="entriesContainer">
-
-                </ul>
-                <div class="pagination">
-                    <button id="viewPrevEntries" class="pagination-button" value="">
-                        <
-                    </button>
-                    <button id="viewNextEntries" class="pagination-button" value="">
-                        >
-                    </button>
-                </div>
-            </div>
-
-            <div class="MCard">
-                <h2 class="gname">View/Edit Entry</h2>
-                <div id="viewEntryContainer">
-                    <h3>Date</h3>
-                    <input id="entryDate" class="MInput" type="datetime-local">
-                    
-                    <h3>Entry</h3>
-                    <textarea id="entryBody"></textarea>
-                    
-                    <h3>Tags</h3>
-                    <select id="existingEntryTags">
-                    </select>
-                    <input class="entryTag MInput" type="text"><button id="addTag" class="MButton">+Tag</button>
-                    <ul id="entryTags">
+                <h2 class="gname">Theme</h2>
+                <form>
+                    <ul class="listNoBullet">
+                        <li>
+                            <label for="lightThemeCheckbox">Light</label>
+                            <input id="lightThemeCheckbox" type="checkbox" value="Light">
+                        </li>
+                        <li>
+                            <label for="darkThemeCheckbox">Dark</label>
+                            <input id="darkThemeCheckbox" type="checkbox" value="Dark">
+                        </li>
                     </ul>
-                    
-                    <input id="deleteEntry" class="MButton" type="button" value="Delete Entry">
-                    <input id="discardChanges" class="MButton" type="button" value="Discard Changes">
-                    <input id="saveChanges" class="MButton" type="button" value="Save Changes">
-                </div>
+                </form>
+                <input id="saveThemeBtn" type="button" value="Save">
             </div>
 
             <div class="MCard">
-                <h2 class="gname">Test Functions</h2>
-                
-                <div id="testFunctionContainer">
-                    <h3>
-                        <label for="createRandomEntries">Create X random entries</label>
-                    </h3>
-                    <input id="createRandomEntries" class="MInput" type="number">
-                    <input id="startCreatingRandEntries" class="MButton" type="button" value="Create X random entries">
+                <h2 class="gname">Reminders</h2>
+                Current Reminders
+                <ul id="listOfCurrentReminders">
 
-                    <h3>
-                        <label for="removeAllEntries">Remove all entries</label>
-                    </h3>
-                    <input id="removeAllEntries" class="MButton" type="button" value="Remove all entries">
-
-                    <h3>
-                        <label for="viewAllEntries">View all entries</label>
-                    </h3>
-                    <input id="viewAllEntries" class="MButton" type="button" value="View all entries">
-                    <pre>
-                        <code id="allEntries">
-                        </code>
-                    </pre>
-                </div>
-            </div>
-
-            <div class="MCard">
-                <h2 class="gname">WYSIWYG</h2>
-                <textarea id="froala-editor"></textarea>
+                </ul>
+                <hr>
+                Create New Reminders
+                <label for="newReminderDate">Enter Date</label>
+                <input id="newReminderDate" type="date">
+                <label for="newReminderTime">Enter Time</label>
+                <input id="newReminderTime" type="time">
+                <input id="addNewReminder" type="button" value="Add Reminder">
             </div>
         </main>
 
