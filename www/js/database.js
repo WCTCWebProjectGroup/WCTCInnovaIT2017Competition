@@ -313,6 +313,16 @@ var connector = (new function(){
             let option = document.createElement("option");
             option.innerHTML = tag;
         });
+
+        document.getElementById("saveChanges").addEventListener("click", () => {
+            document.getElementById("saveChanges").removeEventListener("click", database.UpdateEntryInDB);
+            var newDate = Date.parse(document.getElementById("entryDate").value);
+            document.getElementById("entryDate").value = "";
+            var newBody = document.getElementById("entryBody").value;
+            document.getElementById("entryBody").value = "";
+            entry.date = newDate;
+            entry.body.text = newBody;
+        });
     }
 
     this.GetIncrement = function () {

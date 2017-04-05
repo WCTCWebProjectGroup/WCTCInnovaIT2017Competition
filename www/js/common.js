@@ -153,11 +153,17 @@ var common = new function () {
     }
 
     function _closeDrawer () {
-        document.getElementById("sideNav").style.left = "100%";
-        document.getElementById("sideNav").style.boxShadow = "none";;
+        document.getElementById("sideNav").style.left = "-100%";
+        document.getElementById("sideNav").style.boxShadow = "none";
     }
 
     document.getElementById("openDrawer").addEventListener("click", _openNav);
     document.getElementById("openAlert").addEventListener("click", _openAlerts)
     document.getElementById("clsBtn").addEventListener("click", _closeDrawer);
+    document.getElementById("sideNavNotClickable").addEventListener("click", _closeDrawer);
+    document.querySelectorAll("#shareEntry").forEach(function (element) {
+        element.addEventListener("click", () => {
+            common.DisplayAlert("Sharing is still a WIP!");
+        });
+    });
 })();
