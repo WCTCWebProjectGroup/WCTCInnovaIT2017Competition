@@ -17,6 +17,15 @@ var database = new function () {
         this.tags = [];
     }
 
+    function Theme (name, primary, secondary, ternary, quaternary, active) {
+        this.name = name;
+        this.primary = primary;
+        this.secondary = secondary;
+        this.ternary = ternary;
+        this.quaternary = quaternary;
+        this.active = active;
+    }
+
     // ----- End Constructors ----- //
 
     var _db = {};
@@ -40,7 +49,9 @@ var database = new function () {
         _db = new Dexie(_DB_name());
 
         return _db.version(1).stores({
-            Entries: 'uid, date, body, tags'
+            Entries: 'uid, date, body, tags',
+            Theme: 'name, primary, secondary, ternary, quaternary, active',
+            Google: 'username, passwordHash, token'
         });
     })();
 
@@ -172,6 +183,24 @@ var database = new function () {
                 });
 
                 return uniqueTags;
+            });
+    }
+
+    this.GetTheme = function ()  {
+        return _db.Theme
+            .where('active')
+            .equals(true);
+    }
+
+    this.SetTheme = function (themeObj) {
+        return _db.Theme
+            .update(themeObj.name, {
+                name: theme.name,
+                primary: theme.primary,
+                secondary: theme.secondary,
+                ternary: theme.ternary,
+                quaternary: theme.quaternary,
+                active: theme.active
             });
     }
 }
@@ -341,6 +370,9 @@ var connector = (new function(){
 
     this.UpdateEntries = _UpdateEntries;
     function _UpdateEntries () {
+        if (document.querySelectorAll("#entriesContainer").length < 1) {
+            return;
+        }
         _ready = false;
         database
             .GetAllEntriesFromDB()

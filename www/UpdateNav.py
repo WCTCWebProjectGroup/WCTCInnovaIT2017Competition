@@ -2,7 +2,8 @@ from os import listdir
 from os.path import isfile, join
 import fileinput
 
-updates = []
+navUpdates = []
+headerUpdates = [] # TODO
 
 # Get all files, except index.html, that end in .html
 filesToUpdate = []
@@ -11,7 +12,7 @@ for file in listdir():
         filesToUpdate.append(file)
         print('Found file: {0}'.format(file))
 
-# Get the nav html and store in updates
+# Get the nav html and store in navUpdates
 with open('./index.html', 'r') as inputfile:
     foundNavStart = False
     for line in inputfile:
@@ -20,12 +21,12 @@ with open('./index.html', 'r') as inputfile:
                 print("found navend!")
                 break;
             else:
-                updates.append(line)
+                navUpdates.append(line)
         elif "<!--NAVSTART-->" in line:
             foundNavStart = True
             print("found navstart!")
     print("Updated html:")
-    print(updates)
+    print(navUpdates)
 
 # Then replace the html in filesToUpdate between the <!--NAVSTART--> 
 # and <!--NAVEND-->
@@ -45,7 +46,7 @@ for file in filesToUpdate:
                     print("found navstart")
                     navStart = True
                     filelines.append(line)
-                    filelines += updates
+                    filelines += navUpdates
                 else:
                     filelines.append(line)
 
