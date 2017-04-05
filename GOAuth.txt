@@ -1,0 +1,5 @@
+Client ID:
+6602944139-0te741sl8r5po70uev7sk2c81mh9vk78.apps.googleusercontent.com
+
+Client Secret:
+mN1A9I_T5VqjJ3VTMchV-i-d

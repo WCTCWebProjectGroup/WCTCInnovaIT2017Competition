@@ -32,6 +32,7 @@
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <meta name="google-signin-client_id" content="6602944139-0te741sl8r5po70uev7sk2c81mh9vk78.apps.googleusercontent.com">
         
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/index.css">
@@ -158,6 +159,8 @@
                 <h2 class="gname">Blackboard Account</h2>
                 <form id="blackboardForm">
                     <input id="schoolBlackboardUrl" class="MInput" type="url" placeholder="school blackboard login url">
+                    <select id="blackboardSchool">
+                    </select>
                     <input id="blackboardUsername" class="MInput" type="email" placeholder="username">
                     <input id="blackboardPassword" class="MInput" type="password" placeholder="password">
                     <input id="blackboardLoginBtn" class="MButton" type="submit">
@@ -166,13 +169,16 @@
 
             <div class="MCard">
                 <h2 class="gname">Google Account</h2>
-                Coming Soon...
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                <button id="authorize-button" style="display: none;">Authorize</button>
+                <button id="signout-button" style="display: none;">Sign Out</button>
             </div>
         </main>
 
         <footer>
 
         </footer>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script type="text/javascript" src="js/init.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
@@ -188,6 +194,10 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
         <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
+        <script async defer src="https://apis.google.com/js/api.js"
+        onload="this.onload=function(){};handleClientLoad()"
+        onreadystatechange="if (this.readyState === 'complete') this.onload()">
+        </script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>
