@@ -33,7 +33,7 @@ var settings = new function () {
         return "";
     }
 
-    function _applyTheme () {
+    function _activateTheme () {
         database
             .GetTheme()
             .then(function (themeObj) {
@@ -45,7 +45,7 @@ var settings = new function () {
             });
     }
 
-    this.ApplyTheme = _applyTheme;
+    this.ActivateTheme = _activateTheme;
 
     function _blackboardLogin (username, password) {
         var xhr = new XMLHttpRequest();
@@ -72,4 +72,44 @@ var settings = new function () {
     this.GetBlackboardTokenCookie = function () {
         console.log(_getCookie(_blackboardCookieName));
     };
+}
+
+// ----- Event Listeners ----- //
+
+(function () {
+    var themeTemplateEl = document.getElementById("themeT");
+    var listOfThemes = document.getElementById("listOfThemes");
+
+    database.GetAllThemes()
+        .then(function (themes) {
+            themes.forEach(function (theme) {
+                let newThemeEl = document.importNode(themeTemplateEl, true);
+                let themeLabelEl = newThemeEl.getElementByTagName("label");
+                let themeCheckBoxEl = newThemeEl.getElementByTagName("input");
+
+                themeLabelEl.innerText = theme.name;
+                themeLabelEl.setAttribute("for", theme.name + "ThemeCheckbox");
+
+                themeCheckBoxEl.setAttribute("id", theme.name + "ThemeCheckbox");
+                themeCheckBoxEl.setAttribute("value", theme.active);
+
+                listOfThemes.appendChild(newThemeEl);
+
+                newThemeEl.addEventListener("click", function (theme) {
+                    if (newThemeEl.value) {
+                        database.SetThemeToActive(theme.name)
+                            .then(()=>{
+                                settings.ApplyTheme();
+                            });
+                    }
+                });
+            });
+        });
+})();
+
+// ----- END Event Listeners ----- //
+
+// WIP
+function handleClientLoad () {
+	console.log("WIP Handling client load...");
 }

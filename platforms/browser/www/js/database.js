@@ -17,14 +17,48 @@ var database = new function () {
         this.tags = [];
     }
 
-    function Theme (name, primary, secondary, ternary, quaternary, active) {
+    function Theme (name, background, statusBar, appBar, cardsDialog, primary, secondary, ternary, quaternary) {
         this.name = name;
+        this.background = background;
+        this.statusBar = statusbar;
+        this.appBar = appBar;
+        this.cardsDialog = cardsDialog;
         this.primary = primary;
         this.secondary = secondary;
         this.ternary = ternary;
         this.quaternary = quaternary;
-        this.active = active;
+        this.active = false;
     }
+
+    var _primary = "";
+    var _secondary = "";
+    var _ternary = "";
+    var _quarternary = "";
+
+    var _lightTheme = new Theme(
+        'light', 
+        '#fafafa', 
+        '#e0e0e0',
+        '#f5f5f5',
+        '#ffffff',
+        'rgb(0,153,153)',
+        'rgb(18,64,171)',
+        'rgb(255,170,0)',
+        'rgb(255,116,0)'
+    );
+    _lightTheme.active = true;
+
+    var _darkTheme = new Theme(
+        'dark',
+        '#303030',
+        '#000000',
+        '#212121',
+        '#424242',
+        'rgb(0,153,153)',
+        'rgb(18,64,171)',
+        'rgb(255,170,0)',
+        'rgb(255,116,0)'
+    );
 
     // ----- End Constructors ----- //
 
@@ -50,12 +84,38 @@ var database = new function () {
     (function () {
         _db = new Dexie(_DB_name());
 
-        return _db.version(1).stores({
+        _db.version(1).stores({
             Entries: 'uid, date, body, tags',
-            Theme: 'name, primary, secondary, ternary, quaternary, active',
+            Themes: '&name, background, primary, secondary, ternary, quaternary, active',
             Google: 'username, passwordHash, token'
-        });
+        })
+        _db.Themes
+            .toCollection()
+            .toArray()
+            .then(function (themes) {
+                if (themes.length < 1) {
+                    // Create dark & light themes if no themes present
+                    var themes = [_lightTheme, _darkTheme]
+                    _db.Themes.bulkAdd(themes);
+                }
+            });
     })();
+
+    // Get all themes
+    this.GetAllThemes = function () {
+        return _db.Themes
+            .toCollection()
+            .toArray();
+    }
+
+    // Set theme to active
+    this.SetThemeToActive = function (themeName) {
+        return _db.Themes
+            .where('active')
+            .equals(true)
+            .modify({active: false})
+            .update(themeName, {active: true});
+    }
 
     // Generates random uid
     function _GenerateRandomUID () {

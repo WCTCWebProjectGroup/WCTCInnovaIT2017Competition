@@ -8,6 +8,21 @@ var common = new function () {
     var _primaryLocks = 0;
     var _secondaryLocks = 0;
 
+    // ----- Applying Theme ----- //
+
+    function _applyTheme () {
+        database.GetTheme()
+            .then(function (themeObj) {
+                var themeableClass = "themeable";
+                document.querySelectorAll(".themeable").forEach(function (themeable) {
+                    themeable.setAttribute("class", themeableClass + " " + themeObj.name);
+                });
+            })
+    }
+    this.ApplyTheme = _applyTheme;
+
+    // ----- END Applying Theme ----- //
+
     // ----- Primary Loading Screens ----- //
     // Displays the primary loading screen
     this.ShowPrimaryLoading = _ShowPrimaryLoading;

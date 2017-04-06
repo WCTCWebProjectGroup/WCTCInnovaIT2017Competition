@@ -44,7 +44,7 @@
         
         <title>Index</title>
     </head>
-    <body>
+    <body class="themeable">
         <div id="common">
             <div id="loadingGif"></div>
 
@@ -124,9 +124,17 @@
         <main>
             <h2 class="gname">Settings</h2>
             <div class="MCard">
+                <h2 class="gname">Language</h2>
+                <select>
+                    <option>English (default)</option>
+                    <option>German</option>
+                    <option>Irish</option>
+                </select>
+            </div>
+            <div class="MCard">
                 <h2 class="gname">Theme</h2>
                 <form>
-                    <ul class="listNoBullet">
+                    <ul id="listOfThemes" class="listNoBullet">
                         <li>
                             <label for="lightThemeCheckbox">Light</label>
                             <input id="lightThemeCheckbox" type="checkbox" value="Light">
@@ -178,6 +186,22 @@
         <footer>
 
         </footer>
+
+        <!-- ----- Templates Go Here ----- -->
+
+        <template id="themeT">
+            <li>
+                <label for=""></label>
+                <div class="MCheckbox">
+                    <input id="" type="checkbox" value="">
+                </div>
+            </li>
+        </template>
+
+        <!-- ----- END Templates Section ----- -->
+
+        <!-- ----- All Scripts are to be kept below this line! ----- -->
+
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script type="text/javascript" src="js/init.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
@@ -194,6 +218,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
         <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
+        <script type="text/javascript" src="js/settings.js"></script>
         <script async defer src="https://apis.google.com/js/api.js"
         onload="this.onload=function(){};handleClientLoad()"
         onreadystatechange="if (this.readyState === 'complete') this.onload()">

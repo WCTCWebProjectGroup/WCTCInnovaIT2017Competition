@@ -22,6 +22,7 @@ var calendar = new function () {
                 if (!_goodDates.includes(cleanDate))
                     _goodDates.push(entry);
             });
+            
             $('.calendar').pignoseCalendar({
                 select: _onDateClickHandler,
                 scheduleOptions: {
@@ -31,6 +32,10 @@ var calendar = new function () {
                     }
                 },
                 schedules: _goodDates
+            });
+
+            document.getElementById("newEntry").addEventListener("click", ()=>{
+                window.location.href = '/journal.html?newentry=true';
             });
         })
 }
