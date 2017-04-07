@@ -86,19 +86,21 @@ var database = new function () {
 
         _db.version(1).stores({
             Entries: 'uid, date, body, tags',
-            Themes: '&name, background, primary, secondary, ternary, quaternary, active',
+            Themes: '++, &name, background, primary, secondary, ternary, quaternary, active',
             Google: 'username, passwordHash, token'
         })
-        _db.Themes
-            .toCollection()
-            .toArray()
-            .then(function (themes) {
-                if (themes.length < 1) {
-                    // Create dark & light themes if no themes present
-                    var themes = [_lightTheme, _darkTheme]
-                    _db.Themes.bulkAdd(themes);
-                }
-            });
+        _db.transaction('rw', _db.Themes, function () {
+            _db.Themes
+                .toCollection()
+                .toArray()
+                .then(function (themes) {
+                    if (themes.length < 1) {
+                        // Create dark & light themes if no themes present
+                        var themes = [_lightTheme, _darkTheme]
+                        _db.Themes.bulkAdd(themes);
+                    }
+                });
+        });
     })();
 
     // Get all themes
@@ -149,6 +151,23 @@ var database = new function () {
                     throw "Error occured while adding an entry to the db!";
                 });
         });
+    }
+
+    // Create new entry
+    this.CreateNewEntry = _CreateNewEntry;
+    function _CreateNewEntry (datetime, body, tags) {
+        return _GenerateRandomUID()
+            .then(function (newUid) {
+                let entry = new Entry();
+                entry.date = datetime;
+                entry.body.text = body;
+                entry.tags = tags;
+                entry.uid = newUid;
+
+                database.AddEntryToDB(entry).then(function () {
+                    console.log("Added entry");
+                });
+            })
     }
 
     // Gets all entries from the db
@@ -499,9 +518,20 @@ var connector = (new function(){
     // ----- CRUD Functions for entries ----- //
 
     // Create new entry
-    this.GoToCreateNewEntry = _GoToCreateNewEntry;
-    function _GoToCreateNewEntry () {
+    this.CreateNewEntry = _CreateNewEntry;
+    function _CreateNewEntry (datetime, body, tags) {
+        return _GenerateRandomUID()
+            .then(function (newUid) {
+                let entry = new Entry();
+                entry.date = datetime;
+                entry.body.text = body;
+                entry.tags = tags;
+                entry.uid = newUid;
 
+                database.AddEntryToDB(entry).then(function () {
+                    console.log("Added entry");
+                });
+            })
     }
 
     // Retrieve entry - Don't think i need this...

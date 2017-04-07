@@ -24,6 +24,7 @@ var calendar = new function () {
             });
             
             $('.calendar').pignoseCalendar({
+                toggle: true,
                 select: _onDateClickHandler,
                 scheduleOptions: {
                     colors: {

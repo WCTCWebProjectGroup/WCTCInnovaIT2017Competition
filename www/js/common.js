@@ -182,9 +182,10 @@ var common = new function () {
         });
     });
 
-    if (document.querySelectorAll("#froala-editor").length > 0) {
-        $(function() { $("#froala-editor").froalaEditor({
-            height: 200
-        }) });
-    }
+    // Moved to journal.js
+    // if (document.querySelectorAll("#froala-editor").length > 0) {
+    //     $(function() { $("#froala-editor").froalaEditor({
+    //         height: 200
+    //     }) });
+    // }
 })();

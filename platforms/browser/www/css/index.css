@@ -520,6 +520,7 @@ button.newEntry {
 
 .listNoBullet {
 	list-style: none;
+	padding-right: 0px;
 }
 
 .margin {
