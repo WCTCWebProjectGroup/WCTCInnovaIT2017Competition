@@ -17,64 +17,19 @@ var database = new function () {
         this.tags = [];
     }
 
-    function Theme (name, background, statusBar, appBar, cardsDialog, primary, secondary, ternary, quaternary) {
+    function Theme (name) {
         this.name = name;
-        this.background = background;
-        this.statusBar = statusbar;
-        this.appBar = appBar;
-        this.cardsDialog = cardsDialog;
-        this.primary = primary;
-        this.secondary = secondary;
-        this.ternary = ternary;
-        this.quaternary = quaternary;
         this.active = false;
     }
 
-    var _primary = "";
-    var _secondary = "";
-    var _ternary = "";
-    var _quarternary = "";
-
-    var _lightTheme = new Theme(
-        'light', 
-        '#fafafa', 
-        '#e0e0e0',
-        '#f5f5f5',
-        '#ffffff',
-        'rgb(0,153,153)',
-        'rgb(18,64,171)',
-        'rgb(255,170,0)',
-        'rgb(255,116,0)'
-    );
+    var _lightTheme = new Theme('light');
     _lightTheme.active = true;
 
-    var _darkTheme = new Theme(
-        'dark',
-        '#303030',
-        '#000000',
-        '#212121',
-        '#424242',
-        'rgb(0,153,153)',
-        'rgb(18,64,171)',
-        'rgb(255,170,0)',
-        'rgb(255,116,0)'
-    );
+    var _darkTheme = new Theme('dark');
 
     // ----- End Constructors ----- //
 
     var _db = {};
-    
-    // This was moved to calendar.js
-    // function _createCalendar() {
-    //     // Default Calendar
-    //     $('.calendar').pignoseCalendar({
-    //         //select: onClickHandler,
-    //         //enabledDates: goodDates
-    //     });
-    // }
-
-    // Initialize the calendar when ready
-    //initialize.push(_createCalendar);
 
     function _DB_name () {
         return "TripMySchoolJournalDB";
@@ -86,9 +41,29 @@ var database = new function () {
 
         _db.version(1).stores({
             Entries: 'uid, date, body, tags',
-            Themes: '++, &name, background, primary, secondary, ternary, quaternary, active',
+            Themes: '++, &name, active',
             Google: 'username, passwordHash, token'
-        })
+        });
+        _db.transaction('rw', _db.Themes, function () {
+            _db.Themes
+                .toCollection()
+                .toArray()
+                .then(function (themes) {
+                    if (themes.length < 1) {
+                        _db.Themes.
+                            bulkAdd([
+                                {name: 'light', active: true },
+                                {name: 'dark', active: false },
+                            ]);
+                        
+                    }
+                })
+        }).catch(function (error) {
+            console.log("failed to add themes to the db!");
+        });
+    })();
+
+    this.AddThemes = function () {
         _db.transaction('rw', _db.Themes, function () {
             _db.Themes
                 .toCollection()
@@ -97,11 +72,14 @@ var database = new function () {
                     if (themes.length < 1) {
                         // Create dark & light themes if no themes present
                         var themes = [_lightTheme, _darkTheme]
-                        _db.Themes.bulkAdd(themes);
+                        _db.Themes.
+                            put(_lightTheme);
                     }
-                });
+                })
+        }).catch(function (error) {
+            console.log("failed to add themes to the db!");
         });
-    })();
+    }
 
     // Get all themes
     this.GetAllThemes = function () {
@@ -112,11 +90,16 @@ var database = new function () {
 
     // Set theme to active
     this.SetThemeToActive = function (themeName) {
-        return _db.Themes
-            .where('active')
-            .equals(true)
-            .modify({active: false})
-            .update(themeName, {active: true});
+        return _db.transaction('rw', _db.Themes, function () {
+            _db.Themes
+                .where('active')
+                .equals(true)
+                .modify({active: false});
+            _db.Themes
+                .where('name')
+                .equalsIgnoreCase(themename)
+                .modify({active: true});
+        })
     }
 
     // Generates random uid
@@ -193,15 +176,29 @@ var database = new function () {
             .first();
     };
 
+    // Gets all entries that occur on the specified day
+    this.GetEntriesOnDay = function (date) {
+        var start = new Date(date);
+        start.setHours(0,0,0,0);
+
+        var end = new Date(date);
+        end.setHours(23,59,59,999)
+
+        return _db.Entries
+            .where('date')
+            .between(start, end)
+            .toArray();
+    }
+
     // Updates an entry from the db based on the uid
     this.UpdateEntryInDB = function (entry) {
         return _db.Entries
             .where('uid')
-            .equals(entry._uid)
+            .equals(entry.uid)
             .modify({
-                date: entry._date,
-                body: entry._body,
-                tags: entry._tags
+                date: entry.date,
+                body: entry.body,
+                tags: entry.tags
             });
     };
 
@@ -232,7 +229,7 @@ var database = new function () {
             .then(function (newUid) {
                 for (var i = 0; i < numToCreate; i++) {
                     let entry = new Entry();
-                    entry.body.text = RandFirstName() + " " + RandLastName() + " " + RandBody();
+                    entry.body.text = "<p>" + RandFirstName() + " " + RandLastName() + " " + RandBody() + "</p>";
                     entry.tags = RandTag();
                     entry.uid = i + newUid;
 
@@ -488,7 +485,7 @@ var connector = (new function(){
     this.GetNextEntries = function () {
         _ready = false;
         var limit = _currentEntries.length;
-        for (var i = 0; i < limit; i++) {
+        for (var i = 0; i < limit && _afterEntries.length > 0; i++) {
             _RemoveFirstEntry();
             _GetNextEntry();
         };
@@ -588,20 +585,21 @@ var connector = (new function(){
     // ----- END CRUD Functions for entries ----- //
 
     this.UpdateTagFilters = function () {
-        database
-        .GetAllTags()
-        .then(function (uniqueTags) {
-            var tagEls = document.getElementById("filterableTags");
-            uniqueTags.forEach(function (tag) {
-                let liEl = document.createElement("li");
-                var checkboxEl = common.CreateMCheckbox(tag);
-                
-                liEl.innerText = tag;
-                
-                liEl.appendChild(checkboxEl);
-                tagEls.appendChild(liEl);
-            });
-        });
+        if (document.querySelectorAll("#filterableTags").length > 0) {
+            database.GetAllTags()
+                .then(function (uniqueTags) {
+                    var tagEls = document.getElementById("filterableTags");
+                    uniqueTags.forEach(function (tag) {
+                        let liEl = document.createElement("li");
+                        var checkboxEl = common.CreateMCheckbox(tag);
+                        
+                        liEl.innerText = tag;
+                        
+                        liEl.appendChild(checkboxEl);
+                        tagEls.appendChild(liEl);
+                    });
+                });
+        }
     }
 
     // Initialize _min, _max, and _allEntries. Also hide loading screen
@@ -616,16 +614,6 @@ var connector = (new function(){
         // View previous/next entries
         document.getElementById("viewNextEntries").addEventListener("click", connector.GetNextEntries);
         document.getElementById("viewPrevEntries").addEventListener("click", connector.GetPrevEntries);
-
-        // Create new entry
-        document.getElementById("createNewEntry").addEventListener("click", connector.GoToCreateNewEntry);
-
-        // Retrieve entry?
-
-        // Update entry
-        document.getElementById("saveChanges").addEventListener("click", () => {
-            
-        });
     }
 })();
 

@@ -90,7 +90,7 @@
                 <tr>
                     <td id="sideNavClickable">
                         <div id="drawerContent">
-                            <a id="clsBtn" href="javascript:void(0)" class="closeDrawer"></a>
+                            <a id="clsBtn" href="javascript:void(0)" class="closeButton"></a>
                             <div class="VCenter">
                                 <a href="calendar.html">Calendar</a>
                                 <a href="journal.html">Journal</a>
@@ -135,17 +135,8 @@
                 <h2 class="gname">Theme</h2>
                 <form>
                     <ul id="listOfThemes" class="listNoBullet">
-                        <li>
-                            <label for="lightThemeCheckbox">Light</label>
-                            <input id="lightThemeCheckbox" type="checkbox" value="Light">
-                        </li>
-                        <li>
-                            <label for="darkThemeCheckbox">Dark</label>
-                            <input id="darkThemeCheckbox" type="checkbox" value="Dark">
-                        </li>
                     </ul>
                 </form>
-                <input id="saveThemeBtn" type="button" value="Save">
             </div>
 
             <div class="MCard">
@@ -157,10 +148,10 @@
                 <hr>
                 Create New Reminders
                 <label for="newReminderDate">Enter Date</label>
-                <input id="newReminderDate" type="date">
+                <input id="newReminderDate" class="MInput" type="date">
                 <label for="newReminderTime">Enter Time</label>
-                <input id="newReminderTime" type="time">
-                <input id="addNewReminder" type="button" value="Add Reminder">
+                <input id="newReminderTime" class="MInput" type="time">
+                <input id="addNewReminder" class="MButton" type="button" value="Add Reminder">
             </div>
 
             <div class="MCard">
@@ -177,7 +168,7 @@
 
             <div class="MCard">
                 <h2 class="gname">Google Account</h2>
-                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                <div class="g-signin2 horizontallyCentered" data-onsuccess="onSignIn"></div>
                 <button id="authorize-button" style="display: none;">Authorize</button>
                 <button id="signout-button" style="display: none;">Sign Out</button>
             </div>
@@ -191,10 +182,8 @@
 
         <template id="themeT">
             <li>
+                <input id="" name="theme" class="MRadioButton" type="radio" value="">
                 <label for=""></label>
-                <div class="MCheckbox">
-                    <input id="" type="checkbox" value="">
-                </div>
             </li>
         </template>
 

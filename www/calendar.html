@@ -89,7 +89,7 @@
                 <tr>
                     <td id="sideNavClickable">
                         <div id="drawerContent">
-                            <a id="clsBtn" href="javascript:void(0)" class="closeDrawer"></a>
+                            <a id="clsBtn" href="javascript:void(0)" class="closeButton"></a>
                             <div class="VCenter">
                                 <a href="calendar.html">Calendar</a>
                                 <a href="journal.html">Journal</a>
@@ -121,6 +121,12 @@
         <!--NAVEND-->
 
         <main>
+            <div id="sidePanel">
+                <a id="clsPanelBtn" href="javascript:void(0)" class="closeButton"></a>
+                <ul id="selectedDayEntries">
+                </ul>
+            </div>
+
             <div id="contextModal">
                 <!--<a href="javascript:void(0)" id="closePanel"></a>-->
                 <ul class="listNoBullet">
@@ -136,14 +142,54 @@
                 </ul>
             </div>
 
-            <div id="sidePanel">
-            </div>
-
             <h2 class="gname">Calendar</h2>
             <div class="floatLeft margin">
                 <button id="newEntry" class="MButton newEntry">New Entry</button>
             </div>
-            <div class="calendar"></div>
+            <div class="MTabViews">
+                <div class="MTabLabels">
+                    <button class="MTabLabel">Calendar</button>
+                    <button class="MTabLabel">List</button>
+                </div>
+
+                <div class="MTabViewsBody">
+                    <div class="MTab" data-bind="Calendar">
+                        <div class="calendar"></div>
+                    </div>
+                    <div class="MTab" data-bind="List">
+                        <ul class="listNoBullet">
+                            <li>
+                                <label class="MLabel" for="filterByTag">Filter by Tag</label>
+                                <div id="filterableTags"></div>
+                                <!--<input id="filterByTag" class="MInput" type="text">-->
+                            </li>
+                            <li>
+                                <label class="MLabel" for="filterAfterDate">Filter After Date</label>
+                                <input id="filterAfterDate" class="MInput" type="date">
+                            </li>
+                                <label class="MLabel" for="filterBeforeDate">Filter Before Date</label>
+                                <input id="filterBeforeDate" class="MInput" type="date">
+                            <li>
+                            <li>
+                                <input id="applyFilters" class="MButton" type="button" value="Search">
+                            </li>
+
+                        </ul>
+
+                        <ul id="entriesContainer">
+
+                        </ul>
+                        <div class="pagination">
+                            <button id="viewPrevEntries" class="pagination-button" value="">
+                                <
+                            </button>
+                            <button id="viewNextEntries" class="pagination-button" value="">
+                                >
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <footer>

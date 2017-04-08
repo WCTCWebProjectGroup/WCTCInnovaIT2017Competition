@@ -91,6 +91,7 @@ var common = new function () {
     // Display alert
     this.DisplayAlert = DisplayAlert;
     function DisplayAlert (message) {
+        document.getElementById("openAlert").style.animationName = "newAlert";
         if (_alertActive) {
             _alertQueue.push(message);
         } else {
@@ -182,10 +183,35 @@ var common = new function () {
         });
     });
 
-    // Moved to journal.js
-    // if (document.querySelectorAll("#froala-editor").length > 0) {
-    //     $(function() { $("#froala-editor").froalaEditor({
-    //         height: 200
-    //     }) });
-    // }
+    // Handle tabs
+    if (document.querySelectorAll(".MTabViews").length > 0) {
+        var tabEls = document.getElementsByClassName("MTabLabel");
+        for (let tablabel of tabEls) {
+            tablabel.addEventListener("click", function (evt) {
+                var tabName = tablabel.innerText;
+                var tabcontent = document.getElementsByClassName("MTab");
+                for (var i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+
+                // Get all elements with class="tablinks" and remove the class "active"
+                var tablinks = document.getElementsByClassName("MTabLabel");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+
+                // Show the current tab, and add an "active" class to the button that opened the tab
+                var tabs = document.getElementsByClassName("MTab");
+                for(let tab of tabs) {
+                    if (tab.getAttribute("data-bind") == tabName) {
+                        tab.style.display = "block";
+                    }
+                };
+                evt.currentTarget.className += " active";
+            });
+        }
+
+        // Then select the first tab as active
+        document.querySelector(".MTabLabel").click();
+    }
 })();

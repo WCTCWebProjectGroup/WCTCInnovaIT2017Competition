@@ -76,36 +76,40 @@ var settings = new function () {
 
 // ----- Event Listeners ----- //
 
-(function () {
+function settingsInit () {
     var themeTemplateEl = document.getElementById("themeT");
     var listOfThemes = document.getElementById("listOfThemes");
 
     database.GetAllThemes()
         .then(function (themes) {
             themes.forEach(function (theme) {
-                let newThemeEl = document.importNode(themeTemplateEl, true);
-                let themeLabelEl = newThemeEl.getElementByTagName("label");
-                let themeCheckBoxEl = newThemeEl.getElementByTagName("input");
+                let newThemeEl = document.importNode(themeTemplateEl.content, true);
+                let themeLabelEl = newThemeEl.querySelector("label");
+                let themeRadioBtnEl = newThemeEl.querySelector("input");
 
                 themeLabelEl.innerText = theme.name;
-                themeLabelEl.setAttribute("for", theme.name + "ThemeCheckbox");
+                themeLabelEl.setAttribute("for", theme.name + "ThemeRadioBtn");
 
-                themeCheckBoxEl.setAttribute("id", theme.name + "ThemeCheckbox");
-                themeCheckBoxEl.setAttribute("value", theme.active);
+                themeRadioBtnEl.setAttribute("id", theme.name + "ThemeRadioBtn");
+                themeRadioBtnEl.setAttribute("value", theme.active);
 
                 listOfThemes.appendChild(newThemeEl);
+                if (theme.active == true) {
+                    themeRadioBtnEl.checked = true;
+                }
 
-                newThemeEl.addEventListener("click", function (theme) {
-                    if (newThemeEl.value) {
+                themeLabelEl.addEventListener("click", function () {
+                    if (themeRadioBtnEl.value ) {
                         database.SetThemeToActive(theme.name)
-                            .then(()=>{
+                            .then(function () {
                                 settings.ApplyTheme();
                             });
                     }
                 });
             });
         });
-})();
+};
+initialize.push(settingsInit);
 
 // ----- END Event Listeners ----- //
 

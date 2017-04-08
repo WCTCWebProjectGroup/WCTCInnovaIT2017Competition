@@ -145,6 +145,7 @@
 
 .MFloatingActionButton, .MSnackbar {
 	box-shadow: 6px 6px 12px rgba(0,0,0,.5);
+	z-index: 6;
 }
 
 .MAppBar, .MSearchBar:focus {
@@ -155,7 +156,7 @@
 	box-shadow: 3px 3px 6px rgba(0,0,0,.5);
 }
 
-.MCard, .MButton, .MCheckBoxButton, .MSearchBar, .MInput, .MLabel {
+.MCard, .MButton, .MCheckBoxButton, .MSearchBar, .MInput, .MLabel, .MRadioButton {
 	box-shadow: 2px 2px 4px rgba(0,0,0,.5);
 }
 
@@ -294,6 +295,8 @@
 	border-bottom: 2px solid rgb(255, 170, 0);
 	/*display: block;*/
 	outline: none;
+	text-align: center;
+
 	padding: 8px;
 
 	max-width: 300px;
@@ -301,7 +304,7 @@
 }
 
 .MLabel {
-	background-color: rgba(0,0,0,0);
+	background-color: rgb(204, 186, 0);
 	color: rgba(14,19,33, .95);
 	display: block;
 	font-weight: bold;
@@ -317,6 +320,76 @@
 	background-color: rgb(1,232,232);
 	color: rgba(14,19,33, .95);
 }
+
+/* ----- MRadio Button ----- */
+
+input[type='radio'].MRadioButton {
+	visibility: hidden;
+
+	position: relative;
+
+	height: 22px;
+	width: 22px;
+}
+/*
+input[type='radio'].MRadioButton + label::after {
+	height: 18px;
+	width: 18px;
+}*/
+
+input[type='radio'].MRadioButton + label::before {
+	background-color: rgba(0,0,0,0);
+	content: url("../img/radioButtonUnChecked_small.png");
+	opacity: 1;
+
+	height: 24px;
+	width: 24px;
+}
+
+input[type='radio'].MRadioButton:checked + label::before {
+	content: url("../img/radioButtonChecked_small.png");
+}
+
+/* ----- MTabViews ----- */
+.MTabViews {
+	overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+.MTabViews > .MTabLabels {
+	display: flex;
+	width: 100%;
+}
+
+.MTabViews > .MTabLabels > button.MTabLabel {
+	background-color: inherit;
+    border: none;
+	flex-basis: 100%;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+}
+
+.MTabViews > .MTabLabels > button.MTabLabel:hover {
+	background-color: #ddd;
+}
+
+.MTabViews > .MTabLabels >  button.MTabLabel.active {
+	background-color: #ccc;
+}
+
+.MTabViews > .MTab {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+/* ----- END MTabViews ----- */
+
+/* ----- END MRadio Button ----- */
 
 .MSelect {
 	background-color: rgb(216, 216, 216);
@@ -338,6 +411,9 @@ body.light {
 
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+
+	transition: .45s color ease-in-out;
+	transition: .45s background-color ease-in-out;
 }
 
 body {
@@ -417,6 +493,35 @@ main > * {
 	background-repeat: no-repeat;
 }
 
+.closeButton {
+	background-image: url("../img/ic_close_black_24dp_2x.png");
+	background-position: center;
+	background-repeat: no-repeat; 
+	
+	position: absolute;
+	top: 0px;
+	right: 25px;
+
+	height: 48px;
+	width: 48px;
+}
+
+.closeButton:hover::before {
+	background-color: rgb(255,170,0);
+	border: 4px solid rgb(166,111,0);
+	border-radius: 50%;
+	content: "";
+	opacity: .75;
+
+	position: absolute;
+	left: -8px;
+	top: -6px;
+	z-index: -1;
+
+	height: 56px;
+	width: 56px;
+}
+
 .centeredText,
 .centeredText * {
 	text-align: center;
@@ -466,7 +571,9 @@ main > * {
 	-webkit-transition-property: max-height;
 }
 
-.group:hover .gcontent {
+.MCard:hover .gcontent,
+.MCard:focus .gcontent,
+.MCard:active .gcontent {
 	max-height: 300px;
 
 	overflow-y: scroll;
@@ -500,6 +607,11 @@ main > * {
     -webkit-transition: .4s ease-in-out .4s ease-in-out;
 }
 
+.horizontallyCentered,
+.horizontallyCentered > * {
+	margin: auto;
+}
+
 .newEntry {
 	background-image: url(../img/ic_add_white_24dp_2x.png);
 	background-position: 50%;
@@ -520,7 +632,7 @@ button.newEntry {
 
 .listNoBullet {
 	list-style: none;
-	padding-right: 0px;
+	padding-left: 0px;
 }
 
 .margin {
@@ -630,6 +742,12 @@ button.newEntry {
     margin: 0;
 }
 
+#clsPanelBtn {
+	position: absolute;
+	top: 32px;
+	right: 32px;
+}
+
 #contextModal {
 	display: none;
 	
@@ -663,6 +781,11 @@ button.newEntry {
 
 #openAlert {
 	background-image: url("../img/ic_notifications_white_24dp_2x.png");
+	
+	animation-name: none;
+	animation-direction: alternate;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
 }
 
 #openDrawer {
@@ -674,9 +797,10 @@ button.newEntry {
 	background-color: rgb(255,170,0);
 	background-repeat: no-repeat;
 	background-position: center;
+	border-color: white;
 	border-radius: 50%;
 	border-style: solid;
-	border-width: 0;
+	border-width: 2px;
 	box-shadow: 4px 4px 8px rgba(0,0,0,.5);
 
 	/*display: none;*/
@@ -811,6 +935,11 @@ button.newEntry {
 	/*-webkit-transition-property: width;*/
 }
 
+#selectedDayEntries {
+	margin-top: 108px;
+	padding: 0;
+}
+
 #sideNav table {
     height: 100%;
     width: 100%;
@@ -865,32 +994,24 @@ button.newEntry {
 	height: 1px;
 }
 
-#sideNav .closeDrawer {
-	background-image: url("../img/ic_close_black_24dp_2x.png");
-	background-position: center;
-	background-repeat: no-repeat; 
+#sidePanel {
+	background-color: #fafafa;
 	
-	position: absolute;
-	top: 0px;
-	right: 25px;
-	margin-left: 50px;
+	position: fixed;
+	left: 100%;
+	top: 0;
+	overflow-y: scroll;
+	
+	height: 100%;
+	width: 100%;
+	
+	z-index: 24;
 
-	height: 48px;
-	width: 48px;
+	transition: left .5s ease-in-out;
 }
 
-#sideNav .closeDrawer:hover::before {
-	background-color: var(--A400);
-	border: 4px solid var(--A400);
-	border-radius: 50%;
-	content: "";
-	opacity: .75;
-
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: -1;
-
-	height: 56px;
-	width: 56px;
+/* ----- Animations ----- */
+@keyframes newAlert {
+	from {border-color: white;}
+	to {border-color: red;}
 }
