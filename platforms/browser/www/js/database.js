@@ -52,8 +52,8 @@ var database = new function () {
                     if (themes.length < 1) {
                         _db.Themes.
                             bulkAdd([
-                                {name: 'light', active: true },
-                                {name: 'dark', active: false },
+                                {name: 'light', active: 1 },
+                                {name: 'dark', active: 0 },
                             ]);
                         
                     }
@@ -93,12 +93,16 @@ var database = new function () {
         return _db.transaction('rw', _db.Themes, function () {
             _db.Themes
                 .where('active')
-                .equals(true)
-                .modify({active: false});
+                .equals(1)
+                .modify(function (theme) {
+                    theme.active = 0;
+                });
             _db.Themes
                 .where('name')
-                .equalsIgnoreCase(themename)
-                .modify({active: true});
+                .equalsIgnoreCase(themeName)
+                .modify(function (theme) {
+                    theme.active = 1;
+                });
         })
     }
 
@@ -265,13 +269,16 @@ var database = new function () {
     }
 
     this.GetTheme = function ()  {
-        return _db.Theme
+        return _db.Themes
             .where('active')
-            .equals(true);
+            .equals(1)
+            .first(function (theme) {
+                return theme;
+            });
     }
 
     this.SetTheme = function (themeObj) {
-        return _db.Theme
+        return _db.Themes
             .update(themeObj.name, {
                 name: theme.name,
                 primary: theme.primary,

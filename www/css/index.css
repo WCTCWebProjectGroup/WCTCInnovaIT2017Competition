@@ -324,12 +324,9 @@
 /* ----- MRadio Button ----- */
 
 input[type='radio'].MRadioButton {
-	visibility: hidden;
+	display: none;
 
 	position: relative;
-
-	height: 22px;
-	width: 22px;
 }
 /*
 input[type='radio'].MRadioButton + label::after {
@@ -342,8 +339,8 @@ input[type='radio'].MRadioButton + label::before {
 	content: url("../img/radioButtonUnChecked_small.png");
 	opacity: 1;
 
-	height: 24px;
-	width: 24px;
+	height: 40px;
+	width: 40px;
 }
 
 input[type='radio'].MRadioButton:checked + label::before {
@@ -675,6 +672,14 @@ button.newEntry {
     text-align: center;
 }
 
+.themeLabel {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	text-indent: -24px;
+	height: 40px;
+}
+
 .themeable {
 	transition: background-color .2s ease;
 }
@@ -916,6 +921,51 @@ button.newEntry {
 
 	margin-left: 8px;
 }*/
+
+/* ----- ShareModal ----- */
+
+#shareModal {
+	border-collapse: collapse;
+	box-shadow: 4px 4px 8px rgba(0,0,0,.25);
+	display: table;
+
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 100%;
+
+	z-index: 24;
+
+	transition: top .3s ease-in-out;
+}
+
+#shareModal tbody {
+	background-color: rgba(0,0,0,0.2);
+}
+
+#shareModal .hide {
+	background-color: rgba(0,0,0,0.2);
+}
+
+#shareModal .hide {
+	display: table-row;
+
+	width: 100%;
+	height: 100%;
+	transition: height .3s ease-in-out;
+}
+
+#shareModal .body td {
+	background-color: rgb(216, 216, 216);;
+	border-top: 4px solid black;
+	display: table-row;
+
+	width: 100%;
+
+	transition: height .3s ease-in-out;
+}
+
+/* ----- END ShareModal ----- */
 
 #sideNav {
 	background-color: rgba(250,250,250,0);

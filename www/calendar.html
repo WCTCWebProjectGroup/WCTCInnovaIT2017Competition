@@ -127,20 +127,21 @@
                 </ul>
             </div>
 
-            <div id="contextModal">
-                <!--<a href="javascript:void(0)" id="closePanel"></a>-->
-                <ul class="listNoBullet">
-                    <li>
-                        Edit/View Entry
-                    </li>
-                    <li>
-                        Delete Entry
-                    </li>
-                    <li>
-                        Share Entry
-                    </li>
-                </ul>
-            </div>
+            <table id="shareModal">
+                <tbody>
+                    <tr class="hide">
+
+                    </tr>
+                    <tr class="body">
+                        <td>
+                            <div class="secondaryLoadingGif"></div>
+                            <input id="uploadToGoogle" class="MButton margin" type="button" value="Upload to G-Drive">
+                            <input id="submitToBlackboard" class="MButton margin" type="button" value="Submit to Blackboard">
+                            <div id="shareStatus"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
             <h2 class="gname">Calendar</h2>
             <div class="floatLeft margin">

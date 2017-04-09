@@ -37,10 +37,10 @@
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <link rel="stylesheet" href="css/pignose.calendar.min.css"> <!-- Calendar Css -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css"> <!-- Whysiwyg Css -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_style.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
+        <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
+        <link rel="stylesheet" href="css/codemirror.min.css"> <!-- Whysiwyg Css -->
+        <link href="css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
+        <link href="css/froala_style.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
         
         <title>Index</title>
     </head>
@@ -157,20 +157,38 @@
             <div class="MCard">
                 <h2 class="gname">Blackboard Account</h2>
                 <form id="blackboardForm">
-                    <input id="schoolBlackboardUrl" class="MInput" type="url" placeholder="school blackboard login url">
-                    <select id="blackboardSchool">
-                    </select>
-                    <input id="blackboardUsername" class="MInput" type="email" placeholder="username">
-                    <input id="blackboardPassword" class="MInput" type="password" placeholder="password">
-                    <input id="blackboardLoginBtn" class="MButton" type="submit">
+                    <div class="phaseI">
+                        <select id="blackboardSchool">
+                            <option>Select your school</option>
+                        </select>
+                        <input id="blackboardUsername" class="MInput" type="email" placeholder="username">
+                        <input id="blackboardPassword" class="MInput" type="password" placeholder="password">
+                        <input id="blackboardLoginBtn" class="MButton" type="submit">
+                    </div>
+
+                    <div class="phaseII">
+                        <hr>
+
+                        <select id="blackboardClasses">
+                            <option>Select your class</option>
+                        </select>
+                    </div>
+
+                    <div class="phaseIII">
+                        <hr>
+
+                        <select id="classAssignments">
+                            <option>Select assignment</option>
+                        </select>
+                    </div>
                 </form>
             </div>
 
             <div class="MCard">
                 <h2 class="gname">Google Account</h2>
-                <div class="g-signin2 horizontallyCentered" data-onsuccess="onSignIn"></div>
-                <button id="authorize-button" style="display: none;">Authorize</button>
-                <button id="signout-button" style="display: none;">Sign Out</button>
+                <button id="authorize-button" class="MButton horizontallyCentered" style="display: none;">Authorize</button>
+                <button id="signout-button" class="MButton horizontallyCentered" style="display: none;">Sign Out</button>
+                <pre id="content"></pre>
             </div>
         </main>
 
@@ -191,7 +209,7 @@
 
         <!-- ----- All Scripts are to be kept below this line! ----- -->
 
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
         <script type="text/javascript" src="js/init.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
@@ -199,19 +217,17 @@
         <script type="text/javascript" src="js/notifications.js"></script>
         <script type="text/javascript" src="js/dexie.js"></script>
         <script type="text/javascript" src="js/database.js"></script>
-        <!--<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>-->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
+        <script type="text/javascript" src="js/codemirror.min.js"></script>
+        <script type="text/javascript" src="js/xml.min.js"></script>
+        <script type="text/javascript" src="js/froala_editor.pkgd.min.js"></script>
         <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
         <script type="text/javascript" src="js/settings.js"></script>
+        <!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
         <script async defer src="https://apis.google.com/js/api.js"
-        onload="this.onload=function(){};handleClientLoad()"
-        onreadystatechange="if (this.readyState === 'complete') this.onload()">
-        </script>
+            onload="this.onload=function(){};handleClientLoad()"
+            onreadystatechange="if (this.readyState === 'complete') this.onload()"></script> 
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

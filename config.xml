@@ -24,5 +24,6 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <engine name="browser" spec="~4.1.0" />
-    <plugin name="cordova-plugin-camera" spec="~2.4.0" />
+    <plugin name="cordova-plugin-jc-googledrive" spec="~1.1.0" />
+    <plugin name="cordova-plugin-file" spec="~4.3.2" />
 </widget>

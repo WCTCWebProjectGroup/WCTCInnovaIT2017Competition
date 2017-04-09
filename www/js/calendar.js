@@ -1,6 +1,11 @@
 var calendar = new function () {
     var _goodDates = [];
+    var _sharedEntries = [];
     var sidePanel = document.getElementById("sidePanel");
+
+    this.SharedEntries = function () {
+        return _sharedEntries;
+    }
     
     function _entryCardElement (entryObj) {
         var card = document.createElement("div");
@@ -16,16 +21,20 @@ var calendar = new function () {
 
         containerEl.setAttribute("class", "gcontent");
 
-        editBtnEl.setAttribute("class", "MButton");
+        editBtnEl.setAttribute("class", "MButton margin");
         editBtnEl.setAttribute("value", "Edit/View");
         editBtnEl.setAttribute("type", "button");
         editBtnEl.addEventListener("click", function () {
             document.location.assign("/journal.html?newEntry=false&entryID=" + entryObj.uid);
         });
 
-        shareBtnEl.setAttribute("class", "MButton");
+        shareBtnEl.setAttribute("class", "MButton margin");
         shareBtnEl.setAttribute("value", "Share");
         shareBtnEl.setAttribute("type", "button");
+        shareBtnEl.addEventListener("click", function () {
+            console.log("Sharing entries is still a WIP");
+            _showShareModalForEntries(entryObj);
+        });
 
         card.appendChild(title);
         containerEl.appendChild(editBtnEl);
@@ -56,6 +65,21 @@ var calendar = new function () {
             });
     }
     this.ShowSidePanel = _showSidePanel;
+
+    function _showShareModalForEntries (entry) {
+        _sharedEntries.push(entry);
+        var modal = document.getElementById("shareModal");
+        modal.style.top = "0px";
+    }
+    this.ShowShareModalForEntries = _showShareModalForEntries;
+
+    function _hideShareModalForEntries () {
+        console.log(_sharedEntries.indexOf());
+        var modal = document.getElementById("shareModal");
+        modal.style.top = "100%";
+        _sharedEntries.pop();
+    }
+    this.HideShareModalForEntries = _hideShareModalForEntries;
 
     function _hideSidePanel () {
         document.getElementById("selectedDayEntries").innerHTML = "";
@@ -116,9 +140,29 @@ var calendar = new function () {
 
 // ----- Event Listeners ----- //
 
+// TODO: Save the file to disk?
 function init () {
     document.getElementById("clsPanelBtn").addEventListener("click", function () {
         calendar.HideSidePanel();
+    });
+    document.getElementById("shareModal").addEventListener("click", function () {
+        calendar.HideShareModalForEntries();
+    });
+    document.getElementById("uploadToGoogle").addEventListener("click", function (evt) {
+        var entry = calendar.SharedEntries()[0];
+        database.GetEntryInDB(entry.uid).then(function () {
+            console.log("Submitting document " + entry.uid + "to google");
+            console.log(entry.body);
+        });
+        evt.stopPropagation();
+    });
+    document.getElementById("submitToBlackboard").addEventListener("click", function (evt) {
+        evt.stopPropagation();
+        var entry = calendar.SharedEntries()[0];
+        database.GetEntryInDB(entry.uid).then(function () {
+            console.log("Submitting document " + entry.uid + "to blackboard");
+            console.log(entry.body);
+        });
     });
 }
 initialize.push(init);
