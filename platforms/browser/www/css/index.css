@@ -239,7 +239,25 @@
 
 /* ----- Checkboxes ----- */
 
-.MCheckbox {
+input[type='checkbox'].MCheckbox {
+	display: none;
+	position: relative;
+}
+
+input[type='checkbox'].MCheckbox + label::before {
+	background-color: rbga(0,0,0,0);
+	content: url("../img/checkBoxUnChecked_small.png");
+	opacity: 1;
+
+	height: 40px;
+	width: 40px;
+}
+
+input[type='radio'].MCheckbox:checked + label::before {
+	content: url("../img/checkBoxChecked_small.png");
+}
+
+/*.MCheckbox {
 	background-color: rgb(255, 255, 255);
 	border: 2px rgb(0, 153, 153);
 
@@ -270,7 +288,7 @@
 
 	height: 80%;
 	width: 80%;
-}
+}*/
 
 /* ----- END Checkboxes ----- */
 
@@ -346,6 +364,8 @@ input[type='radio'].MRadioButton + label::before {
 input[type='radio'].MRadioButton:checked + label::before {
 	content: url("../img/radioButtonChecked_small.png");
 }
+
+/* ----- END MRadio Button ----- */
 
 /* ----- MTabViews ----- */
 .MTabViews {

@@ -109,6 +109,11 @@ function settingsInit () {
                 });
             });
         });
+
+    database.GetAllTags()
+        .then(function (tags) {
+
+        });
 };
 initialize.push(settingsInit);
 

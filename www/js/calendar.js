@@ -6,6 +6,23 @@ var calendar = new function () {
     this.SharedEntries = function () {
         return _sharedEntries;
     }
+
+    function _createCheckboxEl (label) {
+        var mcheckbox = document.importNode(document.getElementById("checkboxT").content, true);
+        var labelEl = mcheckbox.querySelector("label");
+        var inputEl = mcheckbox.querySelector("input");
+
+        labelEl.innerText = label;
+        labelEl.setAttribute("id", label + "Tag");
+        
+        inputEl.addEventListener("click", function () {
+            if (inputEl.value) {
+                console.log("Applied filter " + label);
+            }
+        });
+
+        return mcheckbox;
+    }
     
     function _entryCardElement (entryObj) {
         var card = document.createElement("div");
