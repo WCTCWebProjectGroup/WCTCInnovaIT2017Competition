@@ -958,7 +958,7 @@ button.newEntry {
 #shareModal .body td {
 	background-color: rgb(216, 216, 216);;
 	border-top: 4px solid black;
-	display: table-row;
+	display: table;
 
 	width: 100%;
 

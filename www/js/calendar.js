@@ -141,7 +141,81 @@ var calendar = new function () {
 // ----- Event Listeners ----- //
 
 // TODO: Save the file to disk?
+// ---- Save File to Disk ----- //
+window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
+
+    console.log('file system open: ' + fs.name);
+    createFile(fs.root, "newTempFile.txt", false);
+
+}, console.log);
+function createFile(dirEntry, fileName, isAppend) {
+    // Creates a new file or returns the file if it already exists.
+    dirEntry.getFile(fileName, {create: true, exclusive: false}, function(fileEntry) {
+
+        writeFile(fileEntry, null, isAppend);
+
+    }, console.log);
+
+}
+function writeFile(fileEntry, dataObj) {
+    // Create a FileWriter object for our FileEntry (log.txt).
+    fileEntry.createWriter(function (fileWriter) {
+
+        fileWriter.onwriteend = function() {
+            console.log("Successful file write...");
+            readFile(fileEntry);
+        };
+
+        fileWriter.onerror = function (e) {
+            console.log("Failed file write: " + e.toString());
+        };
+
+        // If data object is not passed in,
+        // create a new Blob instead.
+        if (!dataObj) {
+            dataObj = new Blob(['some file data'], { type: 'text/plain' });
+        }
+
+        fileWriter.write(dataObj);
+    });
+}
+function readFile(fileEntry) {
+
+    fileEntry.file(function (file) {
+        var reader = new FileReader();
+
+        reader.onloadend = function() {
+            console.log("Successful file read: " + this.result);
+            displayFileData(fileEntry.fullPath + ": " + this.result);
+        };
+
+        reader.readAsText(file);
+
+    }, console.log);
+}
+
+// ----- END Save File to Disk ---- //
+
 function init () {
+    function _createTmpFile () {
+        window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
+
+            console.log('file system open: ' + fs.name);
+            createFile(fs.root, "newTempFile.txt", false);
+
+        }, onErrorLoadFs);
+
+        function createFile(dirEntry, fileName, isAppend) {
+        // Creates a new file or returns the file if it already exists.
+        dirEntry.getFile(fileName, {create: true, exclusive: false}, function(fileEntry) {
+
+            writeFile(fileEntry, null, isAppend);
+
+        }, onErrorCreateFile);
+
+       }
+    }
+
     document.getElementById("clsPanelBtn").addEventListener("click", function () {
         calendar.HideSidePanel();
     });
