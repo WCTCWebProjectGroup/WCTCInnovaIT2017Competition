@@ -75,9 +75,9 @@ function _journalInit () {
 
 
     // ----- Event Listeners ----- //
-    cameraBtn.addEventListener("click", function () {
-        console.log("Taking a picture is still a WIP!");
-    });
+    // cameraBtn.addEventListener("click", function () {
+    //     console.log("Taking a picture is still a WIP!");
+    // });
     discardChangesBtn.addEventListener("click", function () {
         console.log("Discarding changes");
         document.location.assign("/index.html");
