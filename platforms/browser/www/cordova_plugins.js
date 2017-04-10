@@ -65,14 +65,6 @@ module.exports = [
         "runs": true
     },
     {
-        "file": "plugins/cordova-plugin-jc-googledrive/www/googleDrive.js",
-        "id": "cordova-plugin-jc-googledrive.GoogleDrive",
-        "pluginId": "cordova-plugin-jc-googledrive",
-        "clobbers": [
-            "window.plugins.gdrive"
-        ]
-    },
-    {
         "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
         "id": "cordova-plugin-file.DirectoryEntry",
         "pluginId": "cordova-plugin-file",
@@ -250,6 +242,14 @@ module.exports = [
         "merges": [
             "window.FileSystem"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-jc-googledrive/www/googleDrive.js",
+        "id": "cordova-plugin-jc-googledrive.GoogleDrive",
+        "pluginId": "cordova-plugin-jc-googledrive",
+        "clobbers": [
+            "window.plugins.gdrive"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -260,9 +260,9 @@ module.exports.metadata =
     "cordova-plugin-network-information": "1.3.2",
     "cordova-plugin-device": "1.1.5",
     "cordova-plugin-app-event": "1.2.0",
-    "cordova-plugin-jc-googledrive": "1.1.0",
     "cordova-plugin-compat": "1.1.0",
-    "cordova-plugin-file": "4.3.2"
+    "cordova-plugin-file": "4.3.2",
+    "cordova-plugin-jc-googledrive": "1.1.0"
 }
 // BOTTOM OF METADATA
 });

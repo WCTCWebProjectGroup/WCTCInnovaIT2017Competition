@@ -8,6 +8,70 @@ var common = new function () {
     var _primaryLocks = 0;
     var _secondaryLocks = 0;
 
+    // ----- Upload to gdrive ----- //
+
+    this.UploadToGoogleDrive = function (entry) {
+        // TODO: Check if signed in
+        
+        window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
+
+            console.log('file system open: ' + fs.name);
+            fs.root.getFile("tmp.txt", {create: true, exclusive: false}, function(fileEntry) {
+                fileEntry.createWriter(function (fileWriter) {
+                    fileWriter.onwriteend = function() {
+                        console.log("Successful file write...");
+                        window.plugins.gdrive.uploadFile(fileEntry.fullPath, function (res) {
+                            console.log("Successfully uploaded file " + fileEntry.fullPath + " to gdrive!");
+                            return "Successfully uploaded file " + fileEntry.fullPath + " to gdrive!";
+                        }, function (err) {
+                            console.log(err);
+                            return err;
+                        });
+                    };
+
+                    fileWriter.onerror = function (e) {
+                        console.log("Failed file write: " + e.toString());
+                        return "Failed file write: " + e.toString();
+                    };
+
+                    dataObj = new Blob([entry.body.text], { type: 'text/plain' });
+
+                    fileWriter.write(dataObj);
+                });
+            });
+
+        }, console.log);
+    }
+
+    // ----- END Upload to gdrive ----- //
+
+    // ----- Blackboard Crap ----- //
+
+    function _makeRequest (method, url) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.onload = function () {
+            return new Promise(function (resolve, reject) {resolve(xhr)});
+        };
+        
+        xhr.onerror = function () {
+            return new Promise(function (resolve, reject) {reject(xhr)});
+        };
+
+        xhr.send();
+    }
+
+    this.LoginToBlackboard = function (username, password) {
+        var iw = document.getElementById("blackboardLoginContainer").contentWindow;
+        
+        _makeRequest('GET', 'localhost:8000/index.html')
+        .then(function (response) {
+            console.log(response);
+        });
+    }
+
+    // ----- END Blackboard Crap ----- //
+
     // ----- Applying Theme ----- //
 
     function _applyTheme () {

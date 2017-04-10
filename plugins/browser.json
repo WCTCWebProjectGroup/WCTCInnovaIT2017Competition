@@ -16,10 +16,10 @@
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "io.cordova.hellocordova"
         },
-        "cordova-plugin-jc-googledrive": {
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "io.cordova.hellocordova"
         },
-        "cordova-plugin-file": {
+        "cordova-plugin-jc-googledrive": {
             "PACKAGE_NAME": "io.cordova.hellocordova"
         }
     },

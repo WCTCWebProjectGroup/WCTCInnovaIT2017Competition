@@ -33,13 +33,13 @@
         "cordova-plugin-app-event": {
             "PACKAGE_NAME": "io.cordova.hellocordova"
         },
-        "cordova-plugin-jc-googledrive": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
-        },
         "cordova-plugin-compat": {
             "PACKAGE_NAME": "io.cordova.hellocordova"
         },
         "cordova-plugin-file": {
+            "PACKAGE_NAME": "io.cordova.hellocordova"
+        },
+        "cordova-plugin-jc-googledrive": {
             "PACKAGE_NAME": "io.cordova.hellocordova"
         }
     },
@@ -108,14 +108,6 @@
             "id": "cordova-plugin-device.DeviceProxy",
             "pluginId": "cordova-plugin-device",
             "runs": true
-        },
-        {
-            "file": "plugins/cordova-plugin-jc-googledrive/www/googleDrive.js",
-            "id": "cordova-plugin-jc-googledrive.GoogleDrive",
-            "pluginId": "cordova-plugin-jc-googledrive",
-            "clobbers": [
-                "window.plugins.gdrive"
-            ]
         },
         {
             "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
@@ -295,6 +287,14 @@
             "merges": [
                 "window.FileSystem"
             ]
+        },
+        {
+            "file": "plugins/cordova-plugin-jc-googledrive/www/googleDrive.js",
+            "id": "cordova-plugin-jc-googledrive.GoogleDrive",
+            "pluginId": "cordova-plugin-jc-googledrive",
+            "clobbers": [
+                "window.plugins.gdrive"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -303,8 +303,8 @@
         "cordova-plugin-network-information": "1.3.2",
         "cordova-plugin-device": "1.1.5",
         "cordova-plugin-app-event": "1.2.0",
-        "cordova-plugin-jc-googledrive": "1.1.0",
         "cordova-plugin-compat": "1.1.0",
-        "cordova-plugin-file": "4.3.2"
+        "cordova-plugin-file": "4.3.2",
+        "cordova-plugin-jc-googledrive": "1.1.0"
     }
 }

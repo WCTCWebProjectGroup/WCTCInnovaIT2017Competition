@@ -650,6 +650,16 @@ button.newEntry {
     color:rgba(236,237,242, .75);
 }
 
+.responseTitle {
+	display: inline;
+	color: green;
+}
+
+.responseBody {
+	display: inline;
+	color: black;
+}
+
 .simpleContainer {
     background: white;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
@@ -723,6 +733,11 @@ button.newEntry {
     padding: 8px;
     text-align: center;
     font-size: 16;
+}
+
+#blackboardLoginContainer {
+	/*TODO: Change display to none!*/
+	display: block;
 }
 
 #calendar {
