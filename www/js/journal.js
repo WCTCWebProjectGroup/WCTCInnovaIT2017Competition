@@ -70,7 +70,7 @@ function _journalInit () {
             });
     } else {
         // Error occurred
-        document.location.assign("/calendar.html");
+        document.location.assign("/index.html");
     }
 
 
@@ -80,7 +80,7 @@ function _journalInit () {
     });
     discardChangesBtn.addEventListener("click", function () {
         console.log("Discarding changes");
-        document.location.assign("/calendar.html");
+        document.location.assign("/index.html");
     });
     saveChangesBtn.addEventListener("click", function () {
         common.ShowPrimaryLoading();
@@ -94,7 +94,7 @@ function _journalInit () {
         if (creatingNewEntry) {
             database.CreateNewEntry(datetime, body, tags)
                 .then(function () {
-                    document.location.assign("/calendar.html");
+                    document.location.assign("/index.html");
                 });
         } else {
             _db_entry.body.text = journal.GetEditorHtml();
@@ -109,7 +109,7 @@ function _journalInit () {
 
             database.UpdateEntryInDB(_db_entry)
                 .then(function () {
-                    document.location.assign("/calendar.html");
+                    document.location.assign("/index.html");
                 });
         }
     });

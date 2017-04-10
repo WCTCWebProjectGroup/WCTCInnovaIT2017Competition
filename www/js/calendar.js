@@ -34,7 +34,7 @@ var calendar = new function () {
         card.setAttribute("class", "MCard");
 
         title.setAttribute("class", "gname");
-        title.innerText = entryObj.date.toLocaleString();
+        title.innerText = "[" + entryObj.uid + "] " + entryObj.date.toLocaleString();
 
         containerEl.setAttribute("class", "gcontent");
 
@@ -60,6 +60,7 @@ var calendar = new function () {
 
         return card;
     }
+    this.CreateEntryCardElement = _entryCardElement;
 
     function _showSidePanel(date, obj) {
         document.getElementById("sidePanel").style.top = 0;
@@ -159,12 +160,12 @@ var calendar = new function () {
 
 // TODO: Save the file to disk?
 // ---- Save File to Disk ----- //
-window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
+// window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
 
-    console.log('file system open: ' + fs.name);
-    createFile(fs.root, "newTempFile.txt", false);
+//     console.log('file system open: ' + fs.name);
+//     createFile(fs.root, "newTempFile.txt", false);
 
-}, console.log);
+// }, console.log);
 function createFile(dirEntry, fileName, isAppend) {
     // Creates a new file or returns the file if it already exists.
     dirEntry.getFile(fileName, {create: true, exclusive: false}, function(fileEntry) {
@@ -233,6 +234,15 @@ function init () {
        }
     }
 
+    document.getElementById("clearFilters").addEventListener("click", function () {
+        var checkboxes = document.getElementById("filterableTags")
+            .getElementsByTagName("input");
+        for (let checkbox of checkboxes) {
+            checkbox.checked = false;
+        };
+        document.getElementById("filterAfterDate").value = "";
+        document.getElementById("filterBeforeDate").value = "";
+    });
     document.getElementById("clsPanelBtn").addEventListener("click", function () {
         calendar.HideSidePanel();
     });

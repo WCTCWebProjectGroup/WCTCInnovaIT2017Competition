@@ -36,14 +36,14 @@
         <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <link rel="stylesheet" href="css/pignose.calendar.min.css"> <!-- Calendar Css -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css"> <!-- Whysiwyg Css -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1/css/froala_style.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
+        <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
+        <link rel="stylesheet" href="css/codemirror.min.css"> <!-- Whysiwyg Css -->
+        <link href="css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
+        <link href="css/froala_style.min.css" rel="stylesheet" type="text/css" /> <!-- Whysiwyg Css -->
         
         <title>Index</title>
     </head>
-    <body>
+    <body class="themeable">
         <div id="common">
             <div id="loadingGif"></div>
 
@@ -113,45 +113,107 @@
         <!--NAVEND-->
 
         <main>
-            <h2 class="gname">View/Edit Journal Entry</h2>
-            <div class="margin centeredText">
-                <label class="MLabel"for="entryDate">Date</label>
-                <input id="entryDate" class="MInput" type="date">
-            </div>
-            <div class="margin centeredText">
-                <label class="MLabel" for="entryTime">Time</label>
-                <input id="entryTime" class="MInput" type="time">
+            <div class="MCard">
+                <h2 class="gname">Journal Entries</h2>
+
+                <button id="createNewEntry" class="MButton">
+                    Create New Entry
+                </button>
+                
+                <hr>
+                <ul class="listNoBullet">
+                    <li>
+                        <label class="MLabel" for="filterByTag">Filter by Tag</label>
+                        <div id="filterableTags"></div>
+                        <!--<input id="filterByTag" class="MInput" type="text">-->
+                    </li>
+                    <li>
+                        <label class="MLabel" for="filterAfterDate">Filter After Date</label>
+                        <input id="filterAfterDate" class="MInput" type="datetime">
+                    </li>
+                        <label class="MLabel" for="filterBeforeDate">Filter Before Date</label>
+                        <input id="filterBeforeDate" class="MInput" type="datetime">
+                    <li>
+                    <li>
+                        <input id="applyFilters" class="MButton" type="button" value="Search">
+                    </li>
+
+                </ul>
+
+                <ul id="entriesContainer">
+
+                </ul>
+                <div class="pagination">
+                    <button id="viewPrevEntries" class="pagination-button" value="">
+                        <
+                    </button>
+                    <button id="viewNextEntries" class="pagination-button" value="">
+                        >
+                    </button>
+                </div>
             </div>
 
             <div class="MCard">
-                <label class="MLabel">Entry</label>
+                <h2 class="gname">View/Edit Entry</h2>
+                <div id="viewEntryContainer">
+                    <h3>Date</h3>
+                    <input id="entryDate" class="MInput" type="datetime-local">
+                    
+                    <h3>Entry</h3>
+                    <textarea id="entryBody"></textarea>
+                    
+                    <h3>Tags</h3>
+                    <select id="existingEntryTags">
+                    </select>
+                    <input class="entryTag MInput" type="text"><button id="addTag" class="MButton">+Tag</button>
+                    <ul id="entryTags">
+                    </ul>
+                    
+                    <input id="deleteEntry" class="MButton" type="button" value="Delete Entry">
+                    <input id="discardChanges" class="MButton" type="button" value="Discard Changes">
+                    <input id="saveChanges" class="MButton" type="button" value="Save Changes">
+                    <input id="shareEntry" class="MButton" type="button" value="Share Entry">
+                </div>
+            </div>
+
+            <div class="MCard">
+                <h2 class="gname">Test Functions</h2>
+                
+                <div id="testFunctionContainer">
+                    <h3>
+                        <label for="createRandomEntries">Create X random entries</label>
+                    </h3>
+                    <input id="createRandomEntries" class="MInput" type="number">
+                    <input id="startCreatingRandEntries" class="MButton" type="button" value="Create X random entries">
+
+                    <h3>
+                        <label for="removeAllEntries">Remove all entries</label>
+                    </h3>
+                    <input id="removeAllEntries" class="MButton" type="button" value="Remove all entries">
+
+                    <h3>
+                        <label for="viewAllEntries">View all entries</label>
+                    </h3>
+                    <input id="viewAllEntries" class="MButton" type="button" value="View all entries">
+                    <pre>
+                        <code id="allEntries">
+                        </code>
+                    </pre>
+                </div>
+            </div>
+
+            <div class="MCard">
+                <h2 class="gname">WYSIWYG</h2>
                 <textarea id="froala-editor"></textarea>
             </div>
-            <div>
-                <label class="MLabel">Add/Remove/Edit Tags</label>
-                <select id="existingTags" class="MSelect">
-                    <option>Add existing tag</option>
-                </select>
-                <input class="entryTag MInput" type="text"><button id="addTag" class="MButton">+Tag</button>
-                <ul id="entryTags"></ul>
-            </div>
-
-            <div class="margin">
-                <hr>
-                <input id="deleteEntry" class="MButton" type="button" value="Delete Entry">
-                <input id="discardChanges" class="MButton" type="button" value="Discard Changes">
-                <hr>
-                <input id="saveChanges" class="MButton" type="button" value="Save Changes">
-                <input id="shareEntry" class="MButton" type="button" value="Share Entry">
-            </div>
-
-            <input id="takePicture" class="MFloatingActionButton camera" type="button">
         </main>
 
         <footer>
 
         </footer>
-        <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script async defer type="text/javascript" src="js/api.js" onload="this.onload=function(){};handleClientLoad()"
+        onreadystatechange="if (this.readyState === 'complete') this.onload()"></script> <!-- Google -->
         <script type="text/javascript" src="js/init.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
@@ -160,13 +222,12 @@
         <script type="text/javascript" src="js/dexie.js"></script>
         <script type="text/javascript" src="js/database.js"></script>
         <script type="text/javascript" src="js/connector.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.5.1//js/froala_editor.pkgd.min.js"></script>
-        <script type="text/javascript" src="js/journal.js"></script>
+        <script type="text/javascript" src="js/codemirror.min.js"></script>
+        <script type="text/javascript" src="js/xml.min.js"></script>
+        <script type="text/javascript" src="js/froala_editor.pkgd.min.js"></script>
+        <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

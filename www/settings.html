@@ -89,28 +89,20 @@
             <table>
                 <tr>
                     <td id="sideNavClickable">
+                        <a id="clsBtn" href="javascript:void(0)" class="closeButton"></a>
                         <div id="drawerContent">
-                            <a id="clsBtn" href="javascript:void(0)" class="closeButton"></a>
                             <div class="VCenter">
-                                <a href="calendar.html">Calendar</a>
+                                <a href="index.html">Calendar</a>
                                 <a href="journal.html">Journal</a>
                                 <a href="settings.html">Settings</a>
                                 <div class="testingNav">
-                                    <a href="login.html">login</a>
-                                    <a href="testV2.html">testV2</a>
+                                    <a href="test.html">test</a>
                                 </div>
                             </div>
                         </div>
                         <div class="alerts">
-                            <div class="MCard">
-                                <h2>Alert 1</h2>
-                            </div>
-                            <div class="MCard">
-                                <h2>Alert 2</h2>
-                            </div>
-                            <div class="MCard">
-                                <h2>Alert 2</h2>
-                            </div>
+                            <ul id="listOfAlerts" class="listNoBullet">
+                            </ul>
                         </div>
                     </td>
                     <td id="sideNavNotClickable">
@@ -217,6 +209,7 @@
         <script type="text/javascript" src="js/notifications.js"></script>
         <script type="text/javascript" src="js/dexie.js"></script>
         <script type="text/javascript" src="js/database.js"></script>
+        <script type="text/javascript" src="js/connector.js"></script>
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
         <script type="text/javascript" src="js/codemirror.min.js"></script>

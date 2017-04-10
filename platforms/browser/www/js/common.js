@@ -87,19 +87,44 @@ var common = new function () {
     // ----- Alerts ----- //
     var _alertActive = false;
     var _alertQueue = [];
+
+    function _createAlertEl (alertText) {
+        let alertEl = document.importNode(document.getElementById("alertT").content, true);
+        let alertBodyEl = alertEl.querySelector("span");
+        let closeAlertBtnEl = alertEl.querySelector("input");
+
+        alertBodyEl.innerText = alertText;
+
+        document.getElementById("listOfAlerts").insertBefore(alertEl, document.querySelector("#listOfAlerts > li:first-child"));
+        alertEl = document.querySelector("#listOfAlerts > li:first-child");
+
+        closeAlertBtnEl.addEventListener("click", function () {
+            var listOfAlerts = document.getElementById("listOfAlerts");
+            
+            listOfAlerts.removeChild(alertEl);
+
+            if (listOfAlerts.childElementCount == 0)
+                document.getElementById("openAlert").style.animationName = "none";
+
+        });
+    }
     
     // Display alert
     this.DisplayAlert = DisplayAlert;
     function DisplayAlert (message) {
         document.getElementById("openAlert").style.animationName = "newAlert";
-        if (_alertActive) {
-            _alertQueue.push(message);
-        } else {
-            _alertActive = true;
-            var messageEl = document.getElementById("alertBg");
-            document.getElementById("alertMessage").innerHTML = message;
-            messageEl.style.visibility = "visible";
-        }
+
+        // Create alert element and append it to the list of alerts
+        _createAlertEl(message);
+
+        // if (_alertActive) {
+        //     _alertQueue.push(message);
+        // } else {
+        //     _alertActive = true;
+        //     var messageEl = document.getElementById("alertBg");
+        //     document.getElementById("alertMessage").innerHTML = message;
+        //     messageEl.style.visibility = "visible";
+        // }
     };
 
     // Close alert
@@ -122,17 +147,23 @@ var common = new function () {
     // ----- Create Common Elements ----- //
     
     function _CreateMCheckBox (labeltext) {
-        let checkboxContainerEl = document.createElement("div");
-        let checkboxtagEl = document.createElement("input");
+        let containerEl = document.createElement("div");
+        let labelEl = document.createElement("label");
+        let checkboxEl = document.createElement("input");
+        let checkboxID = labeltext.replace(" ", "_") + "MCheckbox";
 
-        checkboxtagEl.setAttribute("type", "checkbox");
-        checkboxtagEl.setAttribute("data-tagname", labeltext);
+        labelEl.innerText = labeltext;
+        labelEl.setAttribute("for", checkboxID);
+        labelEl.setAttribute("class", "themeLabel");
+        
+        checkboxEl.setAttribute("id", checkboxID);
+        checkboxEl.setAttribute("class", "MCheckbox");
+        checkboxEl.setAttribute("type", "checkbox");
 
-        checkboxContainerEl.setAttribute("class", "MCheckbox");
+        containerEl.appendChild(checkboxEl);
+        containerEl.appendChild(labelEl);
 
-        checkboxContainerEl.appendChild(checkboxtagEl);
-
-        return checkboxContainerEl;
+        return containerEl;
     }
     this.CreateMCheckbox = _CreateMCheckBox;
 
@@ -158,7 +189,10 @@ var common = new function () {
     document.getElementById("sideNav").style.boxShadow = "none";
 
     function _openAlerts () {
-
+        document.querySelector("#sideNav .alerts").style.display = "block";
+        document.getElementById("drawerContent").style.display = "none";
+        document.getElementById("sideNav").style.left = "0";
+        document.getElementById("sideNav").style.boxShadow = _boxShadow;
     }
 
     function _openNav () {

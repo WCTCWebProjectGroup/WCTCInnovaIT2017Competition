@@ -188,7 +188,7 @@
 	outline: none;
     text-align: center;
     
-    padding: 8px;
+    padding: 0px 8px;
 
 	min-height: 40px;
 }
@@ -249,46 +249,13 @@ input[type='checkbox'].MCheckbox + label::before {
 	content: url("../img/checkBoxUnChecked_small.png");
 	opacity: 1;
 
-	height: 40px;
-	width: 40px;
+	height: 24px;
+	width: 24px;
 }
 
-input[type='radio'].MCheckbox:checked + label::before {
+input[type='checkbox'].MCheckbox:checked + label::before {
 	content: url("../img/checkBoxChecked_small.png");
 }
-
-/*.MCheckbox {
-	background-color: rgb(255, 255, 255);
-	border: 2px rgb(0, 153, 153);
-
-	position: relative;
-
-	height: 30px;
-	width: 30px;
-}
-
-.MCheckbox > input[type='checkbox'] {
-	position: absolute;
-	margin: 0;
-	opacity: 0;
-	padding: 0;
-
-	left: 0px;
-	top: 0px;
-
-	height: 100%;
-	width: 100%;
-}
-
-.MCheckbox > input[type='checkbox']:checked::before {
-	background-color: rgb(0, 153, 153);
-	border-radius: 50%;
-	margin: auto;
-	opacity: 1;
-
-	height: 80%;
-	width: 80%;
-}*/
 
 /* ----- END Checkboxes ----- */
 
@@ -322,8 +289,8 @@ input[type='radio'].MCheckbox:checked + label::before {
 }
 
 .MLabel {
-	background-color: rgb(204, 186, 0);
-	color: rgba(14,19,33, .95);
+	background-color: rgb(0, 153, 153);
+	color: rgba(236,237,242, .95);
 	display: block;
 	font-weight: bold;
 	line-height: 30px;
@@ -502,6 +469,10 @@ main > * {
 	display: block;
 	margin: auto;
 	text-align: center;
+}
+
+.alerts {
+	border-bottom: 2px solid black;
 }
 
 .camera {
@@ -1011,6 +982,8 @@ button.newEntry {
 }
 
 #sideNav table {
+	border-collapse: collapse;
+
     height: 100%;
     width: 100%;
 }
