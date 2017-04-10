@@ -23,7 +23,7 @@ var connector = (new function(){
         
         btnElement.setAttribute("id", "entry-" + entry.uid);
         btnElement.setAttribute("class", "MButton");
-        btnElement.innerHTML = `[${entry.uid}] - ${entry.date.toLocaleString()}`;
+        btnElement.innerHTML = "[" + entry.uid + "] - " + entry.date.toLocaleString();
 
         editBtn.value = "Edit/View Entry";
         editBtn.addEventListener("click", function () {
@@ -33,7 +33,7 @@ var connector = (new function(){
         liElement.appendChild(btnElement);
 
         // Event listener for updating the event
-        liElement.addEventListener("click", () => {
+        liElement.addEventListener("click", function () {
             calendar.ShowShareModalForEntries(entry);
         });
         
@@ -82,11 +82,11 @@ var connector = (new function(){
         // TODO: Setup seperate table for tracking tags and functions for adding removing tags from that table
         var select = document.getElementById("existingEntryTags");
         entry.tags.forEach(function (tag) {
-            let option = document.createElement("option");
+            var option = document.createElement("option");
             option.innerHTML = tag;
         });
 
-        document.getElementById("saveChanges").addEventListener("click", () => {
+        document.getElementById("saveChanges").addEventListener("click", function () {
             document.getElementById("saveChanges").removeEventListener("click", database.UpdateEntryInDB);
             var newDate = Date.parse(document.getElementById("entryDate").value);
             document.getElementById("entryDate").value = "";
@@ -236,7 +236,7 @@ var connector = (new function(){
     function _CreateNewEntry (datetime, body, tags) {
         return _GenerateRandomUID()
             .then(function (newUid) {
-                let entry = new Entry();
+                var entry = new Entry();
                 entry.date = datetime;
                 entry.body.text = body;
                 entry.tags = tags;
@@ -308,7 +308,7 @@ var connector = (new function(){
                 .then(function (uniqueTags) {
                     var tagEls = document.getElementById("filterableTags");
                     uniqueTags.forEach(function (tag) {
-                        let liEl = document.createElement("li");
+                        var liEl = document.createElement("li");
                         var checkboxEl = common.CreateMCheckbox(tag);
                         
                         // liEl.innerText = tag;
@@ -348,7 +348,7 @@ function TestFunctions () {
         // Create random entries input
         document
             .getElementById("startCreatingRandEntries")
-            .addEventListener("click", () => {
+            .addEventListener("click", function () {
                 var input = document.getElementById("createRandomEntries").value;
                 common.ShowPrimaryLoading();
                 database.CreateRandEntries(input)
@@ -362,7 +362,7 @@ function TestFunctions () {
         // Clear out the database
         document
             .getElementById("removeAllEntries")
-            .addEventListener("click", () => {
+            .addEventListener("click", function () {
                 common.ShowPrimaryLoading();
                 database.RemoveAllEntriesInDB()
                     .then(function () {
@@ -374,7 +374,7 @@ function TestFunctions () {
         // View all entries
         document
             .getElementById("viewAllEntries")
-            .addEventListener("click", () => {
+            .addEventListener("click", function () {
                 database
                     .GetAllEntriesFromDB()
                     .then(function (entries) {

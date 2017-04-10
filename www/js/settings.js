@@ -3,9 +3,9 @@ var settings = new function () {
     var _googleCookieName = "googletoken";
 
     function Cookie (name, value, expiration) {
-        let _name = name;
-        let _value = value;
-        let _expiration = Date.parse(expiration);
+        var _name = name;
+        var _value = value;
+        var _expiration = Date.parse(expiration);
         this.Name = _name;
         this.Value = _value;
         this.Expiration = _expiration;
@@ -83,9 +83,9 @@ function settingsInit () {
     database.GetAllThemes()
         .then(function (themes) {
             themes.forEach(function (theme) {
-                let newThemeEl = document.importNode(themeTemplateEl.content, true);
-                let themeLabelEl = newThemeEl.querySelector("label");
-                let themeRadioBtnEl = newThemeEl.querySelector("input");
+                var newThemeEl = document.importNode(themeTemplateEl.content, true);
+                var themeLabelEl = newThemeEl.querySelector("label");
+                var themeRadioBtnEl = newThemeEl.querySelector("input");
 
                 themeLabelEl.innerText = theme.name;
                 themeLabelEl.setAttribute("for", theme.name + "ThemeRadioBtn");

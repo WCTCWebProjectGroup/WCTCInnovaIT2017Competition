@@ -143,7 +143,7 @@ var database = new function () {
     function _CreateNewEntry (datetime, body, tags) {
         return _GenerateRandomUID()
             .then(function (newUid) {
-                let entry = new Entry();
+                var entry = new Entry();
                 entry.date = datetime;
                 entry.body.text = body;
                 entry.tags = tags;
@@ -224,13 +224,13 @@ var database = new function () {
 
     // Enters dummy entries into the database
     this.CreateRandEntries = function (numToCreate) {
-        let promises = [];
-        let newEntries = [];
+        var promises = [];
+        var newEntries = [];
     
         return _GenerateRandomUID()
             .then(function (newUid) {
                 for (var i = 0; i < numToCreate; i++) {
-                    let entry = new Entry();
+                    var entry = new Entry();
                     entry.body.text = "<p>" + RandFirstName() + " " + RandLastName() + " " + RandBody() + "</p>";
                     entry.tags = RandTag();
                     entry.uid = i + newUid;

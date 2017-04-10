@@ -42,7 +42,7 @@ var calendar = new function () {
         editBtnEl.setAttribute("value", "Edit/View");
         editBtnEl.setAttribute("type", "button");
         editBtnEl.addEventListener("click", function () {
-            document.location.assign("/journal.html?newEntry=false&entryID=" + entryObj.uid);
+            document.location.assign("journal.html?newEntry=false&entryID=" + entryObj.uid);
         });
 
         shareBtnEl.setAttribute("class", "MButton margin");
@@ -151,8 +151,8 @@ var calendar = new function () {
             //     }
             // });
 
-            document.getElementById("newEntry").addEventListener("click", ()=>{
-                window.location.href = '/journal.html?newentry=true';
+            document.getElementById("newEntry").addEventListener("click", function () {
+                window.location.href = 'journal.html?newentry=true';
             });
         })
 }
@@ -163,8 +163,8 @@ function init () {
     document.getElementById("clearFilters").addEventListener("click", function () {
         var checkboxes = document.getElementById("filterableTags")
             .getElementsByTagName("input");
-        for (let checkbox of checkboxes) {
-            checkbox.checked = false;
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
         };
         document.getElementById("filterAfterDate").value = "";
         document.getElementById("filterBeforeDate").value = "";
