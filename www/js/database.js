@@ -40,7 +40,8 @@ var database = new function () {
         _db.version(1).stores({
             Entries: 'uid, date, body, tags',
             Themes: '++, &name, active',
-            Google: 'username, passwordHash, token'
+            Google: 'username, passwordHash, token',
+            Languages: '++, name, active'
         });
         _db.transaction('rw', _db.Themes, function () {
             _db.Themes
@@ -58,6 +59,24 @@ var database = new function () {
                 })
         }).catch(function (error) {
             console.log("failed to add themes to the db!");
+        });
+        
+        _db.transaction('rw', _db.Languages, function () {
+            _db.Languages
+                .toCollection()
+                .toArray()
+                .then(function (languages) {
+                    if (languages.length < 1) {
+                        _db.Languages
+                            .bulkAdd([
+                                {name: 'english', active: 1},
+                                {name: 'german', active: 0},
+                                {name: 'gaelic', active: 0}
+                            ]);
+                    }
+                })
+        }).catch(function (error) {
+            console.log("failed to add languages to the db!")
         });
     })();
 
@@ -264,6 +283,36 @@ var database = new function () {
 
                 return uniqueTags;
             });
+    }
+
+    this.GetAllLanguages = function () {
+        return _db.Languages
+            .toCollection()
+            .toArray()
+            .then(function (array) {
+                return array;
+            });
+    }
+
+    this.GetActiveLangauge = function () {
+        return _db.Languages
+            .where('active')
+            .equals(1);
+    }
+
+    this.SetActiveLanguage = function (langName) {
+        return _db.transaction('rw', _db.Languages, function () {
+            _db.Languages
+                .where('active')
+                .equals('1')
+                .modify({active: 0})
+                .then(function () {
+                    _db.Languages
+                        .where('name')
+                        .equals(langName)
+                        .modify({active: 1});
+                });
+        }) 
     }
 
     this.GetTheme = function ()  {

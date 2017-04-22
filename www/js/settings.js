@@ -110,6 +110,21 @@ function settingsInit () {
             });
         });
 
+    database.GetAllLanguages()
+        .then(function (languages) {
+            var langContainer = document.getElementById("languageContainer");
+            languages.forEach(function (language) {
+                var newLanguageEl = document.createElement("option");
+                var cleanName = language.name.charAt(0).toUpperCase() + language.name.slice(1);
+                newLanguageEl.innerText = cleanName;
+
+                if (language.active == 1)
+                    newLanguageEl.setAttribute("selected", "selected");
+
+                langContainer.appendChild(newLanguageEl);
+            });
+        })
+
     database.GetAllTags()
         .then(function (tags) {
 

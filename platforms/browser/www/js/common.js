@@ -78,9 +78,10 @@ var common = new function () {
         database.GetTheme()
             .then(function (themeObj) {
                 var themeableClass = "themeable";
-                document.querySelectorAll(".themeable").forEach(function (themeable) {
-                    themeable.setAttribute("class", themeableClass + " " + themeObj.name);
-                });
+                var themeables = document.querySelectorAll("." + themeableClass);
+                for (var i = 0; i < themeables.length; i++) {
+                    themeables[i].setAttribute("class", themeableClass + " " + themeObj.name);
+                }
             })
     }
     this.ApplyTheme = _applyTheme;
@@ -153,9 +154,9 @@ var common = new function () {
     var _alertQueue = [];
 
     function _createAlertEl (alertText) {
-        let alertEl = document.importNode(document.getElementById("alertT").content, true);
-        let alertBodyEl = alertEl.querySelector("span");
-        let closeAlertBtnEl = alertEl.querySelector("input");
+        var alertEl = document.importNode(document.getElementById("alertT").content, true);
+        var alertBodyEl = alertEl.querySelector("span");
+        var closeAlertBtnEl = alertEl.querySelector("input");
 
         alertBodyEl.innerText = alertText;
 
@@ -211,10 +212,10 @@ var common = new function () {
     // ----- Create Common Elements ----- //
     
     function _CreateMCheckBox (labeltext) {
-        let containerEl = document.createElement("div");
-        let labelEl = document.createElement("label");
-        let checkboxEl = document.createElement("input");
-        let checkboxID = labeltext.replace(" ", "_") + "MCheckbox";
+        var containerEl = document.createElement("div");
+        var labelEl = document.createElement("label");
+        var checkboxEl = document.createElement("input");
+        var checkboxID = labeltext.replace(" ", "_") + "MCheckbox";
 
         labelEl.innerText = labeltext;
         labelEl.setAttribute("for", checkboxID);
@@ -239,7 +240,7 @@ var common = new function () {
     (function () {
         document
             .getElementById("closeAlert")
-            .addEventListener("click", () => {
+            .addEventListener("click", function () {
                 CloseAlert();
             });
     })();
@@ -275,18 +276,19 @@ var common = new function () {
     document.getElementById("openAlert").addEventListener("click", _openAlerts)
     document.getElementById("clsBtn").addEventListener("click", _closeDrawer);
     document.getElementById("sideNavNotClickable").addEventListener("click", _closeDrawer);
-    document.querySelectorAll("#shareEntry").forEach(function (element) {
-        element.addEventListener("click", () => {
+    var shareEntries = document.querySelectorAll("#shareEntry");
+    for (var i = 0; i < shareEntries.length; i++) {
+        shareEntries[i].addEventListener("click", function () {
             common.DisplayAlert("Sharing is still a WIP!");
         });
-    });
+    }
 
     // Handle tabs
     if (document.querySelectorAll(".MTabViews").length > 0) {
         var tabEls = document.getElementsByClassName("MTabLabel");
-        for (let tablabel of tabEls) {
-            tablabel.addEventListener("click", function (evt) {
-                var tabName = tablabel.innerText;
+        for (var i = 0; i < tabEls.length; i++) {
+            tabEls[i].addEventListener("click", function (evt) {
+                var tabName = evt.currentTarget.innerText;
                 var tabcontent = document.getElementsByClassName("MTab");
                 for (var i = 0; i < tabcontent.length; i++) {
                     tabcontent[i].style.display = "none";
@@ -300,9 +302,9 @@ var common = new function () {
 
                 // Show the current tab, and add an "active" class to the button that opened the tab
                 var tabs = document.getElementsByClassName("MTab");
-                for(let tab of tabs) {
-                    if (tab.getAttribute("data-bind") == tabName) {
-                        tab.style.display = "block";
+                for(var i = 0; i < tabs.length; i++) {
+                    if (tabs[i].getAttribute("data-bind") == tabName) {
+                        tabs[i].style.display = "block";
                     }
                 };
                 evt.currentTarget.className += " active";

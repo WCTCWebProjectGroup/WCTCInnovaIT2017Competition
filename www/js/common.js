@@ -288,7 +288,7 @@ var common = new function () {
         var tabEls = document.getElementsByClassName("MTabLabel");
         for (var i = 0; i < tabEls.length; i++) {
             tabEls[i].addEventListener("click", function (evt) {
-                var tabName = tabEls[i].innerText;
+                var tabName = evt.currentTarget.innerText;
                 var tabcontent = document.getElementsByClassName("MTab");
                 for (var i = 0; i < tabcontent.length; i++) {
                     tabcontent[i].style.display = "none";
