@@ -619,6 +619,10 @@ button.newEntry {
 	opacity: 0;
 }
 
+.languages {
+	display: none;
+}
+
 .listNoBullet {
 	list-style: none;
 	padding-left: 0px;

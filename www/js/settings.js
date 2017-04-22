@@ -2,6 +2,18 @@ var settings = new function () {
     var _blackboardCookieName = "blackboardtoken";
     var _googleCookieName = "googletoken";
 
+    // ----- Languages ----- //
+
+    this.SetLanguage = function () {
+        var langCont = document.getElementById("languageContainer");
+        database.SetLanguage(langCont.value)
+            .then(function () {
+                common.DisplayLanguages();
+            });
+    }
+
+    // ----- END Languages ----- //
+
     function Cookie (name, value, expiration) {
         var _name = name;
         var _value = value;
@@ -79,6 +91,17 @@ var settings = new function () {
 function settingsInit () {
     var themeTemplateEl = document.getElementById("themeT");
     var listOfThemes = document.getElementById("listOfThemes");
+
+    database.GetAllLanguages()
+        .then(function (langs) {
+            langs.forEach(function (e) {
+                var opt = document.createElement("option");
+                if (e.active == 1)
+                    opt.setAttribute("selected", "selected");
+                
+                document.getElementById("languageContainer").appendChild(opt);
+            });
+        });
 
     database.GetAllThemes()
         .then(function (themes) {
