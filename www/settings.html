@@ -58,6 +58,8 @@
                     <div id="alertMessage"></div>
                 </div>
             </div>
+
+            <div id="alertWarningBar"></div>
         </div>
 
         <!--HEADERSTART-->
@@ -164,13 +166,30 @@
                 <ul id="listOfCurrentReminders">
 
                 </ul>
+                
                 <hr>
-                Create New Reminders
-                <label for="newReminderDate">Enter Date</label>
+
+                <div class="languages english">Create New Reminders</div>
+                <div class="languages german">Neue Erinnerungen erstellen</div>
+                <div class="languages gaelic">Crear novo Reminders</div>
+
+                <label for="newReminderDate">
+                    <div class="languages english">Enter Date</div>
+                    <div class="languages german">Datum eingeben</div>
+                    <div class="languages gaelic">Introduza Data</div>
+                </label>
                 <input id="newReminderDate" class="MInput" type="date">
-                <label for="newReminderTime">Enter Time</label>
+                <label for="newReminderTime">
+                    <div class="languages english">Enter Time</div>
+                    <div class="languages german">Zeit eingeben</div>
+                    <div class="languages gaelic">Introduza Tempo</div>
+                </label>
                 <input id="newReminderTime" class="MInput" type="time">
-                <input id="addNewReminder" class="MButton" type="button" value="Add Reminder">
+                <button id="addNewReminder" class="MButton">
+                    <div class="languages english">Add Reminder</div>
+                    <div class="languages german">Erinnerung hinzufügen</div>
+                    <div class="languages gaelic">Agregar Reminder</div>
+                </button>
             </div>
 
             <!--<div class="MCard">
@@ -204,9 +223,21 @@
             </div>-->
 
             <div class="MCard">
-                <h2 class="gname">Google Account</h2>
-                <button id="authorize-button" class="MButton horizontallyCentered" style="display: none;">Authorize</button>
-                <button id="signout-button" class="MButton horizontallyCentered" style="display: none;">Sign Out</button>
+                <h2 class="gname">
+                    <div class="languages english">Google Account</div>
+                    <div class="languages german">Google Benutzerkonto</div>
+                    <div class="languages gaelic">Conta de Google</div>
+                </h2>
+                <button id="authorize-button" class="MButton horizontallyCentered" style="display: none;">
+                    <div class="languages english">Authorize</div>
+                    <div class="languages german">Autorisieren</div>
+                    <div class="languages gaelic">Autorizar</div>
+                </button>
+                <button id="signout-button" class="MButton horizontallyCentered" style="display: none;">
+                    <div class="languages english">Sign Out</div>
+                    <div class="languages german">Ausloggen</div>
+                    <div class="languages gaelic">Saír</div>
+                </button>
                 <pre id="content"></pre>
             </div>
         </main>
@@ -216,6 +247,13 @@
         </footer>
 
         <!-- ----- Templates Go Here ----- -->
+
+        <template id="alertT">
+            <li>
+                <span class="alertBody"></span>
+                <input class="closeAlert MButton" type="button" value="X">
+            </li>
+        </template>
 
         <template id="themeT">
             <li>
@@ -229,7 +267,6 @@
         <!-- ----- All Scripts are to be kept below this line! ----- -->
 
         <script type="text/javascript" src="js/jquery.min.js"></script>
-        <script type="text/javascript" src="js/init.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/dexie.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
@@ -241,7 +278,6 @@
         <script type="text/javascript" src="js/codemirror.min.js"></script>
         <script type="text/javascript" src="js/xml.min.js"></script>
         <script type="text/javascript" src="js/froala_editor.pkgd.min.js"></script>
-        <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
         <script type="text/javascript" src="js/settings.js"></script>
         <!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
         <script async defer src="https://apis.google.com/js/api.js"

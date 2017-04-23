@@ -1,6 +1,6 @@
 var events = {};
 
-initialize.push(function () {
+common.initialize.push(function () {
     if (cordova != null) {
         if (cordova.plugins.notification != null)
         {

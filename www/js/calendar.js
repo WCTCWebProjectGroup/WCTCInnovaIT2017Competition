@@ -27,6 +27,7 @@ var calendar = new function () {
     function _entryCardElement (entryObj) {
         var card = document.createElement("div");
         var title = document.createElement("h2");
+        var tagEl = document.createElement("ul");
         var containerEl = document.createElement("div");
         var editBtnEl = document.createElement("input");
         var shareBtnEl = document.createElement("input");
@@ -35,6 +36,15 @@ var calendar = new function () {
 
         title.setAttribute("class", "gname");
         title.innerText = "[" + entryObj.uid + "] " + entryObj.date.toLocaleString();
+
+        tagEl.setAttribute("class", "listNoBullet listHorizontal tagContainer");
+        entryObj.tags.forEach(function (tag) {
+            var tagEntryEl = document.createElement("li");
+            tagEntryEl.innerText = tag.name;
+            tagEntryEl.style.borderColor = tag.color;
+
+            tagEl.appendChild(tagEntryEl);
+        });
 
         containerEl.setAttribute("class", "gcontent");
 
@@ -54,6 +64,7 @@ var calendar = new function () {
         });
 
         card.appendChild(title);
+        card.appendChild(tagEl);
         containerEl.appendChild(editBtnEl);
         containerEl.appendChild(shareBtnEl);
         card.appendChild(containerEl);
@@ -66,7 +77,7 @@ var calendar = new function () {
         document.getElementById("sidePanel").style.top = 0;
         console.log("_showSidePanel()" + date);
         sidePanel.style.left = "0";
-        database.GetEntriesOnDay(new Date(date[0]))
+        common.GetEntriesOnDay(new Date(date[0]))
             .then(function (entries) {
                 var selectedEntriesEl = document.getElementById("selectedDayEntries");
                 selectedEntriesEl.innerHTML = "";
@@ -112,7 +123,7 @@ var calendar = new function () {
     }
 
     common.ShowPrimaryLoading();
-    database.GetAllEntriesFromDB()
+    common.GetAllEntriesFromDB()
         .then(function (entries) {
             entries.forEach(function (entry) {
                 var cleanDate = entry.date.toISOString().slice(0, 10);
@@ -124,16 +135,22 @@ var calendar = new function () {
                     _goodDates.push(entry);
             });
             
-            $('.calendar').pignoseCalendar({
-                //toggle: true,
-                scheduleOptions: {
-                    colors: {
-                        entry: '#2fabb7'
-                    }
-                },
-                schedules: _goodDates,
-                select: _onDateClickHandler
-            });
+            if (_goodDates.length > 0) {
+                $('.calendar').pignoseCalendar({
+                    //toggle: true,
+                    scheduleOptions: {
+                        colors: {
+                            entry: '#2fabb7'
+                        }
+                    },
+                    schedules: _goodDates,
+                    select: _onDateClickHandler
+                });
+            } else {
+                $('.calendar').pignoseCalendar({
+                    select: _onDateClickHandler
+                });
+            }
 
             // $('.calendar').pignoseCalendar({
             //     scheduleOptions: {
@@ -168,6 +185,7 @@ function init () {
         };
         document.getElementById("filterAfterDate").value = "";
         document.getElementById("filterBeforeDate").value = "";
+        connector.UpdateEntries();
     });
     document.getElementById("clsPanelBtn").addEventListener("click", function () {
         calendar.HideSidePanel();
@@ -181,7 +199,7 @@ function init () {
     document.getElementById("shareResponse").style.display = "none";
     document.getElementById("uploadToGoogle").addEventListener("click", function (evt) {
         var entry = calendar.SharedEntries()[0];
-        database.GetEntryInDB(entry.uid).then(function () {
+        common.GetEntryInDB(entry.uid).then(function () {
             console.log("Submitting document " + entry.uid + " to google");
             var response = common.UploadToGoogleDrive(entry);
             document.querySelector("#shareResponse span").innerText = response;
@@ -189,14 +207,14 @@ function init () {
         });
         evt.stopPropagation();
     });
-    document.getElementById("submitToBlackboard").addEventListener("click", function (evt) {
-        evt.stopPropagation();
-        var entry = calendar.SharedEntries()[0];
-        database.GetEntryInDB(entry.uid).then(function () {
-            console.log("Submitting document " + entry.uid + " to blackboard");
-        });
-    });
+    // document.getElementById("submitToBlackboard").addEventListener("click", function (evt) {
+    //     evt.stopPropagation();
+    //     var entry = calendar.SharedEntries()[0];
+    //     common.GetEntryInDB(entry.uid).then(function () {
+    //         console.log("Submitting document " + entry.uid + " to blackboard");
+    //     });
+    // });
 }
-initialize.push(init);
+common.initialize.push(init);
 
 // ----- END Event Listeners ----- //

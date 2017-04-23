@@ -1,4 +1,4 @@
-initialize.push(TestFunctions);
+common.initialize.push(TestFunctions);
 
 // ----- Connectors ----- //
 
@@ -87,7 +87,7 @@ var connector = (new function(){
         });
 
         document.getElementById("saveChanges").addEventListener("click", function () {
-            document.getElementById("saveChanges").removeEventListener("click", database.UpdateEntryInDB);
+            document.getElementById("saveChanges").removeEventListener("click", common.UpdateEntryInDB);
             var newDate = Date.parse(document.getElementById("entryDate").value);
             document.getElementById("entryDate").value = "";
             var newBody = document.getElementById("entryBody").value;
@@ -136,7 +136,7 @@ var connector = (new function(){
         });
 
         _ready = false;
-        database
+        common
             .GetAllEntriesFromDB()
             .then(function (newEntries) {
                 newEntries = newEntries.reverse();
@@ -145,7 +145,7 @@ var connector = (new function(){
                 if (filterTags.length > 0) {
                     newEntries = newEntries.filter(function (entry) {
                         return entry.tags.some(function (tag) {
-                            return filterTags.includes(tag)
+                            return filterTags.includes(tag.name)
                         });
                     });
                 }
@@ -242,7 +242,7 @@ var connector = (new function(){
                 entry.tags = tags;
                 entry.uid = newUid;
 
-                database.AddEntryToDB(entry).then(function () {
+                common.AddEntryToDB(entry).then(function () {
                     console.log("Added entry");
                 });
             })
@@ -275,7 +275,7 @@ var connector = (new function(){
             return tagBtnEl;
         }
 
-        database
+        common
             .GetEntryInDB(entryObj.uid)
             .then(function (entry) {
                 console.log(entry);
@@ -304,7 +304,7 @@ var connector = (new function(){
 
     this.UpdateTagFilters = function () {
         if (document.querySelectorAll("#filterableTags").length > 0) {
-            database.GetAllTags()
+            common.GetAllTags()
                 .then(function (uniqueTags) {
                     var tagEls = document.getElementById("filterableTags");
                     uniqueTags.forEach(function (tag) {
@@ -322,7 +322,7 @@ var connector = (new function(){
 
     // Initialize _min, _max, and _allEntries. Also hide loading screen
     _UpdateEntries();
-    initialize.push(this.UpdateTagFilters);
+    common.initialize.push(this.UpdateTagFilters);
 });
 
 // WIP: This anon function will attach the needed event listeners that will paginate
@@ -351,7 +351,7 @@ function TestFunctions () {
             .addEventListener("click", function () {
                 var input = document.getElementById("createRandomEntries").value;
                 common.ShowPrimaryLoading();
-                database.CreateRandEntries(input)
+                common.CreateRandEntries(input)
                     .then(function (entries) {
                         common.DisplayAlert(JSON.stringify(entries));
                         common.HidePrimaryLoading();
@@ -359,12 +359,12 @@ function TestFunctions () {
                     });
             });
 
-        // Clear out the database
+        // Clear out the common
         document
             .getElementById("removeAllEntries")
             .addEventListener("click", function () {
                 common.ShowPrimaryLoading();
-                database.RemoveAllEntriesInDB()
+                common.RemoveAllEntriesInDB()
                     .then(function () {
                         common.HidePrimaryLoading();
                         common.DisplayAlert("Removed all entries in the db");
@@ -375,7 +375,7 @@ function TestFunctions () {
         document
             .getElementById("viewAllEntries")
             .addEventListener("click", function () {
-                database
+                common
                     .GetAllEntriesFromDB()
                     .then(function (entries) {
                         document.getElementById("allEntries").innerHTML = (JSON.stringify(entries, null, 2));

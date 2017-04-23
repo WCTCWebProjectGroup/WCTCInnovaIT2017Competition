@@ -31,7 +31,7 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
-        initialize.forEach(function (init) {
+        common.initialize.forEach(function (init) {
             init();
         });
 

@@ -57,6 +57,8 @@
                     <div id="alertMessage"></div>
                 </div>
             </div>
+
+            <div id="alertWarningBar"></div>
         </div>
 
         <!--HEADERSTART-->
@@ -69,8 +71,14 @@
                         </div>
                     </td>
                     <td>
-                        <h1>
+                        <h1 class="languages english">
                             WCTC 2017 InnovaIT Competition
+                        </h1>
+                        <h1 class="languages german">
+                            WCTC 2017 InnovaIT Wettbewerb
+                        </h1>
+                        <h1 class="languages gaelic">
+                            WCTC 2017 InnovaIT Competición
                         </h1>
                     </td>
 
@@ -91,11 +99,21 @@
                         <a id="clsBtn" href="javascript:void(0)" class="closeButton"></a>
                         <div id="drawerContent">
                             <div class="VCenter">
-                                <a href="index.html">Calendar</a>
-                                <a href="journal.html">Journal</a>
-                                <a href="settings.html">Settings</a>
+                                <a class="languages english" href="index.html">Calendar</a>
+                                <a class="languages german" href="index.html">Kalender</a>
+                                <a class="languages gaelic" href="index.html">Calendario</a>
+
+                                <a class="languages english" href="journal.html?createNewEntry=true">New Entry</a>
+                                <a class="languages german" href="journal.html?createNewEntry=true">Journaleintrag Erstellen</a>
+                                <a class="languages gaelic" href="journal.html?createNewEntry=true">Nova Entrada de Diario</a>
+
+                                <a class="languages english" href="settings.html">Settings</a>
+                                <a class="languages german" href="settings.html">Einstellungen</a>
+                                <a class="languages gaelic" href="settings.html">Configuración</a>
                                 <div class="testingNav">
-                                    <a href="test.html">test</a>
+                                    <a class="languages english" href="test.html">test</a>
+                                    <a class="languages german" href="test.html">test</a>
+                                    <a class="languages gaelic" href="test.html">proba</a>
                                 </div>
                             </div>
                         </div>
@@ -128,11 +146,23 @@
                         <td>
                             <div class="secondaryLoadingGif"></div>
                             <!--<input id="editEntry" class="MButton margin" type="button" value="Edit/View Entry">-->
-                            <input id="uploadToGoogle" class="MButton margin" type="button" value="Upload to G-Drive">
-                            <input id="submitToBlackboard" class="MButton margin" type="button" value="Submit to Blackboard">
+                            <button id="uploadToGoogle" class="MButton margin">
+                                <div class="languages english">Upload to GDrive</div>
+                                <div class="languages german">Auf GDrive hochladen</div>
+                                <div class="languages gaelic">Subir ao GDrive</div>
+                            </button>
+                            <!--<button id="submitToBlackboard" class="MButton margin">
+                                <div class="languages english">Submit to Blackboard</div>
+                                <div class="languages german">Senden an Blackboard</div>
+                                <div class="languages gaelic">Someter ao Blackboard</div>
+                            </button>-->
                         </td>
                         <td id="shareResponse">
-                            <h2 class="responseTitle">Response</h2>
+                            <h2 class="responseTitle">
+                                <div class="languages english">Response</div>
+                                <div class="languages german">Antwort</div>
+                                <div class="languages gaelic">Resposta</div>
+                            </h2>
                             <span class="responseBody margin"></span>
                             <div class="margin"></div>
                         </td>
@@ -140,14 +170,30 @@
                 </tbody>
             </table>
 
-            <h2 class="gname">Calendar</h2>
+            <h2 class="gname">
+                <div class="languages english">Calendar</div>
+                <div class="languages german">Kalender</div>
+                <div class="languages gaelic">Calendario</div>
+            </h2>
             <div class="floatLeft margin">
-                <button id="newEntry" class="MButton newEntry">New Entry</button>
+                <button id="newEntry" class="MButton newEntry">
+                    <div class="languages english">New Entry</div>
+                    <div class="languages german">Neuer Eintrag</div>
+                    <div class="languages gaelic">Nova Entrada</div>
+                </button>
             </div>
             <div class="MTabViews">
                 <div class="MTabLabels">
-                    <button class="MTabLabel">Calendar</button>
-                    <button class="MTabLabel">List</button>
+                    <button class="MTabLabel" data-bind="Calendar">
+                        <div class="languages english">Calendar</div>
+                        <div class="languages german">Kalender</div>
+                        <div class="languages gaelic">Calendario</div>
+                    </button>
+                    <button class="MTabLabel" data-bind="List">
+                        <div class="languages english">List</div>
+                        <div class="languages german">Liste</div>
+                        <div class="languages gaelic">Lista</div>
+                    </button>
                 </div>
 
                 <div class="MTabViewsBody">
@@ -155,24 +201,51 @@
                         <div class="calendar"></div>
                     </div>
                     <div class="MTab" data-bind="List">
-                        <ul class="listNoBullet">
-                            <li>
-                                <label class="MLabel" for="filterByTag">Filter by Tag</label>
-                                <div id="filterableTags"></div>
-                                <!--<input id="filterByTag" class="MInput" type="text">-->
-                            </li>
-                            <li>
-                                <label class="MLabel" for="filterAfterDate">Filter After Date</label>
-                                <input id="filterAfterDate" class="MInput" type="date">
-                            </li>
-                                <label class="MLabel" for="filterBeforeDate">Filter Before Date</label>
-                                <input id="filterBeforeDate" class="MInput" type="date">
-                            <li>
-                            <li>
-                                <input id="applyFilters" class="MButton margin" type="button" value="Search">
-                                <input id="clearFilters" class="MButton margin" type="button" value="Clear Filters">
-                            </li>
-                        </ul>
+                        <details>
+                            <summary class="MLabel">
+                                <div class="inline languages english">Filter Results</div>
+                                <div class="inline languages german">Ergebnisse Filtern</div>
+                                <div class="inline languages gaelic">Filtrar Resultados</div>
+                            </summary>
+                            <ul class="listNoBullet">
+                                <li>
+                                    <label class="MLabel" for="filterByTag">
+                                        <div class="languages english">Filter by Tag</div>
+                                        <div class="languages german">Nach Tag Filtern</div>
+                                        <div class="languages gaelic">Filtrar Por: Etiqueta</div>
+                                    </label>
+                                    <div id="filterableTags"></div>
+                                    <!--<input id="filterByTag" class="MInput" type="text">-->
+                                </li>
+                                <li>
+                                    <label class="MLabel" for="filterAfterDate">
+                                        <div class="languages english">Filter After Date</div>
+                                        <div class="languages german">Filter nach Datum</div>
+                                        <div class="languages gaelic">Filtro Tras Data</div>
+                                    </label>
+                                    <input id="filterAfterDate" class="MInput" type="date">
+                                </li>
+                                    <label class="MLabel" for="filterBeforeDate">
+                                        <div class="languages english">Filter Before Date</div>
+                                        <div class="languages german">Filter vor dem Datum</div>
+                                        <div class="languages gaelic">Filtro antes da data</div>
+                                    </label>
+                                    <input id="filterBeforeDate" class="MInput" type="date">
+                                <li>
+                                <li>
+                                    <button id="applyFilters" class="MButton margin">
+                                        <div class="languages english">Search</div>
+                                        <div class="languages german">Suche</div>
+                                        <div class="languages gaelic">Busca</div>
+                                    </button>
+                                    <button id="clearFilters" class="MButton margin">
+                                        <div class="languages english">Clear Filters</div>
+                                        <div class="languages german">Filter löschen</div>
+                                        <div class="languages gaelilc">borrar filtros</div>
+                                    </button>
+                                </li>
+                            </ul>
+                        </details>
                         <hr>
 
                         <ul id="entriesContainer" class="listNoBullet">
@@ -211,20 +284,13 @@
         </footer>
         
         <script type="text/javascript" src="js/jquery.min.js"></script>
-        <script type="text/javascript" src="js/init.js"></script>
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/dexie.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/connection.js"></script>
         <script type="text/javascript" src="js/notifications.js"></script>
-        <script type="text/javascript" src="js/dexie.js"></script>
-        <script type="text/javascript" src="js/database.js"></script>
-        <!--<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>-->
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
-        <script type="text/javascript" src="js/codemirror.min.js"></script>
-        <script type="text/javascript" src="js/xml.min.js"></script>
-        <script type="text/javascript" src="js/froala_editor.pkgd.min.js"></script>
-        <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
         <!--IGNORESTART-->
         <script type="text/javascript" src="js/calendar.js"></script>
         <script type="text/javascript" src="js/connector.js"></script>

@@ -1,121 +1,318 @@
 var journal = new function () {
     
     this.GetEditorHtml = function () {
-        return $('#froala-editor').froalaEditor('html.get', true);
+        return tinyMCE.activeEditor.getContent();
     }
 
     this.SetEditorHtml = function (html) {
-        return $('#froala-editor').froalaEditor('html.set', html);
+        return tinyMCE.activeEditor.setContent(html);
     }
 }
 
 // ----- Event Listeners ----- //
 
 function _journalInit () {
-    if (document.querySelectorAll("#froala-editor").length > 0) {
-        $(function() { $("#froala-editor").froalaEditor({
-            height: 200
-        }) });
-    }
+    // if (document.querySelectorAll("#froala-editor").length > 0) {
+    //     $(function() { $("#froala-editor").froalaEditor({
+    //         height: 200
+    //     }) });
+    // }
+    common.GetAllTags()
+        .then(function (tags) {
+            var existingTags = document.getElementById("existingTags");
+            if (tags.length > 0) {
+                tags.forEach(function (tag) {
+                    var optionEl = document.createElement("option");
+                    optionEl.innerText = tag.name;
+                    optionEl.setAttribute("data-bind", tag.color);
+                    existingTags.appendChild(optionEl);
+                });
 
-    // First determine if creating a new entry or editing an exisiting one
-    var urlParams = document.location.search.replace('?', '').split('&');
-    var creatingNewEntry = false;
-    
-    var dateEl = document.getElementById("entryDate");
-    var timeEl = document.getElementById("entryTime");
-    var entryBody = document.getElementById("froala-editor");
-    var entryTagList = document.getElementById("entryTags");
-    var existingTagsSelectEl = document.getElementById("existingTags");
-    var _db_entry = {};
+                existingTags.addEventListener("change", function () {
+                    var options = document.querySelector("#existingTags option");
+                    var selectedTagEl = existingTags.children[existingTags.selectedIndex];
 
-    var deleteEntryBtn = document.getElementById("existingTags");
-    var discardChangesBtn = document.getElementById("discardChanges");
-    var saveChangesBtn = document.getElementById("saveChanges");
-    var shareEntryBtn = document.getElementById("shareEntry");
-    var cameraBtn = document.getElementById("takePicture");
-    
+                    document.getElementById("newTagName").value = selectedTagEl.innerText;
+                    document.getElementById("newTagColor").value = selectedTagEl.getAttribute("data-bind");
+                });
+            } else {
+                existingTags.style.display = "none";
+            }
+        });
 
-    if (urlParams[0].split('=')[1] == "true") {
-        // Creating new entry
-        console.log("Creating new entry...");
-        creatingNewEntry = true;
+    function _StoreImage (file) {
+        function writeFile(fileEntry, dataObj) {
+            // Create a FileWriter object for our FileEntry (log.txt).
+            fileEntry.createWriter(function (fileWriter) {
 
-        // Hide discardChangesBtn
-        deleteEntryBtn.style.display = "none";
+                fileWriter.onwriteend = function() {
+                    console.log("Successful file write...");
+                    readFile(fileEntry);
+                };
 
-        // Set the date/time to today
-        var today = new Date();
-        dateEl.value = today.toISOString().slice(0, 10);
-        timeEl.value = today.toISOString().slice(11, 19);
+                fileWriter.onerror = function (e) {
+                    console.log("Failed file write: " + e.toString());
+                };
 
-    } else if (urlParams[0].split('=')[1] == "false") {
-        // Editing existing entry
-        console.log("Updating an existing entry...");
-        
-        var editingEntryNumber = Number(urlParams[1].split('=')[1]);
-        console.log("Editing " + editingEntryNumber);
-        database.GetEntryInDB(Number(editingEntryNumber))
-            .then(function (entry) {
-                _db_entry = entry;
+                // If data object is not passed in,
+                // create a new Blob instead.
+                if (!dataObj) {
+                    dataObj = new Blob(['some file data'], { type: file.type });
+                }
 
-                // Set date/time
-                dateEl.value = entry.date.toISOString().slice(0, 10);
-                timeEl.value = entry.date.toISOString().slice(11, 19);
-
-                // Set body
-                journal.SetEditorHtml(entry.body.text);
-
-                // TODO: Set Tags
+                fileWriter.write(dataObj);
             });
-    } else {
-        // Error occurred
-        document.location.assign("/index.html");
+        }
+
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+
+            console.log('file system open: ' + fs.name);
+            fs.root.getFile(file.name, { create: true, exclusive: false }, function (fileEntry) {
+
+                console.log("fileEntry is file?" + fileEntry.isFile.toString());
+                // fileEntry.name == 'someFile.txt'
+                // fileEntry.fullPath == '/someFile.txt'
+                writeFile(fileEntry, null);
+
+            }, onErrorCreateFile);
+
+        }, onErrorLoadFs);
+
+        function onErrorLoadFs (err) {
+            console.log(err);
+        }
+
     }
 
+    function updateExistingTags () {
 
-    // ----- Event Listeners ----- //
-    // cameraBtn.addEventListener("click", function () {
-    //     console.log("Taking a picture is still a WIP!");
-    // });
-    discardChangesBtn.addEventListener("click", function () {
-        console.log("Discarding changes");
-        document.location.assign("/index.html");
-    });
-    saveChangesBtn.addEventListener("click", function () {
-        common.ShowPrimaryLoading();
-        console.log("Saving entry")
-        var datetime = new Date(dateEl.value);
-        datetime.setHours( timeEl.value.slice(0,2));
-        datetime.setMinutes(timeEl.value.slice(3, 5));
-        datetime.setSeconds(timeEl.value.slice(6, 8));
-        var body = journal.GetEditorHtml();
-        var tags = [];
-        if (creatingNewEntry) {
-            database.CreateNewEntry(datetime, body, tags)
-                .then(function () {
+    }
+
+    tinymce.init({
+        selector: '#editor',
+        setup: function (ed) {
+            ed.on('init', function(args) {
+                console.debug(args.target.id);
+
+                // First determine if creating a new entry or editing an exisiting one
+                var urlParams = document.location.search.replace('?', '').split('&');
+                var creatingNewEntry = false;
+                var editingEntryNumber = -1;
+                
+                var dateEl = document.getElementById("entryDate");
+                var timeEl = document.getElementById("entryTime");
+                var entryBody = document.getElementById("froala-editor");
+                var entryTagList = document.getElementById("entryTags");
+                var addTagBtn = document.getElementById("addTag");
+                var existingTagsSelectEl = document.getElementById("existingTags");
+                var _db_entry = {};
+
+                var deleteEntryBtn = document.getElementById("existingTags");
+                var discardChangesBtn = document.getElementById("discardChanges");
+                var saveChangesBtn = document.getElementById("saveChanges");
+                var shareEntryBtn = document.getElementById("shareEntry");
+                var cameraBtn = document.getElementById("takePicture");
+                
+
+                if (urlParams[0].split('=')[1] == "true") {
+                    // Creating new entry
+                    console.log("Creating new entry...");
+                    creatingNewEntry = true;
+
+                    // Hide discardChangesBtn
+                    deleteEntryBtn.style.display = "none";
+
+                    // Set the date/time to today
+                    var today = new Date();
+                    dateEl.value = today.toISOString().slice(0, 10);
+                    timeEl.value = today.toTimeString().slice(0, 8);
+
+                } else if (urlParams[0].split('=')[1] == "false") {
+                    // Editing existing entry
+                    console.log("Updating an existing entry...");
+                    
+                    editingEntryNumber = Number(urlParams[1].split('=')[1]);
+                    console.log("Editing " + editingEntryNumber);
+                    common.GetEntryInDB(Number(editingEntryNumber))
+                        .then(function (entry) {
+                            // Set date/time
+                            dateEl.value = entry.date.toISOString().slice(0, 10);
+                            // timeEl.value = entry.date.toISOString().slice(11, 19);
+                            timeEl.value = entry.date.toTimeString().slice(0, 8);
+
+                            // Set body
+                            journal.SetEditorHtml(entry.body.text);
+
+                            // TODO: Set Tags
+                            entry.tags.forEach(function (tag) {
+                                var container = document.importNode(document.getElementById("tagT").content, true);
+                                container.querySelector(".tagName").value = tag.name;
+                                container.querySelector(".tagColor").value = tag.color;
+                                
+                                entryTagList.appendChild(container);
+                            });
+                        });
+                } else {
+                    // Error occurred
+                    document.location.assign("/index.html");
+                }
+
+                // ----- Event Listeners ----- //
+                // cameraBtn.addEventListener("click", function () {
+                //     console.log("Taking a picture is still a WIP!");
+                // });
+                discardChangesBtn.addEventListener("click", function () {
+                    console.log("Discarding changes");
                     document.location.assign("/index.html");
                 });
-        } else {
-            _db_entry.body.text = journal.GetEditorHtml();
 
-            var datetime = new Date(dateEl.value);
-            datetime.setHours( timeEl.value.slice(0,2));
-            datetime.setMinutes(timeEl.value.slice(3, 5));
-            datetime.setSeconds(timeEl.value.slice(6, 8));
+                addTagBtn.addEventListener("click", function () {
+                    var tagName = document.getElementById("newTagName").value;
 
-            // TODO: Tags
-            // _db_entry
+                    if (tagName == "") {
+                        common.DisplayAlert("Tag name cannot be empty!");
+                        return;
+                    }
 
-            database.UpdateEntryInDB(_db_entry)
-                .then(function () {
-                    document.location.assign("/index.html");
+                    var existingTags = [];
+
+                    var tagEls = document.querySelectorAll(".tagName")
+                    for (var i = 0; i < tagEls.length; i++) {
+                        var name = tagEls.item(i).value;
+                        if (!existingTags.includes(name))
+                            existingTags.push(name);
+                    }
+
+                    if (existingTags.includes(tagName)) {
+                        common.DisplayAlert("Entry already has tag of same name!")
+                        return;
+                    }
+
+                    var container = document.importNode(document.getElementById("tagT").content, true);
+                    container.querySelector(".tagName").value = tagName;
+                    container.querySelector(".tagColor").value = document.getElementById("newTagColor").value;
+
+                    entryTagList.prepend(container);
+                    
+                    var goodEl = entryTagList.querySelector("li:first-child");
+                    goodEl.querySelector("input:last-child").addEventListener("click", function () {
+                        entryTagList.removeChild(goodEl);
+                    });
+                    
+                    document.getElementById("newTagName").value = "";
+                    document.getElementById("newTagColor").value = "#000000";
+
+                    document.getElementById("existingTags").selectedIndex = "0";
                 });
-        }
+
+                saveChangesBtn.addEventListener("click", function () {
+                    common.ShowPrimaryLoading();
+                    console.log("Saving entry")
+                    var datetime = new Date();
+                    // datetime.setHours( timeEl.value.slice(0,2));
+                    // datetime.setMinutes(timeEl.value.slice(3, 5));
+                    // datetime.setSeconds(timeEl.value.slice(6, 8));
+                    var body = journal.GetEditorHtml();
+
+                    // TODO: Tags
+                    var tags = [];
+
+                    var tagListEntries = entryTagList.getElementsByTagName("li");
+                    for (var i = 0; i < tagListEntries.length; i++) {
+                        var tagEl = tagListEntries.item(i);
+                        var tag = new common.Tag();
+                        
+                        tag.name = tagEl.querySelector(".tagName").value;
+                        tag.color = tagEl.querySelector(".tagColor").value;
+                        
+                        tags.push(tag);
+                    }
+
+                    if (creatingNewEntry) {
+                        common.CreateNewEntry(datetime, body, tags)
+                            .then(function () {
+                                document.location.assign("/index.html");
+                            });
+                    } else {
+                        var _db_entry = {
+                            uid: editingEntryNumber,
+                            body: {text: ""},
+                            tags: [],
+                            date: {}
+                        }
+
+                        _db_entry.body.text = journal.GetEditorHtml();
+
+                        var datetime = new Date(dateEl.value);
+                        datetime.setHours( timeEl.value.slice(0,2));
+                        datetime.setMinutes(timeEl.value.slice(3, 5));
+                        datetime.setSeconds(timeEl.value.slice(6, 8));
+                        _db_entry.date = datetime;
+
+                        var tagEls = document.querySelectorAll("#entryTags > li");
+                        for (var i = 0; i < tagEls.length; i++) {
+                            var item = tagEls.item(i);
+                            var tag = {
+                                name: "",
+                                color: ""
+                            };
+
+                            tag.name = item.querySelector(".tagName").value;
+                            tag.color = item.querySelector(".tagColor").value;
+
+                            _db_entry.tags.push(tag);
+                        }
+
+                        common.UpdateEntryInDB(_db_entry)
+                            .then(function () {
+                                document.location.assign("/index.html");
+                            });
+                    }
+                });
+                // ----- Event Listeners ----- //
+            });
+        },
+        plugins: [
+            'image'
+        ],
+        menubar: false,
+        toolbar: 'image | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent',
+        automatic_uploads: true,
+        images_upload_handler: function (blobInfo, success, failure) {
+            var xhr, formData;
+            xhr = new XMLHttpRequest();
+            xhr.withCredentials = false;
+        },
+        file_browser_callback_types: 'image',
+        file_browser_callback: function (callback, value, meta) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+
+            input.onchange = function() {
+                var file = this.files[0];
+                _StoreImage();
+                
+                // Note: Now we need to register the blob in TinyMCEs image blob
+                // registry. In the next release this part hopefully won't be
+                // necessary, as we are looking to handle it internally.
+                // var id = 'blobid' + (new Date()).getTime();
+                // var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                // var blobInfo = blobCache.create(id, file);
+                // blobCache.add(blobInfo);
+                
+                // call the callback and populate the Title field with the file name
+                // cb(blobInfo.blobUri(), { title: file.name });
+            };
+            
+            input.click();
+        },
+        image_title: false,
+        image_dimensions: false,
+        image_description: false
     });
-    // ----- Event Listeners ----- //
 }
 
-initialize.push(_journalInit);
+common.initialize.push(_journalInit);
 
 // ----- END Event Listeners ----- //

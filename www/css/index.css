@@ -82,7 +82,7 @@
  *  secondary-color-lighter-2: rgb(108,140,213);
  *  secondary-color-darker-1: rgb(42,68,128);
  *  secondary-color-darker-2: rgb(6,38,111);
- * tertiary-color-main: rgb(255,170,0);
+ * tertiary-color-main: rgb(47,193,59);
  *  tertiary-color-lighter-1: rgb(255,191,64);
  *  tertiary-color-lighter-2: rgb(255,208,115);
  *  tertiary-color-darker-1: rgb(191,143,48);
@@ -223,6 +223,12 @@
 	color: rgba(14,19,33, .95);
 }
 
+.MButton.remove {
+	background-color: #ec1111;
+	border-radius: 50%;
+	width: 40px;
+}
+
 .MCard {
     background-color: #e7e7e7;
 	border: 4px solid rgba(0,0,0,.25);
@@ -276,7 +282,7 @@ input[type='checkbox'].MCheckbox:checked + label::before {
 
 .MInput {
 	background-color: rgb(255, 255, 255);
-	border: none;
+	border: 1px solid #dedede;
 	border-bottom: 2px solid rgb(255, 170, 0);
 	/*display: block;*/
 	outline: none;
@@ -286,6 +292,37 @@ input[type='checkbox'].MCheckbox:checked + label::before {
 
 	max-width: 300px;
 	width: 90%;
+}
+
+.MInput.MColor {
+	border: 1px solid rgb(255, 170, 0);
+
+	display: block;
+	margin: auto;
+
+	height: 60px;
+	width: 60px;
+}
+
+.MColor-small {
+	border: 2px solid #a0a0a0;
+	outline: none;
+	display: inline;
+
+	margin: auto;
+
+	vertical-align: middle;
+}
+
+.MInput-inline {
+	background-color: rgb(255, 255, 255);
+	border: 1px solid #dedede;
+	border-bottom: 2px solid rgb(255, 170, 0);
+	display: inline;
+	outline: none;
+	text-align: center;
+
+	padding: 8px;
 }
 
 .MLabel {
@@ -436,6 +473,11 @@ button {
     text-align: center;
 }
 
+details {
+	background-color: white;
+	border: 1px solid #b5b5b5;
+}
+
 h1 {
     font-size:24px;
     font-weight:bold;
@@ -472,8 +514,24 @@ main > * {
 	text-align: center;
 }
 
+summary {
+	background-color: rgb(0,153,153);
+	color: white;
+	outline: none;
+
+	padding: 8px;
+}
+
 .alerts {
 	border-bottom: 2px solid black;
+}
+
+.alternatingColors > *:nth-child(odd) {
+	background-color: #d4d4d4;
+}
+
+.alternatingColors > *:nth-child(even) {
+	background-color: #dedede;
 }
 
 .camera {
@@ -496,7 +554,7 @@ main > * {
 }
 
 .closeButton:hover::before {
-	background-color: rgb(255,170,0);
+	background-color: rgb(47,193,59);
 	border: 4px solid rgb(166,111,0);
 	border-radius: 50%;
 	content: "";
@@ -514,6 +572,10 @@ main > * {
 .centeredText,
 .centeredText * {
 	text-align: center;
+}
+
+.entryTag {
+	padding: 4px;
 }
 
 .event {
@@ -573,14 +635,14 @@ main > * {
 }
 
 .gfooter {
-	background-color: rgb(255,170,0);
+	background-color: rgb(47,193,59);
 
 	height: 12px;
 	width: 100%;
 }
 
 .gname {
-	background-color: rgb(255,170,0);
+	background-color: rgb(47,193,59);
     box-shadow: 0px 8px 16px rgba(0,0,0,0);
 	color: rgba(236,237,242, .95);
     font-size: 24px;
@@ -615,12 +677,25 @@ button.newEntry {
 	padding-right: 64px;
 }
 
+.inline {
+	display: inline;
+	position: relative;
+}
+
 .noOpacity {
 	opacity: 0;
 }
 
 .languages {
 	display: none;
+}
+
+.listHorizontal {
+	list-style-type: none;
+}
+
+.listHorizontal > li{
+	display: inline-grid;
 }
 
 .listNoBullet {
@@ -676,6 +751,23 @@ button.newEntry {
     margin-right: 5%;
     max-width: 1200px;
     text-align: center;
+}
+
+.tagContainer > * {
+	background-color: white;
+	border: 4px solid black;
+	border-radius: 20px;
+	color: black;
+	font-size: 15px;
+	overflow: hidden;
+	text-overflow: clip;
+	
+	margin: 0px 4px;
+	padding: 4px;
+
+	height: 20px;
+	min-width: 20px;
+	max-width: 40px;
 }
 
 .themeLabel {
@@ -738,6 +830,25 @@ button.newEntry {
     padding: 8px;
     text-align: center;
     font-size: 16;
+}
+
+#alertWarningBar {
+	background-color: rgba(0,0,0,0);
+	position: fixed;
+
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	
+	height: 4px;
+	width: 100%;
+
+	z-index: 26;
+
+	animation-name: none;
+	animation-direction: alternate;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
 }
 
 #blackboardLoginContainer {
@@ -810,7 +921,7 @@ button.newEntry {
 
 #openAlert, 
 #openDrawer {
-	background-color: rgb(255,170,0);
+	background-color: rgb(47,193,59);
 	background-repeat: no-repeat;
 	background-position: center;
 	border-color: white;
@@ -839,7 +950,7 @@ button.newEntry {
 }
 
 /*#openAlert::before {
-	background-color: rgb(255,170,0);
+	background-color: rgb(47,193,59);
 	border-radius: 50%;
 	box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
 	content: "";
@@ -874,7 +985,7 @@ button.newEntry {
 }
 
 /*#openDrawer {
-	background-color: rgb(255,170,0);
+	background-color: rgb(47,193,59);
 	background-repeat: no-repeat;
 	background-position: center;
 	border-radius: 50%;
@@ -968,7 +1079,7 @@ button.newEntry {
 
 #shareModal .body td {
 	background-color: rgb(216, 216, 216);;
-	border-top: 4px solid black;
+	border-top: 4px solid #ffaa00;
 	display: table;
 
 	width: 100%;
@@ -1077,4 +1188,9 @@ button.newEntry {
 @keyframes newAlert {
 	from {border-color: white;}
 	to {border-color: red;}
+}
+
+@keyframes alertWarningBar {
+	from {background-color: rgba(0,0,0,0);}
+	to {background-color: red;}
 }

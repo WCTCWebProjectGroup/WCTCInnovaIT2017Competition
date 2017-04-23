@@ -6,7 +6,7 @@ var settings = new function () {
 
     this.SetLanguage = function () {
         var langCont = document.getElementById("languageContainer");
-        database.SetLanguage(langCont.value)
+        common.SetLanguage(langCont.value)
             .then(function () {
                 common.DisplayLanguages();
             });
@@ -46,7 +46,7 @@ var settings = new function () {
     }
 
     function _activateTheme () {
-        database
+        common
             .GetTheme()
             .then(function (themeObj) {
                 document
@@ -92,18 +92,7 @@ function settingsInit () {
     var themeTemplateEl = document.getElementById("themeT");
     var listOfThemes = document.getElementById("listOfThemes");
 
-    database.GetAllLanguages()
-        .then(function (langs) {
-            langs.forEach(function (e) {
-                var opt = document.createElement("option");
-                if (e.active == 1)
-                    opt.setAttribute("selected", "selected");
-                
-                document.getElementById("languageContainer").appendChild(opt);
-            });
-        });
-
-    database.GetAllThemes()
+    common.GetAllThemes()
         .then(function (themes) {
             themes.forEach(function (theme) {
                 var newThemeEl = document.importNode(themeTemplateEl.content, true);
@@ -124,7 +113,7 @@ function settingsInit () {
 
                 themeLabelEl.addEventListener("click", function () {
                     if (themeRadioBtnEl.value ) {
-                        database.SetThemeToActive(theme.name)
+                        common.SetThemeToActive(theme.name)
                             .then(function () {
                                 settings.ActivateTheme();
                             });
@@ -133,7 +122,11 @@ function settingsInit () {
             });
         });
 
-    database.GetAllLanguages()
+    document.getElementById("languageContainer").addEventListener("change", function (evt) {
+        common.SetActiveLanguage(evt.target.value);
+    });
+
+    common.GetAllLanguages()
         .then(function (languages) {
             var langContainer = document.getElementById("languageContainer");
             languages.forEach(function (language) {
@@ -148,12 +141,12 @@ function settingsInit () {
             });
         })
 
-    database.GetAllTags()
+    common.GetAllTags()
         .then(function (tags) {
 
         });
 };
-initialize.push(settingsInit);
+common.initialize.push(settingsInit);
 
 // ----- END Event Listeners ----- //
 

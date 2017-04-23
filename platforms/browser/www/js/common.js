@@ -1,10 +1,9 @@
-// Database functions and vars
-// The app will use only ONE database, for now it will be called TripMySchoolJournalDB
-// Needs to be included before index.js!
-
-// *The database currently has the tables; 'Entries'
-
-var database = new function () {
+var common = new function () {
+    
+    // Initializer functions array
+    this.initialize = [];
+    var init = this.initialize;
+    init.push(_DisplayLanguages);
 
     // ----- Constructors ----- //
 
@@ -14,6 +13,13 @@ var database = new function () {
         this.body = {};
         this.tags = [];
     }
+
+    function Tag () {
+        this.name = "";
+        this.color = "";
+    }
+
+    this.Tag = Tag;
 
     function Theme (name) {
         this.name = name;
@@ -168,7 +174,7 @@ var database = new function () {
                 entry.tags = tags;
                 entry.uid = newUid;
 
-                database.AddEntryToDB(entry).then(function () {
+                common.AddEntryToDB(entry).then(function () {
                     console.log("Added entry");
                 });
             })
@@ -255,7 +261,7 @@ var database = new function () {
                     entry.uid = i + newUid;
 
                     newEntries.push(entry);
-                    promises.push(database.AddEntryToDB(entry).then(function () {
+                    promises.push(common.AddEntryToDB(entry).then(function () {
                         console.log("Added entry");
                     }));
                 }
@@ -294,24 +300,28 @@ var database = new function () {
             });
     }
 
-    this.GetActiveLangauge = function () {
+    function _GetActiveLangauge () {
         return _db.Languages
             .where('active')
             .equals(1)
             .toArray();
     }
+    this.GetActiveLangauge = _GetActiveLangauge;
 
     this.SetActiveLanguage = function (langName) {
         return _db.transaction('rw', _db.Languages, function () {
             _db.Languages
                 .where('active')
-                .equals('1')
+                .equals(1)
                 .modify({active: 0})
                 .then(function () {
                     _db.Languages
                         .where('name')
-                        .equals(langName)
+                        .equals(langName.toLowerCase())
                         .modify({active: 1});
+                })
+                .then(function () {
+                    _DisplayLanguages();
                 });
         }) 
     }
@@ -336,76 +346,7 @@ var database = new function () {
                 active: theme.active
             });
     }
-}
 
-// Dummy data generator
-
-function RandFirstName () {
-    var names = [
-        "Alex",
-        "Bob",
-        "Charlie",
-        "Doug",
-        "Erik",
-        "George",
-        "Hal",
-        "Isaac",
-        "Jack"
-    ]
-
-    var rnd = Math.round(Math.random() * names.length) - 1;
-
-    return names[rnd];
-}
-
-function RandLastName () {
-    var names = [
-        'Baker',
-        'Charming',
-        'Dolye',
-        'Evers',
-        'Fourier',
-        'Giant'
-    ];
-
-    var rnd = Math.round(Math.random() * names.length) - 1;
-
-    return names[rnd];
-}
-
-function RandBody () {
-    var bodies = [
-        "first body",
-        "second body",
-        "third body",
-        "fourth body",
-        "fifth body"
-    ];
-
-    var rnd = Math.round(Math.random() * bodies.length) - 1;
-
-    return bodies[rnd];
-}
-
-function RandTag () {
-    var tags = [
-        "first tag",
-        "second tag",
-        "third tag"
-    ];
-
-    var rnd = Math.round(Math.random() * tags.length) - 1;
-
-    return tags.slice(0, rnd);
-}
-
-
-
-/*
- * This object (loading) is responsible for displaying/hiding the various loading screens of the app
- */
-
-var common = new function () {
     var _primaryLoadingGif = document.getElementById("loadingGif");
     var _secondaryLoadingGifs = document.getElementsByClassName("secondaryLoadingGif");
     var _primaryLocks = 0;
@@ -413,19 +354,24 @@ var common = new function () {
 
     // ----- Languages ----- //
 
-    this.DisplayLanguages = function () {
+    function _DisplayLanguages () {
         var langEls = document.getElementsByClassName("languages");
-        database.GetActiveLangauge()
+        _GetActiveLangauge()
             .then(function (lang) {
-                langEls.forEach(function (langEl) {
-                    var classes = langEl.getAttribute("class");
-                    if (classes.includes(lang.name))
-                        langEl.style.display = "block";
+                for (var i = 0; i < langEls.length; i++) {
+                    var item = langEls.item(i);
+                    var classes = item.getAttribute("class");
+                    if (classes.includes(lang[0].name) && classes.includes("inline"))
+                        item.style.display = "inline";
+                    else if (classes.includes(lang[0].name))
+                        item.style.display = "block";
                     else
-                        langEl.style.display = "none";
-                });
+                        item.style.display = "none";
+                }
             });
     }
+
+    this.DisplayLanguages = _DisplayLanguages();
 
     // ----- END Languages ----- //
 
@@ -496,7 +442,7 @@ var common = new function () {
     // ----- Applying Theme ----- //
 
     function _applyTheme () {
-        database.GetTheme()
+        common.GetTheme()
             .then(function (themeObj) {
                 var themeableClass = "themeable";
                 var themeables = document.querySelectorAll("." + themeableClass);
@@ -591,6 +537,7 @@ var common = new function () {
 
             if (listOfAlerts.childElementCount == 0)
                 document.getElementById("openAlert").style.animationName = "none";
+                document.getElementById("alertWarningBar").style.animationName = "none";
 
         });
     }
@@ -599,6 +546,7 @@ var common = new function () {
     this.DisplayAlert = DisplayAlert;
     function DisplayAlert (message) {
         document.getElementById("openAlert").style.animationName = "newAlert";
+        document.getElementById("alertWarningBar").style.animationName = "alertWarningBar";
 
         // Create alert element and append it to the list of alerts
         _createAlertEl(message);
@@ -636,10 +584,11 @@ var common = new function () {
         var containerEl = document.createElement("div");
         var labelEl = document.createElement("label");
         var checkboxEl = document.createElement("input");
-        var checkboxID = labeltext.replace(" ", "_") + "MCheckbox";
+        var checkboxID = labeltext.name.replace(" ", "_") + "MCheckbox";
 
-        labelEl.innerText = labeltext;
-        labelEl.setAttribute("for", checkboxID);
+        labelEl.innerText = labeltext.name;
+        labelEl.setAttribute("for", checkboxID);;
+        labelEl.setAttribute("data-bind", labeltext.color);
         labelEl.setAttribute("class", "themeLabel");
         
         checkboxEl.setAttribute("id", checkboxID);
@@ -667,9 +616,78 @@ var common = new function () {
     })();
 
     // ----- END Alerts ----- //
-};
+}
 
-// ----- Attach Common Event Listeners ----- //
+// Dummy data generator
+
+function RandFirstName () {
+    var names = [
+        "Alex",
+        "Bob",
+        "Charlie",
+        "Doug",
+        "Erik",
+        "George",
+        "Hal",
+        "Isaac",
+        "Jack"
+    ]
+
+    var rnd = Math.round(Math.random() * names.length) - 1;
+
+    return names[rnd];
+}
+
+function RandLastName () {
+    var names = [
+        'Baker',
+        'Charming',
+        'Dolye',
+        'Evers',
+        'Fourier',
+        'Giant'
+    ];
+
+    var rnd = Math.round(Math.random() * names.length) - 1;
+
+    return names[rnd];
+}
+
+function RandBody () {
+    var bodies = [
+        "first body",
+        "second body",
+        "third body",
+        "fourth body",
+        "fifth body"
+    ];
+
+    var rnd = Math.round(Math.random() * bodies.length) - 1;
+
+    return bodies[rnd];
+}
+
+function RandTag () {
+    var tags = [
+        {
+            name: "first tag",
+            color: "#ce1919"
+        },
+        {
+            name: "second tag",
+            color: "#83ce1a"
+        },
+        {
+            name: "third tag",
+            color: "#425ff4"
+        },
+    ];
+
+    var rnd = Math.round(Math.random() * tags.length) - 1;
+
+    return tags.slice(0, rnd);
+}
+
 (function () {
     var _boxShadow = document.getElementById("sideNav").style.boxShadow;
     document.getElementById("sideNav").style.boxShadow = "none";
@@ -709,7 +727,7 @@ var common = new function () {
         var tabEls = document.getElementsByClassName("MTabLabel");
         for (var i = 0; i < tabEls.length; i++) {
             tabEls[i].addEventListener("click", function (evt) {
-                var tabName = evt.currentTarget.innerText;
+                var tabName = evt.currentTarget.getAttribute("data-bind");
                 var tabcontent = document.getElementsByClassName("MTab");
                 for (var i = 0; i < tabcontent.length; i++) {
                     tabcontent[i].style.display = "none";
@@ -736,5 +754,3 @@ var common = new function () {
         document.querySelector(".MTabLabel").click();
     }
 })();
-
-initialize.push(common.DisplayLanguages());
