@@ -43,7 +43,7 @@
         
         <title>Index</title>
     </head>
-    <body class="themeable">
+    <body class="themable">
         <div id="common">
             <div id="loadingGif"></div>
 
@@ -65,18 +65,24 @@
                 <tr>
                     <td>
                         <div id="openDrawerContainer">
-                            <div id="openDrawer"></div>
+                            <div id="openDrawer" class="themable"></div>
                         </div>
                     </td>
                     <td>
-                        <h1>
+                        <h1 class="languages english">
                             WCTC 2017 InnovaIT Competition
+                        </h1>
+                        <h1 class="languages german">
+                            WCTC 2017 InnovaIT Wettbewerb
+                        </h1>
+                        <h1 class="languages gaelic">
+                            WCTC 2017 InnovaIT Competición
                         </h1>
                     </td>
 
                     <td>
                         <div id="openAlertContainer">
-                            <div id="openAlert"></div>
+                            <div id="openAlert" class="themable"></div>
                         </div>
                     </td>
             </table>
@@ -84,18 +90,28 @@
         <!--HEADEREND-->
 
         <!--NAVSTART-->
-        <nav id="sideNav" class="MNavDrawer">
+        <nav id="sideNav" class="MNavDrawer" class="themable">
             <table>
                 <tr>
-                    <td id="sideNavClickable">
-                        <a id="clsBtn" href="javascript:void(0)" class="closeButton"></a>
+                    <td id="sideNavClickable" class="themable">
+                        <a id="clsBtn" href="javascript:void(0)" class="closeButton themable"></a>
                         <div id="drawerContent">
                             <div class="VCenter">
-                                <a href="index.html">Calendar</a>
-                                <a href="journal.html">Journal</a>
-                                <a href="settings.html">Settings</a>
-                                <div class="testingNav">
-                                    <a href="test.html">test</a>
+                                <a class="languages english" href="index.html">Calendar</a>
+                                <a class="languages german" href="index.html">Kalender</a>
+                                <a class="languages gaelic" href="index.html">Calendario</a>
+
+                                <a class="languages english" href="journal.html?createNewEntry=true">New Entry</a>
+                                <a class="languages german" href="journal.html?createNewEntry=true">Journaleintrag Erstellen</a>
+                                <a class="languages gaelic" href="journal.html?createNewEntry=true">Nova Entrada de Diario</a>
+
+                                <a class="languages english" href="settings.html">Settings</a>
+                                <a class="languages german" href="settings.html">Einstellungen</a>
+                                <a class="languages gaelic" href="settings.html">Configuración</a>
+                                <div class="dev">
+                                    <a class="languages english" href="test.html">test</a>
+                                    <a class="languages german" href="test.html">test</a>
+                                    <a class="languages gaelic" href="test.html">proba</a>
                                 </div>
                             </div>
                         </div>
@@ -113,70 +129,7 @@
         <!--NAVEND-->
 
         <main>
-            <div class="MCard">
-                <h2 class="gname">Journal Entries</h2>
-
-                <button id="createNewEntry" class="MButton">
-                    Create New Entry
-                </button>
-                
-                <hr>
-                <ul class="listNoBullet">
-                    <li>
-                        <label class="MLabel" for="filterByTag">Filter by Tag</label>
-                        <div id="filterableTags"></div>
-                        <!--<input id="filterByTag" class="MInput" type="text">-->
-                    </li>
-                    <li>
-                        <label class="MLabel" for="filterAfterDate">Filter After Date</label>
-                        <input id="filterAfterDate" class="MInput" type="datetime">
-                    </li>
-                        <label class="MLabel" for="filterBeforeDate">Filter Before Date</label>
-                        <input id="filterBeforeDate" class="MInput" type="datetime">
-                    <li>
-                    <li>
-                        <input id="applyFilters" class="MButton" type="button" value="Search">
-                    </li>
-
-                </ul>
-
-                <ul id="entriesContainer">
-
-                </ul>
-                <div class="pagination">
-                    <button id="viewPrevEntries" class="pagination-button" value="">
-                        <
-                    </button>
-                    <button id="viewNextEntries" class="pagination-button" value="">
-                        >
-                    </button>
-                </div>
-            </div>
-
-            <div class="MCard">
-                <h2 class="gname">View/Edit Entry</h2>
-                <div id="viewEntryContainer">
-                    <h3>Date</h3>
-                    <input id="entryDate" class="MInput" type="datetime-local">
-                    
-                    <h3>Entry</h3>
-                    <textarea id="entryBody"></textarea>
-                    
-                    <h3>Tags</h3>
-                    <select id="existingEntryTags">
-                    </select>
-                    <input class="entryTag MInput" type="text"><button id="addTag" class="MButton">+Tag</button>
-                    <ul id="entryTags">
-                    </ul>
-                    
-                    <input id="deleteEntry" class="MButton" type="button" value="Delete Entry">
-                    <input id="discardChanges" class="MButton" type="button" value="Discard Changes">
-                    <input id="saveChanges" class="MButton" type="button" value="Save Changes">
-                    <input id="shareEntry" class="MButton" type="button" value="Share Entry">
-                </div>
-            </div>
-
-            <div class="MCard">
+            <div class="MCard themable">
                 <h2 class="gname">Test Functions</h2>
                 
                 <div id="testFunctionContainer">
@@ -190,44 +143,48 @@
                         <label for="removeAllEntries">Remove all entries</label>
                     </h3>
                     <input id="removeAllEntries" class="MButton" type="button" value="Remove all entries">
-
-                    <h3>
-                        <label for="viewAllEntries">View all entries</label>
-                    </h3>
-                    <input id="viewAllEntries" class="MButton" type="button" value="View all entries">
-                    <pre>
-                        <code id="allEntries">
-                        </code>
-                    </pre>
                 </div>
             </div>
 
-            <div class="MCard">
+            <div class="MCard themable">
                 <h2 class="gname">WYSIWYG</h2>
-                <textarea id="froala-editor"></textarea>
+                <textarea id="editor"></textarea>
+            </div>
+
+            <div class="MCard themable">
+                <h2 class="gname">WYSIWYG</h2>
+                <textarea id="testEditor" class="MInput"></textarea>
+                <input id="saveEditorTextToFile" class="MButton" value="Save as File" type="button">
+                <textarea id="readFromFile" class="MInput"></textarea>
+                <input id="readFromFile" class="MButton" type="button" value="Read File">
             </div>
         </main>
 
         <footer>
-
         </footer>
+
+        <template id="alertT">
+            <li>
+                <span class="alertBody"></span>
+                <input class="closeAlert MButton" type="button" value="X">
+            </li>
+        </template>
+
         <script type="text/javascript" src="js/jquery.min.js"></script>
-        <script async defer type="text/javascript" src="js/api.js" onload="this.onload=function(){};handleClientLoad()"
-        onreadystatechange="if (this.readyState === 'complete') this.onload()"></script> <!-- Google -->
-        <script type="text/javascript" src="js/init.js"></script>
+        <!--<script async defer type="text/javascript" src="js/api.js" onload="this.onload=function(){};handleClientLoad()"
+        onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>  Google -->
+        <!--<script async defer src="https://apis.google.com/js/api.js"
+            onload="this.onload=function(){};handleClientLoad()"
+            onreadystatechange="if (this.readyState === 'complete') this.onload()"></script>-->
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/dexie.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/connection.js"></script>
         <script type="text/javascript" src="js/notifications.js"></script>
-        <script type="text/javascript" src="js/dexie.js"></script>
-        <script type="text/javascript" src="js/database.js"></script>
         <script type="text/javascript" src="js/connector.js"></script>
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
-        <script type="text/javascript" src="js/codemirror.min.js"></script>
-        <script type="text/javascript" src="js/xml.min.js"></script>
-        <script type="text/javascript" src="js/froala_editor.pkgd.min.js"></script>
-        <script> $(function() { $("#froala-editor").froalaEditor() }); </script>
+        <script type="text/javascript" src="js/test.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>

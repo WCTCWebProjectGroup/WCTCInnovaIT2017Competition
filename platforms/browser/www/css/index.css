@@ -1210,6 +1210,10 @@ details.dark {
 	border: 1px solid #4b4b4b;
 }
 
+.dev {
+	display: none;
+}
+
 .closeButton.light {
 	background-image: url("../img/ic_close_black_24dp_2x.png");
 }

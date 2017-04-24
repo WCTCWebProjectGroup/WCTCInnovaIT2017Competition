@@ -81,7 +81,6 @@ function _journalInit () {
         function onErrorLoadFs (err) {
             console.log(err);
         }
-
     }
 
     function updateExistingTags () {
