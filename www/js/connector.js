@@ -171,8 +171,8 @@ var connector = (new function(){
 
                 _allEntries = newEntries;
 
-                if (_allEntries.length == 0)
-                    common.DisplayAlert("No search results!");
+                // if (_allEntries.length == 0)
+                //     common.DisplayAlert("No search results!");
                 
                 // Set max & min
                 _min = 0;
@@ -336,6 +336,111 @@ var connector = (new function(){
         if (document.querySelectorAll("#applyFilters").length > 0) {
             document.getElementById("applyFilters").addEventListener("click", connector.UpdateEntries);
         }
+    }
+
+    if (document.querySelectorAll("#addNewReminder").length > 0) {
+
+        function _createNotificationElement (notification) {
+            var notificationEl = document.importNode(document.getElementById("notificationT"), true).content;
+            notificationEl.querySelector(".notificationName").innerText = notification.name;
+            notificationEl.querySelector(".notificationDateTime").innerText 
+                = notification.notification.at.toLocaleString();
+            
+            document.getElementById("listOfCurrentReminders").appendChild(notificationEl);
+
+            document.querySelector("#listOfCurrentReminders > li:last-child")
+                .addEventListener("click", function (evt) {
+                    common.RemoveNotification(notification.uid)
+                        .then(function () {
+                            document.getElementById("listOfCurrentReminders").removeChild(evt.path[2])
+                        }).catch(function (err) {
+                            console.error(err);
+                            common.DisplayAlert("Failed to delete notification!");
+                        });
+                });
+        }
+
+        // Populate existing reminders
+        common.GetAllNotifications()
+            .then(function (notifications) {
+                notifications.forEach(function (notification) {
+                    _createNotificationElement(notification);
+                });
+            });
+
+        document.getElementById("addNewReminder").addEventListener("click", function () {
+            var newReminderDate = document.getElementById("newReminderDate").value;
+            var newReminderTime = document.getElementById("newReminderTime").value;
+            var newReminderMessage = document.getElementById("newReminderMessage").value;
+            var combinedDate = new Date();
+
+            // Verify all necesary fields are populated
+            if (newReminderDate == "" || newReminderTime == "" || newReminderMessage == "") {
+                if (newReminderDate == "")
+                    common.DisplayAlert("The date field is empty!");
+
+                if (newReminderTime == "")
+                    common.DisplayAlert("The time field is empty!");
+
+                if (newReminderMessage == "")
+                    common.DisplayAlert("The message field is empty!");
+
+                return;
+            }
+
+            var hours = newReminderTime.slice(0, 2);
+            var minutes = newReminderTime.slice(3, 5);
+            combinedDate.setHours(hours);
+            combinedDate.setMinutes(minutes);
+            combinedDate.setSeconds("00");
+
+            var year = newReminderDate.slice(0, 4);
+            var month = newReminderDate.slice(5, 7);
+            var day = newReminderDate.slice(8, 10);
+            combinedDate.setFullYear(year);
+            combinedDate.setMonth(month);
+            combinedDate.setDate(day);
+
+            var cordovaNotification = new common.CordovaNotificationTemplate();
+            cordovaNotification.title = common.AppName;
+            cordovaNotification.text = newReminderMessage;
+            cordovaNotification.at = combinedDate;
+
+            if (document.getElementById("newReminderRepeatEvery").value != "NoRepeat") {
+                var repeatEvery = document.getElementById("newReminderRepeatEvery").value;
+                switch (repeatEvery) {
+                    case "Day":
+                        cordovaNotification.every = "day";
+                        break;
+                    case "WeekDay":
+                        cordovaNotification.every = "week";
+                        break;
+                    case "Month":
+                        cordovaNotification.every = "month";
+                        break;
+                    default:
+                        throw "ERROR!";
+                }
+            }
+
+            common.AddNotification(cordovaNotification)
+                .then(function () {
+                    // When done, reset all fields
+                    document.getElementById("newReminderDate").value = "";
+                    document.getElementById("newReminderTime").value = "";
+                    document.getElementById("newReminderMessage").value = "";
+                    document.getElementById("newReminderRepeatEvery").selectedIndex = "0";
+
+                    // Add new notification to the list
+                    common.GetLatestNotification()
+                        .then(function (n) {
+                            _createNotificationElement(n);
+                        });
+                }).catch(function (err) {
+                    console.error(err);
+                    common.DisplayAlert("Failed to add notification");
+                });
+        });
     }
 })();
 

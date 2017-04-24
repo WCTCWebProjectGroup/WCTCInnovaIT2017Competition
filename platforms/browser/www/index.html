@@ -43,7 +43,7 @@
         
         <title>Index</title>
     </head>
-    <body>
+    <body class="themable">
         <div id="common">
             <div id="loadingGif"></div>
 
@@ -67,7 +67,7 @@
                 <tr>
                     <td>
                         <div id="openDrawerContainer">
-                            <div id="openDrawer"></div>
+                            <div id="openDrawer" class="themable"></div>
                         </div>
                     </td>
                     <td>
@@ -84,7 +84,7 @@
 
                     <td>
                         <div id="openAlertContainer">
-                            <div id="openAlert"></div>
+                            <div id="openAlert" class="themable"></div>
                         </div>
                     </td>
             </table>
@@ -92,11 +92,11 @@
         <!--HEADEREND-->
 
         <!--NAVSTART-->
-        <nav id="sideNav" class="MNavDrawer">
+        <nav id="sideNav" class="MNavDrawer" class="themable">
             <table>
                 <tr>
-                    <td id="sideNavClickable">
-                        <a id="clsBtn" href="javascript:void(0)" class="closeButton"></a>
+                    <td id="sideNavClickable" class="themable">
+                        <a id="clsBtn" href="javascript:void(0)" class="closeButton themable"></a>
                         <div id="drawerContent">
                             <div class="VCenter">
                                 <a class="languages english" href="index.html">Calendar</a>
@@ -182,7 +182,7 @@
                     <div class="languages gaelic">Nova Entrada</div>
                 </button>
             </div>
-            <div class="MTabViews">
+            <div class="MTabViews themable">
                 <div class="MTabLabels">
                     <button class="MTabLabel" data-bind="Calendar">
                         <div class="languages english">Calendar</div>
@@ -201,7 +201,7 @@
                         <div class="calendar"></div>
                     </div>
                     <div class="MTab" data-bind="List">
-                        <details>
+                        <details class="themable">
                             <summary class="MLabel">
                                 <div class="inline languages english">Filter Results</div>
                                 <div class="inline languages german">Ergebnisse Filtern</div>
@@ -209,7 +209,7 @@
                             </summary>
                             <ul class="listNoBullet">
                                 <li>
-                                    <label class="MLabel" for="filterByTag">
+                                    <label class="" for="filterByTag">
                                         <div class="languages english">Filter by Tag</div>
                                         <div class="languages german">Nach Tag Filtern</div>
                                         <div class="languages gaelic">Filtrar Por: Etiqueta</div>
@@ -218,14 +218,14 @@
                                     <!--<input id="filterByTag" class="MInput" type="text">-->
                                 </li>
                                 <li>
-                                    <label class="MLabel" for="filterAfterDate">
+                                    <label class="" for="filterAfterDate">
                                         <div class="languages english">Filter After Date</div>
                                         <div class="languages german">Filter nach Datum</div>
                                         <div class="languages gaelic">Filtro Tras Data</div>
                                     </label>
                                     <input id="filterAfterDate" class="MInput" type="date">
                                 </li>
-                                    <label class="MLabel" for="filterBeforeDate">
+                                    <label class="" for="filterBeforeDate">
                                         <div class="languages english">Filter Before Date</div>
                                         <div class="languages german">Filter vor dem Datum</div>
                                         <div class="languages gaelic">Filtro antes da data</div>
@@ -253,10 +253,10 @@
                         
                         <hr>
                         <div class="pagination">
-                            <button id="viewPrevEntries" class="pagination-button" value="">
+                            <button id="viewPrevEntries" class="pagination-button themable" value="">
                                 <
                             </button>
-                            <button id="viewNextEntries" class="pagination-button" value="">
+                            <button id="viewNextEntries" class="pagination-button themable" value="">
                                 >
                             </button>
                         </div>

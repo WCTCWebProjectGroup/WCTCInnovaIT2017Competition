@@ -4,6 +4,20 @@ var common = new function () {
     this.initialize = [];
     var init = this.initialize;
     init.push(_DisplayLanguages);
+    init.push(function () {
+        common.ShowPrimaryLoading();
+        _getTheme()
+            .then(function (t) {
+                _applyThemeCss("", t.name, true);
+                common.HidePrimaryLoading();
+            });
+    });
+
+    // ----- APP NAME ----- //
+
+    this.AppName = "WCTC 2017 InnovaIT Competition";
+
+    // ----- END APP NAME ----- //
 
     // ----- Constructors ----- //
 
@@ -47,9 +61,22 @@ var common = new function () {
             Entries: 'uid, date, body, tags',
             Themes: '++, &name, active',
             Google: 'username, passwordHash, token',
-            Languages: '++, name, active'
+            Languages: '++, name, active',
         });
-        _db.transaction('rw', _db.Themes, function () {
+        _db.version(2).stores({
+            Entries: 'uid, date, body, tags',
+            Themes: '++, &name, active',
+            Google: 'username, passwordHash, token',
+            Languages: '++, name, active',
+            Notifications: '++uid, name, notification'
+        });
+        
+        _setupThemes ();
+        _setupLanguages();
+    })();
+
+    function _setupThemes () {
+        return _db.transaction('rw', _db.Themes, function () {
             _db.Themes
                 .toCollection()
                 .toArray()
@@ -66,8 +93,10 @@ var common = new function () {
         }).catch(function (error) {
             console.log("failed to add themes to the db!");
         });
-        
-        _db.transaction('rw', _db.Languages, function () {
+    }
+
+    function _setupLanguages () {
+        return _db.transaction('rw', _db.Languages, function () {
             _db.Languages
                 .toCollection()
                 .toArray()
@@ -81,10 +110,75 @@ var common = new function () {
                             ]);
                     }
                 })
-        }).catch(function (error) {
-            console.log("failed to add languages to the db!")
+            }).catch(function (error) {
+                console.log("failed to add languages to the db!")
         });
-    })();
+    }
+
+    function _cordovaNotificationTemplate () {
+        this.id = "";
+        this.title = "";
+        this.text =  "";
+        this.every =  "0";
+        this.at =  new Date();
+        this.badge = 0;
+    }
+
+    function _NotificationTemplate () {
+        this.id = "";
+        this.name = "";
+        this.notification = new _cordovaNotificationTemplate();
+    }
+    this.CordovaNotificationTemplate = _cordovaNotificationTemplate;
+
+    this.GetAllNotifications = function () {
+        return _db.Notifications
+            .toArray();
+    }
+
+    this.RemoveNotification = function (notificationID) {
+        return _db.Notifications
+            .where('uid')
+            .equals(notificationID)
+            .delete()
+            .then(function () {
+                cordova.plugins.notification.local.cancel(notificationID, function() {
+                    console.log("deleted notification");
+                });
+            }).catch(function (err) {
+                common.DisplayAlert("Failed to delete notification");
+                console.error(err);
+            });
+    }
+
+    this.AddNotification = function (cordovaNotification) {
+        if (cordovaNotification.text == "")
+            return;
+        if (cordovaNotification.at == null)
+            return;
+
+        var n = new _NotificationTemplate();
+        n.notification = cordovaNotification;
+        n.name = cordovaNotification.text;
+
+        return _db.Notifications
+            .add(n)
+            .then(function (status, nID) {
+                cordovaNotification.id = nID;
+                cordova.plugins.notification.local.schedule(cordovaNotification);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+    }
+
+    this.GetLatestNotification = function () {
+        return _db.Notifications
+            .toArray()
+            .then(function (notifications) {
+                return notifications[notifications.length - 1];
+            });
+    }
 
     this.AddThemes = function () {
         _db.transaction('rw', _db.Themes, function () {
@@ -112,21 +206,47 @@ var common = new function () {
     }
 
     // Set theme to active
-    this.SetThemeToActive = function (themeName) {
+    function _setThemeToActive (themeName) {
         return _db.transaction('rw', _db.Themes, function () {
             _db.Themes
                 .where('active')
                 .equals(1)
-                .modify(function (theme) {
-                    theme.active = 0;
-                });
-            _db.Themes
-                .where('name')
-                .equalsIgnoreCase(themeName)
-                .modify(function (theme) {
-                    theme.active = 1;
-                });
-        })
+                .first()
+                .then(function (ot) {
+                    _db.Themes
+                        .where('active')
+                        .equals(1)
+                        .modify({active: 0})
+                        .then(function() {
+                            _db.Themes
+                                .where('name')
+                                .equalsIgnoreCase(themeName)
+                                .modify({active: 1})
+                                .then(function () {
+                                    _getTheme()
+                                        .then(function (nt) {
+                                            _applyThemeCss(ot.name, nt.name, false);
+                                        });
+                                });
+                        });
+                })
+        });
+    }
+    this.SetThemeToActive = _setThemeToActive;
+
+    function _applyThemeCss (oldthemename, themename, showLoadingScreen) {
+        if (showLoadingScreen)
+            common.ShowPrimaryLoading();
+            var themables = document.querySelectorAll(".themable")
+            for (var el of themables) {
+                var elClasses = el.getAttribute("class");
+                elClasses = elClasses.replace(oldthemename, "").trim();
+                elClasses += " " + themename;
+                el.setAttribute("class", elClasses);
+            }
+
+            if (showLoadingScreen)
+                setTimeout(common.HidePrimaryLoading, 500);
     }
 
     // Generates random uid
@@ -326,24 +446,29 @@ var common = new function () {
         }) 
     }
 
-    this.GetTheme = function ()  {
-        return _db.Themes
-            .where('active')
-            .equals(1)
-            .first(function (theme) {
-                return theme;
+    function _getTheme ()  {
+        return _setupThemes()
+            .then(function () {
+                return _db.Themes
+                    .where('active')
+                    .equals(1)
+                    .first(function (theme) {
+                        return theme;
+                    });
             });
     }
+    this.GetTheme = _getTheme;
 
-    this.SetTheme = function (themeObj) {
+    this.SetTheme = function (themename) {
         return _db.Themes
-            .update(themeObj.name, {
-                name: theme.name,
-                primary: theme.primary,
-                secondary: theme.secondary,
-                ternary: theme.ternary,
-                quaternary: theme.quaternary,
-                active: theme.active
+            .where("active")
+            .equals(1)
+            .modify({active: 0})
+            .then(function () {
+                _db.Themes
+                    .where("name")
+                    .equals(themename)
+                    .modify({active: 1});
             });
     }
 
@@ -356,19 +481,22 @@ var common = new function () {
 
     function _DisplayLanguages () {
         var langEls = document.getElementsByClassName("languages");
-        _GetActiveLangauge()
-            .then(function (lang) {
-                for (var i = 0; i < langEls.length; i++) {
-                    var item = langEls.item(i);
-                    var classes = item.getAttribute("class");
-                    if (classes.includes(lang[0].name) && classes.includes("inline"))
-                        item.style.display = "inline";
-                    else if (classes.includes(lang[0].name))
-                        item.style.display = "block";
-                    else
-                        item.style.display = "none";
-                }
-            });
+        _setupLanguages()
+            .then(function () {
+                _GetActiveLangauge()
+                    .then(function (lang) {
+                        for (var i = 0; i < langEls.length; i++) {
+                            var item = langEls.item(i);
+                            var classes = item.getAttribute("class");
+                            if (classes.includes(lang[0].name) && classes.includes("inline"))
+                                item.style.display = "inline";
+                            else if (classes.includes(lang[0].name))
+                                item.style.display = "block";
+                            else
+                                item.style.display = "none";
+                        }
+                    });
+            })
     }
 
     this.DisplayLanguages = _DisplayLanguages();
@@ -379,35 +507,40 @@ var common = new function () {
 
     this.UploadToGoogleDrive = function (entry) {
         // TODO: Check if signed in
-        
-        window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
+        return new Promise(function (resolve, reject) {
+            var localUrl = window.URL.createObjectURL(entry);
+            window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
+                console.log('file system open: ' + fs.name);
+                fs.root.getFile("tmp.txt", {create: true, exclusive: false}, function(fileEntry) {
+                    fileEntry.createWriter(function (fileWriter) {
+                        
+                        fileWriter.onwriteend = function() {
+                            console.log("Successful file write...");
+                            window.plugins.gdrive.uploadFile(fileEntry.fullPath, function (res) {
+                                console.log("Successfully uploaded file " + fileEntry.fullPath + " to gdrive!");
+                                resolve("Successfully uploaded file " + fileEntry.fullPath + " to gdrive!");
+                            }, function (err) {
+                                console.log(err);
+                                reject("Failed file write: " + e.toString());
+                            });
+                        };
 
-            console.log('file system open: ' + fs.name);
-            fs.root.getFile("tmp.txt", {create: true, exclusive: false}, function(fileEntry) {
-                fileEntry.createWriter(function (fileWriter) {
-                    fileWriter.onwriteend = function() {
-                        console.log("Successful file write...");
-                        window.plugins.gdrive.uploadFile(fileEntry.fullPath, function (res) {
-                            console.log("Successfully uploaded file " + fileEntry.fullPath + " to gdrive!");
-                            return "Successfully uploaded file " + fileEntry.fullPath + " to gdrive!";
-                        }, function (err) {
-                            console.log(err);
-                            return err;
-                        });
-                    };
+                        fileWriter.onerror = function (e) {
+                            console.log("Failed file write: " + e.toString());
+                            reject("Failed file write: " + e.toString());
+                        };
 
-                    fileWriter.onerror = function (e) {
-                        console.log("Failed file write: " + e.toString());
-                        return "Failed file write: " + e.toString();
-                    };
+                        dataObj = new Blob([entry.body.text], { type: 'text/plain' });
 
-                    dataObj = new Blob([entry.body.text], { type: 'text/plain' });
-
-                    fileWriter.write(dataObj);
+                        fileWriter.write(dataObj);
+                    });
                 });
-            });
 
-        }, console.log);
+            }, function (err) {
+                console.error(err);
+                reject(err);
+            });
+        });
     }
 
     // ----- END Upload to gdrive ----- //
@@ -527,8 +660,8 @@ var common = new function () {
 
         alertBodyEl.innerText = alertText;
 
-        document.getElementById("listOfAlerts").insertBefore(alertEl, document.querySelector("#listOfAlerts > li:first-child"));
-        alertEl = document.querySelector("#listOfAlerts > li:first-child");
+        document.getElementById("listOfAlerts").appendChild(alertEl);
+        alertEl = document.querySelector("#listOfAlerts > li:last-child");
 
         closeAlertBtnEl.addEventListener("click", function () {
             var listOfAlerts = document.getElementById("listOfAlerts");

@@ -44,7 +44,7 @@
         
         <title>Index</title>
     </head>
-    <body class="themeable">
+    <body class="themable">
         <div id="common">
             <div id="loadingGif"></div>
 
@@ -68,7 +68,7 @@
                 <tr>
                     <td>
                         <div id="openDrawerContainer">
-                            <div id="openDrawer"></div>
+                            <div id="openDrawer" class="themable"></div>
                         </div>
                     </td>
                     <td>
@@ -85,7 +85,7 @@
 
                     <td>
                         <div id="openAlertContainer">
-                            <div id="openAlert"></div>
+                            <div id="openAlert" class="themable"></div>
                         </div>
                     </td>
             </table>
@@ -93,20 +93,20 @@
         <!--HEADEREND-->
 
         <!--NAVSTART-->
-        <nav id="sideNav" class="MNavDrawer">
+        <nav id="sideNav" class="MNavDrawer" class="themable">
             <table>
                 <tr>
-                    <td id="sideNavClickable">
-                        <a id="clsBtn" href="javascript:void(0)" class="closeButton"></a>
+                    <td id="sideNavClickable" class="themable">
+                        <a id="clsBtn" href="javascript:void(0)" class="closeButton themable"></a>
                         <div id="drawerContent">
                             <div class="VCenter">
                                 <a class="languages english" href="index.html">Calendar</a>
                                 <a class="languages german" href="index.html">Kalender</a>
                                 <a class="languages gaelic" href="index.html">Calendario</a>
 
-                                <a class="languages english" href="journal.html">Journal</a>
-                                <a class="languages german" href="journal.html">Tagebuch</a>
-                                <a class="languages gaelic" href="journal.html">Revista</a>
+                                <a class="languages english" href="journal.html?createNewEntry=true">New Entry</a>
+                                <a class="languages german" href="journal.html?createNewEntry=true">Journaleintrag Erstellen</a>
+                                <a class="languages gaelic" href="journal.html?createNewEntry=true">Nova Entrada de Diario</a>
 
                                 <a class="languages english" href="settings.html">Settings</a>
                                 <a class="languages german" href="settings.html">Einstellungen</a>
@@ -136,7 +136,7 @@
             <h2 class="gname languages german">Einstellungen</h2>
             <h2 class="gname languages gaelic">Configuración</h2>
 
-            <div class="MCard">
+            <div class="MCard themable">
                 <h2 class="gname languages english">Language</h2>
                 <h2 class="gname languages german">Sprache</h2>
                 <h2 class="gname languages gaelic">Lingua</h2>
@@ -144,7 +144,7 @@
                 </select>
             </div>
 
-            <div class="MCard">
+            <div class="MCard themable">
                 <h2 class="gname languages english">Theme</h2>
                 <h2 class="gname languages german">Thema</h2>
                 <h2 class="gname languages gaelic">Tema</h2>
@@ -154,7 +154,7 @@
                 </form>
             </div>
 
-            <div class="MCard">
+            <div class="MCard themable">
                 <h2 class="gname languages english">Reminders</h2>
                 <h2 class="gname languages german">Erinnerungen</h2>
                 <h2 class="gname languages gaelic">Recordatorios</h2>
@@ -163,7 +163,7 @@
                 <div class="languages german">Aktuelle Erinnerungen</div>
                 <div class="languages gaelic">Recordatorios Actuais</div>
                 
-                <ul id="listOfCurrentReminders">
+                <ul id="listOfCurrentReminders" class="listNoBullet">
 
                 </ul>
                 
@@ -179,12 +179,33 @@
                     <div class="languages gaelic">Introduza Data</div>
                 </label>
                 <input id="newReminderDate" class="MInput" type="date">
+                
                 <label for="newReminderTime">
                     <div class="languages english">Enter Time</div>
                     <div class="languages german">Zeit eingeben</div>
                     <div class="languages gaelic">Introduza Tempo</div>
                 </label>
                 <input id="newReminderTime" class="MInput" type="time">
+
+                <label for="newReminderMessage">
+                    <div class="languages english">Enter Reminder Message</div>
+                    <div class="languages german">Enter Reminder Message</div>
+                    <div class="languages gaelic">Enter Reminder Message</div>
+                </label>
+                <input id="newReminderMessage" class="MInput" type="text">
+
+                <label>
+                    <div class="languages english">Repeat Reminder</div>
+                    <div class="languages german">Repeat Reminder</div>
+                    <div class="languages gaelic">Repeat Reminder</div>
+                </label>
+                <select id="newReminderRepeatEvery" class="MSelect">
+                    <option value="NoRepeat">Don't Repeat</option>
+                    <option value="Day">Day</option>
+                    <option value="WeekDay">Week</option>
+                    <option value="Month">Month</option>
+                </select>
+
                 <button id="addNewReminder" class="MButton">
                     <div class="languages english">Add Reminder</div>
                     <div class="languages german">Erinnerung hinzufügen</div>
@@ -222,7 +243,7 @@
                 </form>
             </div>-->
 
-            <div class="MCard">
+            <div class="MCard themable">
                 <h2 class="gname">
                     <div class="languages english">Google Account</div>
                     <div class="languages german">Google Benutzerkonto</div>
@@ -262,6 +283,28 @@
             </li>
         </template>
 
+        <template id="notificationT">
+            <li class="notificationEntry">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="notificationName centeredText"></div>
+                            </td>
+                            <td>
+                                <div class="notificationDateTime centeredText"></div>
+                            </td>
+                            <td>
+                                <div class="notificationRepeat centeredText"></div>
+                            </td>
+                            <td>
+                                <input class="MButton remove" type="button" value="X">
+                            </td>
+                        </tr>
+                    </tbody>
+            </li>
+        </template>
+
         <!-- ----- END Templates Section ----- -->
 
         <!-- ----- All Scripts are to be kept below this line! ----- -->
@@ -275,9 +318,6 @@
         <script type="text/javascript" src="js/connector.js"></script>
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
-        <script type="text/javascript" src="js/codemirror.min.js"></script>
-        <script type="text/javascript" src="js/xml.min.js"></script>
-        <script type="text/javascript" src="js/froala_editor.pkgd.min.js"></script>
         <script type="text/javascript" src="js/settings.js"></script>
         <!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
         <script async defer src="https://apis.google.com/js/api.js"

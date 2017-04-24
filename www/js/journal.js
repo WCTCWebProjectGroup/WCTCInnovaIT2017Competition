@@ -47,7 +47,7 @@ function _journalInit () {
 
                 fileWriter.onwriteend = function() {
                     console.log("Successful file write...");
-                    readFile(fileEntry);
+                    //readFile(fileEntry);
                 };
 
                 fileWriter.onerror = function (e) {
@@ -74,7 +74,7 @@ function _journalInit () {
                 // fileEntry.fullPath == '/someFile.txt'
                 writeFile(fileEntry, null);
 
-            }, onErrorCreateFile);
+            }, onErrorLoadFs);
 
         }, onErrorLoadFs);
 
@@ -107,7 +107,7 @@ function _journalInit () {
                 var existingTagsSelectEl = document.getElementById("existingTags");
                 var _db_entry = {};
 
-                var deleteEntryBtn = document.getElementById("existingTags");
+                var deleteEntryBtn = document.getElementById("deleteEntry");
                 var discardChangesBtn = document.getElementById("discardChanges");
                 var saveChangesBtn = document.getElementById("saveChanges");
                 var shareEntryBtn = document.getElementById("shareEntry");
@@ -133,6 +133,14 @@ function _journalInit () {
                     
                     editingEntryNumber = Number(urlParams[1].split('=')[1]);
                     console.log("Editing " + editingEntryNumber);
+
+                    document.getElementById("#deleteEntry").addEventListener("click", function () {
+                        common.RemoveEntryFromDB()
+                            .then(function () {
+                                document.location.assign("/index.html");
+                            });
+                    });
+
                     common.GetEntryInDB(Number(editingEntryNumber))
                         .then(function (entry) {
                             // Set date/time
@@ -291,7 +299,7 @@ function _journalInit () {
 
             input.onchange = function() {
                 var file = this.files[0];
-                _StoreImage();
+                _StoreImage(file);
                 
                 // Note: Now we need to register the blob in TinyMCEs image blob
                 // registry. In the next release this part hopefully won't be

@@ -43,7 +43,7 @@
         
         <title>Index</title>
     </head>
-    <body>
+    <body class="themable">
         <div id="common">
             <div id="loadingGif"></div>
 
@@ -67,7 +67,7 @@
                 <tr>
                     <td>
                         <div id="openDrawerContainer">
-                            <div id="openDrawer"></div>
+                            <div id="openDrawer" class="themable"></div>
                         </div>
                     </td>
                     <td>
@@ -84,7 +84,7 @@
 
                     <td>
                         <div id="openAlertContainer">
-                            <div id="openAlert"></div>
+                            <div id="openAlert" class="themable"></div>
                         </div>
                     </td>
             </table>
@@ -92,11 +92,11 @@
         <!--HEADEREND-->
 
         <!--NAVSTART-->
-        <nav id="sideNav" class="MNavDrawer">
+        <nav id="sideNav" class="MNavDrawer" class="themable">
             <table>
                 <tr>
-                    <td id="sideNavClickable">
-                        <a id="clsBtn" href="javascript:void(0)" class="closeButton"></a>
+                    <td id="sideNavClickable" class="themable">
+                        <a id="clsBtn" href="javascript:void(0)" class="closeButton themable"></a>
                         <div id="drawerContent">
                             <div class="VCenter">
                                 <a class="languages english" href="index.html">Calendar</a>
@@ -119,6 +119,11 @@
                         </div>
                         <div class="alerts">
                             <ul id="listOfAlerts" class="listNoBullet">
+                                <li id="noAlerts">
+                                    <div class="languages english">No Alerts</div>
+                                    <div class="languages german">No Alerts</div>
+                                    <div class="languages gaelic">No Alerts</div>
+                                </li>
                             </ul>
                         </div>
                     </td>
@@ -136,14 +141,15 @@
                 <div class="languages german">Journaleintrag Anzeigen/Bearbeiten</div>
                 <div class="languages gaelic">Ver/Editar Journal Entry</div>
             </h2>
-            <div class="MCard">
-                <label class="MLabel"for="entryDate">
+            <div class="MCard themable">
+                <label class=""for="entryDate">
                     <div class="languages english">Date</div>
                     <div class="languages german">Datum</div>
                     <div class="languages gaelic">Data</div>
                 </label>
                 <input id="entryDate" class="MInput" type="date">
-                <label class="MLabel" for="entryTime">
+                
+                <label class="" for="entryTime">
                     <div class="languages english">Time</div>
                     <div class="languages german">Zeit</div>
                     <div class="languages gaelic">Tempo</div>
@@ -151,7 +157,7 @@
                 <input id="entryTime" class="MInput" type="time">
             </div>
 
-            <div class="MCard">
+            <div class="MCard themable">
                 <label class="MLabel">
                     <div class="gname languages english">Entry</div>
                     <div class="gname languages german">Eintrag</div>
@@ -159,13 +165,14 @@
                 </label>
                 <textarea id="editor"></textarea>
             </div>
-            <div class="MCard">
+
+            <div class="MCard themable">
                 <label class="MLabel">
                     <div class="gname languages english">Add/Remove/Edit Tags</div>
                     <div class="gname languages german">Hinzufügen/Entfernen/Bearbeiten von Tags</div>
                     <div class="gname languages gaelic">Engadir/eliminar/Edit Tags</div>
                 </label>
-                <details>
+                <details class="themable">
                     <summary class="MLabel">
                         <div class="inline languages english">New Tag</div>
                         <div class="inline languages german">Neues Tag</div>
@@ -174,13 +181,13 @@
                     <select id="existingTags" class="MSelect">
                         <option>Add existing tag</option>
                     </select>
-                    <label class="MLabel">
+                    <label class="">
                         <div class="languages english">Tag Name</div>
                         <div class="languages german">Verlinke den Namen</div>
                         <div class="languages gaelic">Nome do Tag</div>
                     </label>
                     <input id="newTagName" class="entryTag MInput" type="text" placeholder="Enter new tag name">
-                    <label class="MLabel">
+                    <label class="">
                         <div class="languages english">Tag Color</div>
                         <div class="languages german">Farbe des Tags</div>
                         <div class="languages gaelic">Nome do Tag</div>
@@ -217,11 +224,11 @@
                     <div class="languages german">Änderungen Speichern</div>
                     <div class="languages gaelic">Gardar Cambios</div>
                 </button>
-                <button id="shareEntry" class="MButton">
+                <!--<button id="shareEntry" class="MButton">
                     <div class="languages english">Share Entry</div>
                     <div class="languages german">Freigeben von Journaleintrag</div>
                     <div class="languages gaelic">Compartir Entry</div>
-                </button>
+                </button>-->
             </div>
 
             <!--<input id="takePicture" class="MFloatingActionButton camera" type="button">-->

@@ -2,6 +2,17 @@ var settings = new function () {
     var _blackboardCookieName = "blackboardtoken";
     var _googleCookieName = "googletoken";
 
+    // ---- Notifications ----- //
+
+    function _CreateNewNotifcation() {
+        cordova.plugins.notification.local.schedule({
+
+        });
+    }
+    this.CreateNewNotification = _CreateNewNotifcation;
+
+    // ---- END Notifications ----- //
+
     // ----- Languages ----- //
 
     this.SetLanguage = function () {
@@ -45,19 +56,19 @@ var settings = new function () {
         return "";
     }
 
-    function _activateTheme () {
-        common
-            .GetTheme()
-            .then(function (themeObj) {
-                document
-                    .querySelectorAll(".themeable")
-                    .forEach(function (themeable) {
-                        themeable.setAttribute("class", "themeable " + themeObj);
-                });
-            });
-    }
+    // function _activateTheme () {
+    //     common
+    //         .GetTheme()
+    //         .then(function (themeObj) {
+    //             document
+    //                 .querySelectorAll(".themeable")
+    //                 .forEach(function (themeable) {
+    //                     themeable.setAttribute("class", "themeable " + themeObj);
+    //             });
+    //         });
+    // }
 
-    this.ActivateTheme = _activateTheme;
+    this.ActivateTheme = common.SetThemeToActive;
 
     function _blackboardLogin (username, password) {
         var xhr = new XMLHttpRequest();
@@ -107,16 +118,13 @@ function settingsInit () {
                 themeRadioBtnEl.setAttribute("value", theme.active);
 
                 listOfThemes.appendChild(newThemeEl);
-                if (theme.active == true) {
+                if (theme.active == 1) {
                     themeRadioBtnEl.checked = true;
                 }
 
                 themeLabelEl.addEventListener("click", function () {
                     if (themeRadioBtnEl.value ) {
-                        common.SetThemeToActive(theme.name)
-                            .then(function () {
-                                settings.ActivateTheme();
-                            });
+                        common.SetThemeToActive(theme.name);
                     }
                 });
             });

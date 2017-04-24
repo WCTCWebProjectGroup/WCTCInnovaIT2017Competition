@@ -393,13 +393,9 @@ input[type='radio'].MRadioButton:checked + label::before {
     transition: 0.3s;
 }
 
-.MTabViews > .MTabLabels > button.MTabLabel:hover {
+/*.MTabViews > .MTabLabels > button.MTabLabel:hover {
 	background-color: #ddd;
-}
-
-.MTabViews > .MTabLabels >  button.MTabLabel.active {
-	background-color: #ccc;
-}
+}*/
 
 .MTabViews > .MTab {
     display: none;
@@ -422,14 +418,6 @@ input[type='radio'].MRadioButton:checked + label::before {
 }
 
 /* ------ END Material Designs ------ */
-
-/* ----- Light Theme ----- */
-
-body.light {
-	background: #fafafa;
-}
-
-/* ----- END Light Theme ----- */
 
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
@@ -512,6 +500,10 @@ main > * {
 	display: block;
 	margin: auto;
 	text-align: center;
+}
+
+main > h2.gname {
+	margin-bottom: 24px;
 }
 
 summary {
@@ -684,6 +676,14 @@ button.newEntry {
 
 .noOpacity {
 	opacity: 0;
+}
+
+li.notificationEntry td {
+	width: 50%;
+}
+
+li.notificationEntry td:last-child {
+	min-width: 60px;
 }
 
 .languages {
@@ -906,25 +906,11 @@ button.newEntry {
     /*transition: visibility 2s;*/
 }
 
-#openAlert {
-	background-image: url("../img/ic_notifications_white_24dp_2x.png");
-	
-	animation-name: none;
-	animation-direction: alternate;
-	animation-duration: 1s;
-	animation-iteration-count: infinite;
-}
-
-#openDrawer {
-	background-image: url("../img/ic_menu_white_24dp_1x.png");
-}
-
 #openAlert, 
 #openDrawer {
 	background-color: rgb(47,193,59);
 	background-repeat: no-repeat;
 	background-position: center;
-	border-color: white;
 	border-radius: 50%;
 	border-style: solid;
 	border-width: 2px;
@@ -1183,6 +1169,154 @@ button.newEntry {
 
 	transition: left .5s ease-in-out;
 }
+
+/* ----- Themes ----- */
+
+body.light {
+	background: #fafafa;
+	color: #2b2b2b;
+}
+
+body.dark {
+	background: #2b2b2b;
+	color: #fafafa;
+}
+
+body.light hr {
+	border: 1px solid #d0d0d0;
+}
+
+body.dark hr {
+	border: 1px solid #5d5d5d;
+}
+
+body.light .tagContainer > * {
+	background-color: white;
+	color: black;
+}
+
+body.dark .tagContainer > * {
+	background-color: #2b2b2b;
+	color: #fafafa;
+}
+
+details.light {
+	background-color: white;
+	border: 1px solid #b5b5b5;
+}
+
+details.dark {
+	background-color: #2b2b2b;
+	border: 1px solid #4b4b4b;
+}
+
+.closeButton.light {
+	background-image: url("../img/ic_close_black_24dp_2x.png");
+}
+
+.closeButton.dark {
+	background-image: url("../img/ic_close_white_24dp_2x.png");
+}
+
+.MCard.light {
+	background-color: #e7e7e7;
+	color: #2b2b2b;
+}
+
+.MCard.dark {
+	background-color: #3a3a3a;
+	color: #fafafa;
+}
+
+.MTabViews.light > .MTabLabel {
+	color: #2b2b2b;
+}
+
+.MTabViews.dark .MTabLabel {
+	color: #fafafa;
+}
+
+.MTabViews.light .MTabLabel.active {
+	background-color: #ccc;
+}
+
+.MTabViews.dark .MTabLabel.active {
+	background-color: #2d2d2d;
+}
+
+.MTabViews.light {
+	border: 1px solid #ccc;
+    background-color: #f1f1f1;
+	color: #2b2b2b;
+}
+
+.MTabViews.dark {
+	border: 1px solid #000000;
+    background-color: #232323;
+	color: #f5f5f5;
+}
+
+.pagination-button.light {
+	background-color: rgb(255, 255, 255);
+}
+
+.pagination-button.dark {
+	background-color: #2b2b2b;
+}
+
+#openDrawer.light {
+	background-image: url("../img/ic_menu_white_24dp_1x.png");
+}
+
+#openDrawer.dark {
+	background-image: url("../img/ic_menu_black_24dp_1x.png");
+}
+
+#openAlert.light {
+	background-image: url("../img/ic_notifications_white_24dp_2x.png");
+	
+	animation-name: none;
+	animation-direction: alternate;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+}
+
+#openAlert.dark {
+	background-image: url("../img/ic_notifications_black_24dp_2x.png");
+	
+	animation-name: none;
+	animation-direction: alternate;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+}
+
+#openAlert.light, 
+#openDrawer.light {
+	border-color: white;
+}
+
+#openAlert.dark, 
+#openDrawer.dark {
+	border-color: #2b2b2b;
+}
+
+#sideNavClickable.light {
+    background-color: rgb(250,250,250);
+}
+
+#sideNavClickable.dark {
+    background-color: #2b2b2b;
+}
+
+#sideNav.light a {
+	color: #2b2b2b;
+}
+
+#sideNav.dark a {
+	color: #fafafa;
+}
+
+/* ----- Themes ----- */
 
 /* ----- Animations ----- */
 @keyframes newAlert {

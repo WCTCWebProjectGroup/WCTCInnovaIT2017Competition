@@ -37,11 +37,6 @@ var app = {
 
         // Once all initializer functions have run, hide the primary loading gif
         common.HidePrimaryLoading();
-        // connector
-        //     .GetNextEntries()
-        //     .then(function () {
-        //         common.HidePrimaryLoading();
-        //     });
     },
 
     // Update DOM on a Received Event

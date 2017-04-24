@@ -31,8 +31,10 @@ var calendar = new function () {
         var containerEl = document.createElement("div");
         var editBtnEl = document.createElement("input");
         var shareBtnEl = document.createElement("input");
+        var currentTheme = document.getElementsByTagName("body")[0].getAttribute("class");
+        currentTheme = currentTheme.replace("themable").trim();
 
-        card.setAttribute("class", "MCard");
+        card.setAttribute("class", "MCard themable " + currentTheme);
 
         title.setAttribute("class", "gname");
         title.innerText = "[" + entryObj.uid + "] " + entryObj.date.toLocaleString();
@@ -135,22 +137,27 @@ var calendar = new function () {
                     _goodDates.push(entry);
             });
             
-            if (_goodDates.length > 0) {
-                $('.calendar').pignoseCalendar({
-                    //toggle: true,
-                    scheduleOptions: {
-                        colors: {
-                            entry: '#2fabb7'
-                        }
-                    },
-                    schedules: _goodDates,
-                    select: _onDateClickHandler
-                });
-            } else {
-                $('.calendar').pignoseCalendar({
-                    select: _onDateClickHandler
-                });
-            }
+            common.GetTheme()
+                .then(function (theme) {
+                    if (_goodDates.length > 0) {
+                        $('.calendar').pignoseCalendar({
+                            //toggle: true,
+                            theme: theme.name,
+                            scheduleOptions: {
+                                colors: {
+                                    entry: '#2fabb7'
+                                }
+                            },
+                            schedules: _goodDates,
+                            select: _onDateClickHandler
+                        });
+                    } else {
+                        $('.calendar').pignoseCalendar({
+                            theme: theme.name,
+                            select: _onDateClickHandler
+                        });
+                    }
+                })
 
             // $('.calendar').pignoseCalendar({
             //     scheduleOptions: {
@@ -201,9 +208,13 @@ function init () {
         var entry = calendar.SharedEntries()[0];
         common.GetEntryInDB(entry.uid).then(function () {
             console.log("Submitting document " + entry.uid + " to google");
-            var response = common.UploadToGoogleDrive(entry);
-            document.querySelector("#shareResponse span").innerText = response;
-            document.getElementById("shareResponse").style.display = "block";
+            common.UploadToGoogleDrive(entry)
+                .then(function (response) {
+                    document.querySelector("#shareResponse span").innerText = response;
+                    document.getElementById("shareResponse").style.display = "block";
+                });
+        }).catch(function (err) {
+            console.error(err);
         });
         evt.stopPropagation();
     });
