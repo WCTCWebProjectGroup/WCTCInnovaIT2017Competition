@@ -133,10 +133,10 @@ function _journalInit () {
                     editingEntryNumber = Number(urlParams[1].split('=')[1]);
                     console.log("Editing " + editingEntryNumber);
 
-                    document.getElementById("#deleteEntry").addEventListener("click", function () {
+                    document.getElementById("deleteEntry").addEventListener("click", function () {
                         common.RemoveEntryFromDB()
                             .then(function () {
-                                document.location.assign("/index.html");
+                                history.back();
                             });
                     });
 
@@ -161,7 +161,7 @@ function _journalInit () {
                         });
                 } else {
                     // Error occurred
-                    document.location.assign("/index.html");
+                    history.back();
                 }
 
                 // ----- Event Listeners ----- //
@@ -170,7 +170,7 @@ function _journalInit () {
                 // });
                 discardChangesBtn.addEventListener("click", function () {
                     console.log("Discarding changes");
-                    document.location.assign("/index.html");
+                    history.back();
                 });
 
                 addTagBtn.addEventListener("click", function () {
@@ -238,7 +238,7 @@ function _journalInit () {
                     if (creatingNewEntry) {
                         common.CreateNewEntry(datetime, body, tags)
                             .then(function () {
-                                document.location.assign("/index.html");
+                                history.back();
                             });
                     } else {
                         var _db_entry = {
@@ -272,7 +272,7 @@ function _journalInit () {
 
                         common.UpdateEntryInDB(_db_entry)
                             .then(function () {
-                                document.location.assign("/index.html");
+                                history.back();
                             });
                     }
                 });
