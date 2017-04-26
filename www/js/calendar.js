@@ -206,15 +206,22 @@ function init () {
     document.getElementById("shareResponse").style.display = "none";
     document.getElementById("uploadToGoogle").addEventListener("click", function (evt) {
         var entry = calendar.SharedEntries()[0];
-        common.GetEntryInDB(entry.uid).then(function () {
-            console.log("Submitting document " + entry.uid + " to google");
-            common.UploadToGoogleDrive(entry)
-                .then(function (response) {
-                    document.querySelector("#shareResponse span").innerText = response;
-                    document.getElementById("shareResponse").style.display = "block";
-                });
+        common.GetEntryInDB(entry.uid)
+            .then(function (cleanEntry) {
+                console.log("then: Submitting document " + cleanEntry.uid + " to google");
+                common.UploadToGoogleDrive(cleanEntry)
+                    .then(function (response) {
+                        document.querySelector("#shareResponse span").innerText = response;
+                        document.getElementById("shareResponse").style.display = "block";
+                    }).catch(function (err) {
+                        console.error(err);
+                        document.querySelector("#shareResponse span").innerText = err;
+                        document.getElementById("shareResponse").style.display = "block";
+                    });
         }).catch(function (err) {
             console.error(err);
+            document.querySelector("#shareResponse span").innerText = err;
+            document.getElementById("shareResponse").style.display = "block";
         });
         evt.stopPropagation();
     });

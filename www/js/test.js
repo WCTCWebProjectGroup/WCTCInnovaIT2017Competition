@@ -44,6 +44,7 @@ function _StoreImage (file) {
 // ----- Init Event Listeners ----- //
 
 function init () {
+
     document.getElementById("saveEditorTextToFile").addEventListener("click", function () {
         var fileText = document.getElementById("testEditor").value;
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
@@ -54,6 +55,7 @@ function init () {
 
                 fileWriter.onwriteend = function() {
                     console.log("Successful file write...");
+                    test.fileEntries.push(fileEntry);
                 };
 
                 fileWriter.onerror = function (e) {
@@ -75,8 +77,37 @@ function init () {
     });
 
     document.getElementById("readFromFile").addEventListener("click", function () {
-
+        
     });
+
+    document.getElementById("uploadImage").addEventListener("change", function (evt) {
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                
+                reader.onload = function (e) {
+                    document.getElementById("blah").setAttribute('src', e.target.result);
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+                test.PerformFileOperation(test.FileOperationsEnum.SAVE, "testPhoto.png", input.files[0])
+                    .then(function (e) {
+                        console.log("then: " + e);
+                    });
+            }
+        }
+
+        readURL(evt.srcElement);
+    });
+
+    document.getElementById("loadSavedImage").addEventListener("click", function (evt) {
+        var filename = document.getElementById("loadSavedImageName").value;
+        test.PerformFileOperation(test.FileOperationsEnum.READ, filename, false)
+        .then(function (e) {
+            console.log("then: " + e);
+            document.getElementById("savedImage").src = window.URL.createObjectURL(e);
+        });
+    })
 };
 
 common.initialize.push(init);

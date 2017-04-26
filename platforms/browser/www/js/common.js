@@ -507,40 +507,11 @@ var common = new function () {
 
     this.UploadToGoogleDrive = function (entry) {
         // TODO: Check if signed in
-        return new Promise(function (resolve, reject) {
-            var localUrl = window.URL.createObjectURL(entry);
-            window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
-                console.log('file system open: ' + fs.name);
-                fs.root.getFile("tmp.txt", {create: true, exclusive: false}, function(fileEntry) {
-                    fileEntry.createWriter(function (fileWriter) {
-                        
-                        fileWriter.onwriteend = function() {
-                            console.log("Successful file write...");
-                            window.plugins.gdrive.uploadFile(fileEntry.fullPath, function (res) {
-                                console.log("Successfully uploaded file " + fileEntry.fullPath + " to gdrive!");
-                                resolve("Successfully uploaded file " + fileEntry.fullPath + " to gdrive!");
-                            }, function (err) {
-                                console.log(err);
-                                reject("Failed file write: " + e.toString());
-                            });
-                        };
-
-                        fileWriter.onerror = function (e) {
-                            console.log("Failed file write: " + e.toString());
-                            reject("Failed file write: " + e.toString());
-                        };
-
-                        dataObj = new Blob([entry.body.text], { type: 'text/plain' });
-
-                        fileWriter.write(dataObj);
-                    });
-                });
-
-            }, function (err) {
-                console.error(err);
-                reject(err);
-            });
-        });
+        var contentDocument = entry.body.text;
+        var content = '<!DOCTYPE html>' + contentDocument;
+        var converted = htmlDocx.asBlob(content, {orientation: false});
+        var url = URL.createObjectURL(converted);
+        return test.PerformFileOperation(test.FileOperationsEnum.UPLOAD, url, null);
     }
 
     // ----- END Upload to gdrive ----- //
@@ -887,3 +858,130 @@ function RandTag () {
         document.querySelector(".MTabLabel").click();
     }
 })();
+
+// ----- Test Functions ----- //
+
+var test = {
+    fileEntries: [],
+    _enumVar: Object.freeze({
+        WRITE: 1,
+        READ: 2,
+        DELETE: 3,
+        UPLOAD: 4,
+        SAVE: 5
+    }),
+    get FileOperationsEnum(){
+        return this._enumVar;
+    },
+    // this.fileOperationsEnum = enumVar;
+
+    PerformFileOperation: function (fileOperation, filename, filedata) {
+        return new Promise(function (resolve, reject) {
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+                switch (fileOperation) {
+                    case test._enumVar.READ:
+                    case test._enumVar.WRITE:
+                    case test._enumVar.UPLOAD:
+                        fs.root.getFile(filename, {create:true,exclusive:false}, function (fileEntry) {
+                            if (fileOperation == test.FileOperationsEnum.WRITE) {
+                                console.log("selected write operation")
+                                fileEntry.createWriter(function (fileWriter) {
+                                    fileWriter.onwriteend = function () {
+                                        resolve({
+                                                fileEntry:fileEntry,
+                                                fileSystem:fs
+                                            });
+                                    };
+
+                                    fileWriter.onerror = function (err) {
+                                        console.error(err);
+                                        reject(err);
+                                    }
+
+                                    fileWriter.write(filedata);
+                                });
+                            } else if (fileOperation == test.FileOperationsEnum.READ) {
+                                console.log("selected read operation");
+
+                                fileEntry.file(function (file) {
+                                    var reader = new FileReader();
+
+                                    reader.onloadend = function () {
+                                        //console.log("Successfully read file! File data: ");
+                                        //console.log(this.result);
+                                        if (filedata == null) {
+                                            resolve(this.result);
+                                        } else {
+                                            var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
+                                            resolve(blob);
+                                        }
+                                    }
+
+                                    if (filedata == null)
+                                        reader.readAsText(file);
+                                    else
+                                        reader.readAsArrayBuffer(file);
+                                    
+                                }, reject);
+                            } else if (fileOperation == test.FileOperationsEnum.UPLOAD) {
+                                window.plugins.gdrive.uploadFile(fileEntry.fullPath,
+                                    function (response) {
+                                        console.log("successfully uploaded file to gdrive!");
+                                        resolve("successfully uploaded file to gdrive!");
+                                    },
+                                    function (error){
+                                        console.log(error);
+                                        reject(error);
+                                    }
+                                );
+                            }
+                        });
+                        break;
+                    case test._enumVar.DELETE:
+                        console.log("selected delete operation - currently not able to delete?");
+                        break;
+                    case test._enumVar.SAVE:
+                        window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
+
+                            console.log('file system open: ' + fs.name);
+                            // saveFile(dirEntry, blob, "downloadedImage.png");
+                            fs.root.getFile(filename, { create: true, exclusive: false }, function (fileEntry) {
+                                fileEntry.createWriter(function (fileWriter) {
+                                    fileWriter.onwriteend = function() {
+                                        console.log("Successful file write...");
+                                        // resolve(fileEntry);
+
+                                        // Demo read image
+                                        fileEntry.file(function(file) {
+                                            var reader = new FileReader();
+
+                                            reader.onloadend = function () {
+                                                var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
+                                                // var elem = document.getElementById('blah2');
+                                                // elem.src = window.URL.createObjectURL(blob);
+                                                resolve(fileEntry, blob);
+                                            };
+
+                                            reader.readAsArrayBuffer(file);
+                                        }, reject);
+                                    };
+
+                                    fileWriter.onerror = function(e) {
+                                        console.log("Failed file write: " + e.toString());
+                                        reject(e);
+                                    };
+
+                                    fileWriter.write(filedata);
+                                });
+                            }, reject);
+                        }, reject);
+                        break;
+                    default:
+                        console.error("unable to determine operation!");
+                        reject("unable to determine operation!");
+                }
+            });
+        });
+    }
+    // this.PerformFileOperation = _performFileOperation;
+};

@@ -90,8 +90,32 @@ function _journalInit () {
     tinymce.init({
         selector: '#editor',
         setup: function (ed) {
+            ed.addButton('mybutton', {
+                text: 'Upload Image',
+                icon: 'image',
+                onclick: function () {
+                    document.getElementById("loadSavedImage").click();
+                }
+            }),
             ed.on('init', function(args) {
                 console.debug(args.target.id);
+
+                var fileInputEl = document.getElementById("loadSavedImage");
+                fileInputEl.addEventListener("change", function (evt) {
+                    var input = evt.srcElement;
+                    var reader = new FileReader();
+            
+                    reader.onload = function (e) {
+                        ed.insertContent('&nbsp;<img src="' + e.target.result + ' max-width="50%">&nbsp;');
+                    }
+                    
+                    reader.readAsDataURL(input.files[0]);
+                    test.PerformFileOperation(test.FileOperationsEnum.SAVE, "testPhoto.png", input.files[0])
+                        .then(function (e) {
+                            console.log("then: " + e);
+                        });
+                    test.PerformFileOperation(test.FileOperationsEnum.WRITE, evt.srcElement.files[0], null)
+                });
 
                 // First determine if creating a new entry or editing an exisiting one
                 var urlParams = document.location.search.replace('?', '').split('&');
@@ -280,10 +304,10 @@ function _journalInit () {
             });
         },
         plugins: [
-            'image'
+            'image autoresize imagetools'
         ],
         menubar: false,
-        toolbar: 'image | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent',
+        toolbar: 'mybutton | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent',
         automatic_uploads: true,
         images_upload_handler: function (blobInfo, success, failure) {
             var xhr, formData;
