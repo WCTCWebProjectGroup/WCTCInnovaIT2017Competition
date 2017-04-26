@@ -959,7 +959,7 @@ var test = {
                                                 var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
                                                 // var elem = document.getElementById('blah2');
                                                 // elem.src = window.URL.createObjectURL(blob);
-                                                resolve(fileEntry, blob);
+                                                resolve({fileEntry: fileEntry, blob: blob});
                                             };
 
                                             reader.readAsArrayBuffer(file);

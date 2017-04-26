@@ -92,7 +92,8 @@ function init () {
                 reader.readAsDataURL(input.files[0]);
                 test.PerformFileOperation(test.FileOperationsEnum.SAVE, "testPhoto.png", input.files[0])
                     .then(function (e) {
-                        console.log("then: " + e);
+                        console.log("then: " + e.fileEntry);
+                        document.getElementById("blah2").src = window.URL.createObjectURL(e.blob);
                     });
             }
         }

@@ -100,19 +100,19 @@ function _journalInit () {
             ed.on('init', function(args) {
                 console.debug(args.target.id);
 
-                var fileInputEl = document.getElementById("loadSavedImage");
-                fileInputEl.addEventListener("change", function (evt) {
+                document.getElementById("loadSavedImage").addEventListener("change", function (evt) {
                     var input = evt.srcElement;
                     var reader = new FileReader();
             
                     reader.onload = function (e) {
-                        ed.insertContent('&nbsp;<img src="' + e.target.result + ' max-width="50%">&nbsp;');
+                        var initWidth = document.querySelector(".MCard").getBoundingClientRect().width - 30;
+                        ed.insertContent('&nbsp;<img src="' + e.target.result + '" width="' + initWidth + 'px">&nbsp;');
                     }
                     
                     reader.readAsDataURL(input.files[0]);
                     test.PerformFileOperation(test.FileOperationsEnum.SAVE, "testPhoto.png", input.files[0])
                         .then(function (e) {
-                            console.log("then: " + e);
+                            console.log("then: " + e.fileEntry);
                         });
                     test.PerformFileOperation(test.FileOperationsEnum.WRITE, evt.srcElement.files[0], null)
                 });
@@ -179,6 +179,9 @@ function _journalInit () {
                                 var container = document.importNode(document.getElementById("tagT").content, true);
                                 container.querySelector(".tagName").value = tag.name;
                                 container.querySelector(".tagColor").value = tag.color;
+                                container.querySelector(".remove").addEventListener("click", function (evt) {
+                                    entryTagList.removeChild(evt.path[1]);
+                                });
                                 
                                 entryTagList.appendChild(container);
                             });
