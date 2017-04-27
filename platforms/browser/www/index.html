@@ -72,13 +72,13 @@
                     </td>
                     <td>
                         <h1 class="languages english">
-                            WCTC 2017 InnovaIT Competition
+                            BitConnections Journaling App
                         </h1>
                         <h1 class="languages german">
-                            WCTC 2017 InnovaIT Wettbewerb
+                            BitConnections Journaling App
                         </h1>
                         <h1 class="languages gaelic">
-                            WCTC 2017 InnovaIT Competición
+                            BitConnections Journaling App
                         </h1>
                     </td>
 
@@ -110,7 +110,7 @@
                                 <a class="languages english" href="settings.html">Settings</a>
                                 <a class="languages german" href="settings.html">Einstellungen</a>
                                 <a class="languages gaelic" href="settings.html">Configuración</a>
-                                <div class="testingNav">
+                                <div class="dev">
                                     <a class="languages english" href="test.html">test</a>
                                     <a class="languages german" href="test.html">test</a>
                                     <a class="languages gaelic" href="test.html">proba</a>
@@ -131,23 +131,53 @@
         <!--NAVEND-->
 
         <main>
-            <div id="sidePanel">
+            <div id="sidePanel" class="themable">
                 <a id="clsPanelBtn" href="javascript:void(0)" class="closeButton"></a>
                 <ul id="selectedDayEntries">
                 </ul>
             </div>
 
-            <table id="shareModal">
+            <table id="shareModal" class="themable">
                 <tbody>
                     <tr class="hide">
 
                     </tr>
                     <tr class="body">
                         <td>
+                            <div class="MCard themable">
+                                <h2 class="gname">
+                                    <div class="languages english">Google Account</div>
+                                    <div class="languages german">Google Benutzerkonto</div>
+                                    <div class="languages gaelic">Conta de Google</div>
+                                </h2>
+                                <button id="authorize-button" class="MButton horizontallyCentered" style="display: none;">
+                                    <div class="languages english">Authorize</div>
+                                    <div class="languages german">Autorisieren</div>
+                                    <div class="languages gaelic">Autorizar</div>
+                                </button>
+                                <button id="signout-button" class="MButton horizontallyCentered" style="display: none;">
+                                    <div class="languages english">Sign Out</div>
+                                    <div class="languages german">Ausloggen</div>
+                                    <div class="languages gaelic">Saír</div>
+                                </button>
+                                <pre id="content"></pre>
+                            </div>
+                        </td>
+                        <td>
                             <div class="secondaryLoadingGif"></div>
                             <!--<input id="editEntry" class="MButton margin" type="button" value="Edit/View Entry">-->
                             <button id="uploadToGoogle" class="MButton margin">
                                 <div class="languages english">Upload to GDrive</div>
+                                <div class="languages german">Auf GDrive hochladen</div>
+                                <div class="languages gaelic">Subir ao GDrive</div>
+                            </button>
+                            <div id="uploadToGDriveHidden" class="g-savetodrive hidden"
+                                data-src=""
+                                data-filename=""
+                                data-sitename="localhost">
+                            </div>
+                            <button id="download" class="MButton margin">
+                                <div class="languages english">Download</div>
                                 <div class="languages german">Auf GDrive hochladen</div>
                                 <div class="languages gaelic">Subir ao GDrive</div>
                             </button>
@@ -292,8 +322,15 @@
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
         <!--IGNORESTART-->
+        <script type="text/javascript" src="js/html2pdf.js"></script>
+        <script type="text/javascript" src="js/jspdf.min.js"></script>
         <script type="text/javascript" src="js/calendar.js"></script>
         <script type="text/javascript" src="js/connector.js"></script>
+        <script type="text/javascript" src="js/html-docx-js/html-docx.js"></script>
+        <script async defer src="https://apis.google.com/js/api.js"></script> <script async defer src="https://apis.google.com/js/api.js"
+            onload="this.onload=function(){};handleClientLoad()"
+            onreadystatechange="if (this.readyState === 'complete') this.onload()"></script> 
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
         <!--IGNOREEND-->
         <script type="text/javascript" src="js/index.js"></script>
     </body>

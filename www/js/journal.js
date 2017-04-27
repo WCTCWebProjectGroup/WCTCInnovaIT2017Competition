@@ -81,7 +81,6 @@ function _journalInit () {
         function onErrorLoadFs (err) {
             console.log(err);
         }
-
     }
 
     function updateExistingTags () {
@@ -91,8 +90,32 @@ function _journalInit () {
     tinymce.init({
         selector: '#editor',
         setup: function (ed) {
+            ed.addButton('mybutton', {
+                text: 'Upload Image',
+                icon: 'image',
+                onclick: function () {
+                    document.getElementById("loadSavedImage").click();
+                }
+            }),
             ed.on('init', function(args) {
                 console.debug(args.target.id);
+
+                document.getElementById("loadSavedImage").addEventListener("change", function (evt) {
+                    var input = evt.srcElement;
+                    var reader = new FileReader();
+            
+                    reader.onload = function (e) {
+                        var initWidth = document.querySelector(".MCard").getBoundingClientRect().width - 30;
+                        ed.insertContent('&nbsp;<img src="' + e.target.result + '" width="' + initWidth + 'px">&nbsp;');
+                    }
+                    
+                    reader.readAsDataURL(input.files[0]);
+                    test.PerformFileOperation(test.FileOperationsEnum.SAVE, "testPhoto.png", input.files[0])
+                        .then(function (e) {
+                            console.log("then: " + e.fileEntry);
+                        });
+                    test.PerformFileOperation(test.FileOperationsEnum.WRITE, evt.srcElement.files[0], null)
+                });
 
                 // First determine if creating a new entry or editing an exisiting one
                 var urlParams = document.location.search.replace('?', '').split('&');
@@ -134,10 +157,10 @@ function _journalInit () {
                     editingEntryNumber = Number(urlParams[1].split('=')[1]);
                     console.log("Editing " + editingEntryNumber);
 
-                    document.getElementById("#deleteEntry").addEventListener("click", function () {
+                    document.getElementById("deleteEntry").addEventListener("click", function () {
                         common.RemoveEntryFromDB()
                             .then(function () {
-                                document.location.assign("/index.html");
+                                history.back();
                             });
                     });
 
@@ -156,13 +179,16 @@ function _journalInit () {
                                 var container = document.importNode(document.getElementById("tagT").content, true);
                                 container.querySelector(".tagName").value = tag.name;
                                 container.querySelector(".tagColor").value = tag.color;
+                                container.querySelector(".remove").addEventListener("click", function (evt) {
+                                    entryTagList.removeChild(evt.path[1]);
+                                });
                                 
                                 entryTagList.appendChild(container);
                             });
                         });
                 } else {
                     // Error occurred
-                    document.location.assign("/index.html");
+                    history.back();
                 }
 
                 // ----- Event Listeners ----- //
@@ -171,7 +197,7 @@ function _journalInit () {
                 // });
                 discardChangesBtn.addEventListener("click", function () {
                     console.log("Discarding changes");
-                    document.location.assign("/index.html");
+                    history.back();
                 });
 
                 addTagBtn.addEventListener("click", function () {
@@ -239,7 +265,7 @@ function _journalInit () {
                     if (creatingNewEntry) {
                         common.CreateNewEntry(datetime, body, tags)
                             .then(function () {
-                                document.location.assign("/index.html");
+                                history.back();
                             });
                     } else {
                         var _db_entry = {
@@ -273,7 +299,7 @@ function _journalInit () {
 
                         common.UpdateEntryInDB(_db_entry)
                             .then(function () {
-                                document.location.assign("/index.html");
+                                history.back();
                             });
                     }
                 });
@@ -281,10 +307,10 @@ function _journalInit () {
             });
         },
         plugins: [
-            'image'
+            'image autoresize imagetools'
         ],
         menubar: false,
-        toolbar: 'image | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent',
+        toolbar: 'mybutton | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent',
         automatic_uploads: true,
         images_upload_handler: function (blobInfo, success, failure) {
             var xhr, formData;
@@ -316,7 +342,7 @@ function _journalInit () {
             input.click();
         },
         image_title: false,
-        image_dimensions: false,
+        image_dimensions: true,
         image_description: false
     });
 }

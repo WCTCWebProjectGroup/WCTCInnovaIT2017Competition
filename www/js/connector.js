@@ -475,17 +475,6 @@ function TestFunctions () {
                         common.DisplayAlert("Removed all entries in the db");
                     });
             });
-
-        // View all entries
-        document
-            .getElementById("viewAllEntries")
-            .addEventListener("click", function () {
-                common
-                    .GetAllEntriesFromDB()
-                    .then(function (entries) {
-                        document.getElementById("allEntries").innerHTML = (JSON.stringify(entries, null, 2));
-                    });
-            });
     }
 }
 

@@ -11,27 +11,27 @@
             "PACKAGE_NAME": "io.cordova.hellocordova"
         },
         "de.appplant.cordova.plugin.local-notification": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+            "PACKAGE_NAME": "io.cordova.WCTCJournalApp"
         },
         "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+            "PACKAGE_NAME": "io.cordova.WCTCJournalApp"
         },
         "cordova-plugin-jc-googledrive": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+            "PACKAGE_NAME": "io.cordova.WCTCJournalApp"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "io.cordova.WCTCJournalApp"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+            "PACKAGE_NAME": "io.cordova.WCTCJournalApp"
         },
         "cordova-plugin-app-event": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+            "PACKAGE_NAME": "io.cordova.WCTCJournalApp"
         },
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+            "PACKAGE_NAME": "io.cordova.WCTCJournalApp"
         }
     }
 }

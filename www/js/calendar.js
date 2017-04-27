@@ -100,6 +100,7 @@ var calendar = new function () {
     function _showShareModalForEntries (entry) {
         _sharedEntries.push(entry);
         var modal = document.getElementById("shareModal");
+        var hiddenGDriveEl = document.getElementById("uploadToGDriveHidden");
         document.querySelector("#shareResponse div").style.display = "none";
         modal.style.top = "0px";
     }
@@ -206,15 +207,43 @@ function init () {
     document.getElementById("shareResponse").style.display = "none";
     document.getElementById("uploadToGoogle").addEventListener("click", function (evt) {
         var entry = calendar.SharedEntries()[0];
-        common.GetEntryInDB(entry.uid).then(function () {
-            console.log("Submitting document " + entry.uid + " to google");
-            common.UploadToGoogleDrive(entry)
-                .then(function (response) {
-                    document.querySelector("#shareResponse span").innerText = response;
-                    document.getElementById("shareResponse").style.display = "block";
-                });
+        common.GetEntryInDB(entry.uid)
+            .then(function (cleanEntry) {
+                console.log("then: Submitting document " + cleanEntry.uid + " to google");
+                common.UploadToGoogleDrive(cleanEntry)
+                    .then(function (response) {
+                        document.querySelector("#shareResponse span").innerText = "Successfully uploaded file to " + response.name;
+                        document.getElementById("shareResponse").style.display = "block";
+                    }).catch(function (err) {
+                        console.error(err);
+                        document.querySelector("#shareResponse span").innerText = "Error occured while uploading file to Google Drive";
+                        document.getElementById("shareResponse").style.display = "block";
+                    });
         }).catch(function (err) {
             console.error(err);
+            document.querySelector("#shareResponse span").innerText = err;
+            document.getElementById("shareResponse").style.display = "block";
+        });
+        evt.stopPropagation();
+    });
+    document.getElementById("download").addEventListener("click", function (evt) {
+        var entry = calendar.SharedEntries()[0];
+        common.GetEntryInDB(entry.uid)
+            .then(function (cleanEntry) {
+                console.log("then: Downloading document " + cleanEntry.uid);
+                common.DownloadJournalEntry(cleanEntry)
+                    .then(function (response) {
+                        document.querySelector("#shareResponse span").innerText = "Downloaded File";
+                        document.getElementById("shareResponse").style.display = "block";
+                    }).catch(function (err) {
+                        console.error(err);
+                        document.querySelector("#shareResponse span").innerText = "Error occured while trying to download the file";
+                        document.getElementById("shareResponse").style.display = "block";
+                    });
+        }).catch(function (err) {
+            console.error(err);
+            document.querySelector("#shareResponse span").innerText = err;
+            document.getElementById("shareResponse").style.display = "block";
         });
         evt.stopPropagation();
     });

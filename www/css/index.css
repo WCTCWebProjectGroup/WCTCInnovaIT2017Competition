@@ -306,12 +306,16 @@ input[type='checkbox'].MCheckbox:checked + label::before {
 
 .MColor-small {
 	border: 2px solid #a0a0a0;
+	border-radius: 50%;
 	outline: none;
 	display: inline;
 
 	margin: auto;
 
 	vertical-align: middle;
+	
+	height: 20px;
+	width: 20px;
 }
 
 .MInput-inline {
@@ -464,6 +468,10 @@ button {
 details {
 	background-color: white;
 	border: 1px solid #b5b5b5;
+}
+
+footer {
+	display: none;
 }
 
 h1 {
@@ -655,6 +663,10 @@ summary {
 	margin: auto;
 }
 
+i.mce-i-ic_add_a_photo_black_24dp_1x:before {
+	background-image: url(../img/ic_add_a_photo_black_24dp_1x.png);
+}
+
 .newEntry {
 	background-image: url(../img/ic_add_white_24dp_2x.png);
 	background-position: 50%;
@@ -737,7 +749,6 @@ li.notificationEntry td:last-child {
 
 .responseBody {
 	display: inline;
-	color: black;
 }
 
 .simpleContainer {
@@ -767,7 +778,7 @@ li.notificationEntry td:last-child {
 
 	height: 20px;
 	min-width: 20px;
-	max-width: 40px;
+	max-width: 100px;
 }
 
 .themeLabel {
@@ -1210,6 +1221,15 @@ details.dark {
 	border: 1px solid #4b4b4b;
 }
 
+img {
+	max-height: 50%;
+	max-width: 50%;
+}
+
+.dev {
+	display: none;
+}
+
 .closeButton.light {
 	background-image: url("../img/ic_close_black_24dp_2x.png");
 }
@@ -1300,6 +1320,16 @@ details.dark {
 	border-color: #2b2b2b;
 }
 
+#shareModal.light .body td {
+	background-color: #fafafa;
+	color: #2b2b2b;
+}
+
+#shareModal.dark .body td{
+	background-color: #2b2b2b;
+	color: #fafafa;
+}
+
 #sideNavClickable.light {
     background-color: rgb(250,250,250);
 }
@@ -1314,6 +1344,24 @@ details.dark {
 
 #sideNav.dark a {
 	color: #fafafa;
+}
+
+#sidePanel.light {
+	background-color: #fafafa;
+	color: #2b2b2b;
+}
+
+#sidePanel.dark {
+	background-color: #2b2b2b;
+	color: #fafafa;
+}
+
+#sidePanel.light > a:first-child {
+	background-image: url("../img/ic_close_black_24dp_2x.png");
+}
+
+#sidePanel.dark > a:first-child {
+	background-image: url("../img/ic_close_white_24dp_2x.png");
 }
 
 /* ----- Themes ----- */

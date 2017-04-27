@@ -503,44 +503,61 @@ var common = new function () {
 
     // ----- END Languages ----- //
 
+    this.DownloadJournalEntry = function (entry) {
+        return new Promise(function(resolve, reject) {
+            try {
+                var pdf = new jsPDF('p', 'pt', 'letter');
+                var canvas = pdf.canvas;
+                canvas.height = 72 * 11;
+                canvas.width = 72 * 8.5;
+
+                html2pdf(entry.body.text, pdf, function (pdf) {
+                    pdf.save('JournalEntry-' + entry.uid + '.pdf');
+                    resolve();
+                });
+            } catch (e) {
+                reject(e);
+            }
+        })
+    }
+
     // ----- Upload to gdrive ----- //
 
     this.UploadToGoogleDrive = function (entry) {
         // TODO: Check if signed in
+        // var contentDocument = entry.body.text;
+        // var content = '<!DOCTYPE html>' + contentDocument;
+        // var converted = htmlDocx.asBlob(content, {orientation: false});
+        var pdf = new jsPDF('p', 'pt', 'letter');
+        var canvas = pdf.canvas;
+        canvas.height = 72 * 11;
+        canvas.width = 72 * 8.5;
+        
         return new Promise(function (resolve, reject) {
-            var localUrl = window.URL.createObjectURL(entry);
-            window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
-                console.log('file system open: ' + fs.name);
-                fs.root.getFile("tmp.txt", {create: true, exclusive: false}, function(fileEntry) {
-                    fileEntry.createWriter(function (fileWriter) {
-                        
-                        fileWriter.onwriteend = function() {
-                            console.log("Successful file write...");
-                            window.plugins.gdrive.uploadFile(fileEntry.fullPath, function (res) {
-                                console.log("Successfully uploaded file " + fileEntry.fullPath + " to gdrive!");
-                                resolve("Successfully uploaded file " + fileEntry.fullPath + " to gdrive!");
-                            }, function (err) {
-                                console.log(err);
-                                reject("Failed file write: " + e.toString());
-                            });
-                        };
-
-                        fileWriter.onerror = function (e) {
-                            console.log("Failed file write: " + e.toString());
-                            reject("Failed file write: " + e.toString());
-                        };
-
-                        dataObj = new Blob([entry.body.text], { type: 'text/plain' });
-
-                        fileWriter.write(dataObj);
-                    });
-                });
-
-            }, function (err) {
-                console.error(err);
-                reject(err);
+            html2pdf(entry.body.text, pdf, function (pdf) {
+                resolve(pdf);
             });
+        }).then(function (resp) {
+            gapi.savetodrive.render('uploadToGDriveHidden', {
+                src: document.URL,
+                filename: resp.output("bloburi"),
+                sitename: "localhost"
+            });
+            var el = document.getElementsByClassName("save-to-drive-button")[0];
+            el.setAttribute("data-src", document.URL);
+            el.setAttribute("data-filename", resp.output("blob"));
+            el.click();
+            //return createFile("JournalEntry-" + entry.uid + ".pdf", resp.output("blob"));
         });
+        // return test.PerformFileOperation(test.FileOperationsEnum.SAVE, "tmp.docx", url)
+        //     .then(function (docx) {
+        //         return test.PerformFileOperation(test.FileOperationsEnum.UPLOAD, docx.fileEntry.fullPath);
+        //     });
+        // return test.PerformFileOperation(test.FileOperationsEnum.SAVE, "test.docx", converted)
+        //     .then(function (response) {
+        //         return createFile("JournalEntry_" + entry.uid, url);
+        //     })
+        // return test.PerformFileOperation(test.FileOperationsEnum.UPLOAD, url, null);
     }
 
     // ----- END Upload to gdrive ----- //
@@ -887,3 +904,316 @@ function RandTag () {
         document.querySelector(".MTabLabel").click();
     }
 })();
+
+// ----- Test Functions ----- //
+
+var test = {
+    fileEntries: [],
+    _enumVar: Object.freeze({
+        WRITE: 1,
+        READ: 2,
+        DELETE: 3,
+        UPLOAD: 4,
+        SAVE: 5
+    }),
+    get FileOperationsEnum(){
+        return this._enumVar;
+    },
+    // this.fileOperationsEnum = enumVar;
+
+    PerformFileOperation: function (fileOperation, filename, filedata) {
+        return new Promise(function (resolve, reject) {
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+                switch (fileOperation) {
+                    case test._enumVar.READ:
+                    case test._enumVar.WRITE:
+                    case test._enumVar.UPLOAD:
+                        fs.root.getFile(filename, {create:true,exclusive:false}, function (fileEntry) {
+                            if (fileOperation == test.FileOperationsEnum.WRITE) {
+                                console.log("selected write operation")
+                                fileEntry.createWriter(function (fileWriter) {
+                                    fileWriter.onwriteend = function () {
+                                        resolve({
+                                                fileEntry:fileEntry,
+                                                fileSystem:fs
+                                            });
+                                    };
+
+                                    fileWriter.onerror = function (err) {
+                                        console.error(err);
+                                        reject(err);
+                                    }
+
+                                    fileWriter.write(filedata);
+                                });
+                            } else if (fileOperation == test.FileOperationsEnum.READ) {
+                                console.log("selected read operation");
+
+                                fileEntry.file(function (file) {
+                                    var reader = new FileReader();
+
+                                    reader.onloadend = function () {
+                                        //console.log("Successfully read file! File data: ");
+                                        //console.log(this.result);
+                                        if (filedata == null) {
+                                            resolve(this.result);
+                                        } else {
+                                            var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
+                                            resolve(blob);
+                                        }
+                                    }
+
+                                    if (filedata == null)
+                                        reader.readAsText(file);
+                                    else
+                                        reader.readAsArrayBuffer(file);
+                                    
+                                }, reject);
+                            } else if (fileOperation == test.FileOperationsEnum.UPLOAD) {
+                                if (!window.plugins.gdrive) {
+                                    reject("GDrive plugin failed!");
+                                } else if (!window.plugins.gdrive.uploadFile == null ) {
+                                    reject("GDrive plugin failed!");
+                                }
+                                window.plugins.gdrive.uploadFile(fileEntry.fullPath,
+                                    function (response) {
+                                        console.log("successfully uploaded file to gdrive!");
+                                        resolve("successfully uploaded file to gdrive!");
+                                    },
+                                    function (error){
+                                        console.log(error);
+                                        reject(error);
+                                    }
+                                );
+                            }
+                        });
+                        break;
+                    case test._enumVar.DELETE:
+                        console.log("selected delete operation - currently not able to delete?");
+                        break;
+                    case test._enumVar.SAVE:
+                        window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, function (fs) {
+
+                            console.log('file system open: ' + fs.name);
+                            // saveFile(dirEntry, blob, "downloadedImage.png");
+                            fs.root.getFile(filename, { create: true, exclusive: false }, function (fileEntry) {
+                                fileEntry.createWriter(function (fileWriter) {
+                                    fileWriter.onwriteend = function() {
+                                        console.log("Successful file write...");
+                                        // resolve(fileEntry);
+
+                                        // Demo read image
+                                        fileEntry.file(function(file) {
+                                            var reader = new FileReader();
+
+                                            reader.onloadend = function () {
+                                                var blob = new Blob([new Uint8Array(this.result)], { type: "image/png" });
+                                                // var elem = document.getElementById('blah2');
+                                                // elem.src = window.URL.createObjectURL(blob);
+                                                resolve({fileEntry: fileEntry, blob: blob});
+                                            };
+
+                                            reader.readAsArrayBuffer(file);
+                                        }, reject);
+                                    };
+
+                                    fileWriter.onerror = function(e) {
+                                        console.log("Failed file write: " + e.toString());
+                                        reject(e);
+                                    };
+
+                                    fileWriter.write(filedata);
+                                });
+                            }, reject);
+                        }, reject);
+                        break;
+                    default:
+                        console.error("unable to determine operation!");
+                        reject("unable to determine operation!");
+                }
+            });
+        });
+    }
+    // this.PerformFileOperation = _performFileOperation;
+};
+
+// ----- GOOGLE DRIVE FUNCTIONS! ----- //
+
+// Client ID and API key from the Developer Console
+var CLIENT_ID = '6602944139-0te741sl8r5po70uev7sk2c81mh9vk78.apps.googleusercontent.com';
+
+// Array of API discovery doc URLs for APIs used by the quickstart
+var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
+
+// Authorization scopes required by the API; multiple scopes can be
+// included, separated by spaces.
+var SCOPES = 'https://www.googleapis.com/auth/drive';
+
+var authorizeButton = document.getElementById('authorize-button');
+var signoutButton = document.getElementById('signout-button');
+
+var pickerApiLoaded = false;
+var picker;
+
+/**
+ *  On load, called to load the auth2 library and API client library.
+ */
+function handleClientLoad() {
+gapi.load('client:auth2', initClient);
+gapi.load('picker', {'callback': initPicker});
+}
+
+/**
+ *  Initializes the API client library and sets up sign-in state
+ *  listeners.
+ */
+function initClient() {
+gapi.client.init({
+    discoveryDocs: DISCOVERY_DOCS,
+    clientId: CLIENT_ID,
+    scope: SCOPES
+}).then(function () {
+    // Listen for sign-in state changes.
+    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+    // Handle the initial sign-in state.
+    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+    authorizeButton.onclick = handleAuthClick;
+    signoutButton.onclick = handleSignoutClick;
+});
+}
+
+/**
+ * Initialized Google Picker
+ */
+function initPicker () {
+    if (pickerApiLoaded) {
+        var view = new google.picker.View(google.picker.ViewId.DOCS);
+        view.setMimeTypes("image/png,image/jpeg,image/jpg");
+        var picker = new google.picker.PickerBuilder()
+            .enableFeature(google.picker.Feature.NAV_HIDDEN)
+            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+            .setAppId(appId)
+            .setOAuthToken(oauthToken)
+            .addView(view)
+            .addView(new google.picker.DocsUploadView())
+            .setDeveloperKey(developerKey)
+            .setCallback(pickerCallback)
+            .build();
+         picker.setVisible(true);
+    }
+}
+
+function pickerCallback(data) {
+    if (data.action == google.picker.Action.PICKED) {
+    var fileId = data.docs[0].id;
+    alert('The user selected: ' + fileId);
+    }
+}
+
+/**
+ *  Called when the signed in status changes, to update the UI
+ *  appropriately. After a sign-in, the API is called.
+ */
+function updateSigninStatus(isSignedIn) {
+if (isSignedIn) {
+    authorizeButton.style.display = 'none';
+    signoutButton.style.display = 'block';
+    //listFiles();
+} else {
+    authorizeButton.style.display = 'block';
+    signoutButton.style.display = 'none';
+}
+}
+
+/**
+ *  Sign in the user upon button click.
+ */
+function handleAuthClick(event) {
+gapi.auth2.getAuthInstance().signIn();
+}
+
+/**
+ *  Sign out the user upon button click.
+ */
+function handleSignoutClick(event) {
+gapi.auth2.getAuthInstance().signOut();
+}
+
+/**
+ * Append a pre element to the body containing the given message
+ * as its text node. Used to display the results of the API call.
+ *
+ * @param {string} message Text to be placed in pre element.
+ */
+function appendPre(message) {
+// var pre = document.getElementById('content');
+// var textContent = document.createTextNode(message + '\n');
+// pre.appendChild(textContent);
+}
+
+/**
+ * Create files
+ */
+function createFile (name, data) {
+    return new Promise(function (resolve, reject) {
+        const boundary = '-------314159265358979323846';
+        const delimiter = "\r\n--" + boundary + "\r\n";
+        const close_delim = "\r\n--" + boundary + "--";
+
+        const contentType = 'application/pdf';
+        var reader = new FileReader();
+
+        reader.readAsBinaryString(data);
+        reader.onload = function (e) {
+            var metadata = {
+                'name': name,
+                'mimeType': contentType
+            };
+
+            //data = btoa(reader.result);
+            var multipartRequestBody =
+                delimiter +
+                'Content-Type: ' + contentType + '\r\n\r\n' +
+                JSON.stringify(metadata) +
+                delimiter +
+                'Content-Type: ' + contentType + '\r\n\r\n' +
+                reader.result +
+                close_delim;
+
+            var request = gapi.client.request({
+                'path': '/upload/drive/v2/files',
+                'method': 'POST',
+                'params': {'uploadType': 'multipart'},
+                'headers': {
+                'Content-Type': 'multipart/related; boundary="' + boundary + '"'
+            }, 'body': multipartRequestBody});
+            request.execute(resolve);
+        }
+    }).catch (function (err) {
+        return (err)
+    });
+}
+
+/**
+ * Print files.
+ */
+function listFiles() {
+gapi.client.drive.files.list({
+    'pageSize': 10,
+    'fields': "nextPageToken, files(id, name)"
+}).then(function(response) {
+    appendPre('Files:');
+    var files = response.result.files;
+    if (files && files.length > 0) {
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        appendPre(file.name + ' (' + file.id + ')');
+    }
+    } else {
+    appendPre('No files found.');
+    }
+});
+}
+
+// ----- END GOOGLE DRIVE FUNCTIONS! ----- //

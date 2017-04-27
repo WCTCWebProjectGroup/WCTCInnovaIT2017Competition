@@ -179,15 +179,7 @@ public class Notification {
             getAlarmMgr().setRepeating(AlarmManager.RTC_WAKEUP,
                     triggerTime, options.getRepeatInterval(), pi);
         } else {
-            if (Build.VERSION.SDK_INT < 23) {
-              if (Build.VERSION.SDK_INT >= 19) {
-                getAlarmMgr().setExact(AlarmManager.RTC_WAKEUP, triggerTime, pi);
-              } else {
-                getAlarmMgr().set(AlarmManager.RTC_WAKEUP, triggerTime, pi);
-              }
-            } else {
-                getAlarmMgr().setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pi);
-            }
+            getAlarmMgr().set(AlarmManager.RTC_WAKEUP, triggerTime, pi);
         }
     }
 
