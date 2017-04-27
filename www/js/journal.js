@@ -342,7 +342,7 @@ function _journalInit () {
             input.click();
         },
         image_title: false,
-        image_dimensions: false,
+        image_dimensions: true,
         image_description: false
     });
 }

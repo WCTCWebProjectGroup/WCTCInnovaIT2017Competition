@@ -72,13 +72,13 @@
                     </td>
                     <td>
                         <h1 class="languages english">
-                            WCTC 2017 InnovaIT Competition
+                            BitConnections Journaling App
                         </h1>
                         <h1 class="languages german">
-                            WCTC 2017 InnovaIT Wettbewerb
+                            BitConnections Journaling App
                         </h1>
                         <h1 class="languages gaelic">
-                            WCTC 2017 InnovaIT Competición
+                            BitConnections Journaling App
                         </h1>
                     </td>
 
@@ -143,6 +143,26 @@
 
                     </tr>
                     <tr class="body">
+                        <td>
+                            <div class="MCard themable">
+                                <h2 class="gname">
+                                    <div class="languages english">Google Account</div>
+                                    <div class="languages german">Google Benutzerkonto</div>
+                                    <div class="languages gaelic">Conta de Google</div>
+                                </h2>
+                                <button id="authorize-button" class="MButton horizontallyCentered" style="display: none;">
+                                    <div class="languages english">Authorize</div>
+                                    <div class="languages german">Autorisieren</div>
+                                    <div class="languages gaelic">Autorizar</div>
+                                </button>
+                                <button id="signout-button" class="MButton horizontallyCentered" style="display: none;">
+                                    <div class="languages english">Sign Out</div>
+                                    <div class="languages german">Ausloggen</div>
+                                    <div class="languages gaelic">Saír</div>
+                                </button>
+                                <pre id="content"></pre>
+                            </div>
+                        </td>
                         <td>
                             <div class="secondaryLoadingGif"></div>
                             <!--<input id="editEntry" class="MButton margin" type="button" value="Edit/View Entry">-->
@@ -295,6 +315,9 @@
         <script type="text/javascript" src="js/calendar.js"></script>
         <script type="text/javascript" src="js/connector.js"></script>
         <script type="text/javascript" src="js/html-docx-js/html-docx.js"></script>
+        <script async defer src="https://apis.google.com/js/api.js"></script> <script async defer src="https://apis.google.com/js/api.js"
+            onload="this.onload=function(){};handleClientLoad()"
+            onreadystatechange="if (this.readyState === 'complete') this.onload()"></script> 
         <!--IGNOREEND-->
         <script type="text/javascript" src="js/index.js"></script>
     </body>

@@ -211,11 +211,11 @@ function init () {
                 console.log("then: Submitting document " + cleanEntry.uid + " to google");
                 common.UploadToGoogleDrive(cleanEntry)
                     .then(function (response) {
-                        document.querySelector("#shareResponse span").innerText = response;
+                        document.querySelector("#shareResponse span").innerText = "Successfully uploaded file to " + response.name;
                         document.getElementById("shareResponse").style.display = "block";
                     }).catch(function (err) {
                         console.error(err);
-                        document.querySelector("#shareResponse span").innerText = err;
+                        document.querySelector("#shareResponse span").innerText = "Error occured while uploading file to Google Drive";
                         document.getElementById("shareResponse").style.display = "block";
                     });
         }).catch(function (err) {
