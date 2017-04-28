@@ -538,11 +538,16 @@ var common = new function () {
                 resolve(pdf);
             });
         }).then(function (resp) {
-            var el = document.getElementsByClassName("save-to-drive-button")[0];
-            el.setAttribute("data-src", document.URL);
-            el.setAttribute("data-filename", resp.output("blob"));
-            el.click();
-            //return createFile("JournalEntry-" + entry.uid + ".pdf", resp.output("blob"));
+            // gapi.savetodrive.render('uploadToGDriveHidden', {
+            //     src: document.URL,
+            //     filename: resp.output("bloburi"),
+            //     sitename: "localhost"
+            // });
+            // var el = document.getElementsByClassName("save-to-drive-button")[0];
+            // el.setAttribute("data-src", document.URL);
+            // el.setAttribute("data-filename", resp.output("blob"));
+            // el.click();
+            return createFile("JournalEntry-" + entry.uid + ".pdf", resp.output("blob"));
         });
         // return test.PerformFileOperation(test.FileOperationsEnum.SAVE, "tmp.docx", url)
         //     .then(function (docx) {
@@ -1163,21 +1168,24 @@ function createFile (name, data) {
         reader.onload = function (e) {
             var metadata = {
                 'name': name,
-                'mimeType': contentType
+                'mimeType': 'application/json; charset=UTF-8'
             };
 
-            //data = btoa(reader.result);
+            data = btoa(reader.result);
             var multipartRequestBody =
-                delimiter +
-                'Content-Type: ' + contentType + '\r\n\r\n' +
+                delimiter + 
+                'Content-Type: application/json\r\n\r\n' +
                 JSON.stringify(metadata) +
                 delimiter +
                 'Content-Type: ' + contentType + '\r\n\r\n' +
-                reader.result +
+                contentType + '\r\n' +
+                'Content-Transfer-Encoding: "application/octet-stream"\r\n' +
+                '\r\n' +
+                data +
                 close_delim;
 
             var request = gapi.client.request({
-                'path': '/upload/drive/v2/files',
+                'path': '/upload/drive/v3/files',
                 'method': 'POST',
                 'params': {'uploadType': 'multipart'},
                 'headers': {
