@@ -212,7 +212,8 @@ function init () {
                 console.log("then: Submitting document " + cleanEntry.uid + " to google");
                 common.UploadToGoogleDrive(cleanEntry)
                     .then(function (response) {
-                        document.querySelector("#shareResponse span").innerText = "Successfully uploaded file to " + response.name;
+                        console.log(response.name);
+                        document.querySelector("#shareResponse span").innerText = "Successfully uploaded file as " + response.name;
                         document.getElementById("shareResponse").style.display = "block";
                     }).catch(function (err) {
                         console.error(err);

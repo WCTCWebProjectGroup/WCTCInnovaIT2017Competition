@@ -538,11 +538,12 @@ var common = new function () {
                 resolve(pdf);
             });
         }).then(function (resp) {
-            // gapi.savetodrive.render('uploadToGDriveHidden', {
+            // gapi.savetodrive.render("uploadToGDriveHidden", {
             //     src: document.URL,
             //     filename: resp.output("bloburi"),
             //     sitename: "localhost"
             // });
+            // document.getElementById("uploadToGDriveHidden").addEventListener("click", )
             // var el = document.getElementsByClassName("save-to-drive-button")[0];
             // el.setAttribute("data-src", document.URL);
             // el.setAttribute("data-filename", resp.output("blob"));
@@ -1043,7 +1044,7 @@ var test = {
 var CLIENT_ID = '6602944139-0te741sl8r5po70uev7sk2c81mh9vk78.apps.googleusercontent.com';
 
 // Array of API discovery doc URLs for APIs used by the quickstart
-var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v2/rest"];
+var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
@@ -1157,28 +1158,27 @@ function appendPre(message) {
  */
 function createFile (name, data) {
     return new Promise(function (resolve, reject) {
-        const boundary = '-------314159265358979323846';
+        const boundary = "-------314159265358979323846";
         const delimiter = "\r\n--" + boundary + "\r\n";
         const close_delim = "\r\n--" + boundary + "--";
 
-        const contentType = 'application/pdf';
         var reader = new FileReader();
 
         reader.readAsBinaryString(data);
         reader.onload = function (e) {
             var metadata = {
-                'name': name,
-                'mimeType': 'application/json; charset=UTF-8'
+                "name": name,
+                "mimeType": "application/pdf; charset=UTF-8"
             };
 
-            data = btoa(reader.result);
+            // data = btoa(reader.result);
+            data = reader.result;
             var multipartRequestBody =
-                delimiter + 
-                'Content-Type: application/octet-stream\r\n\r\n' +
-                JSON.stringify(metadata) +
                 delimiter +
-                'Content-Type: ' + contentType + '\r\n\r\n' +
-                //'Content-Transfer-Encoding: "application/pdf"\r\n\r\n' +
+                "Content-Type: application/json; charset=UTF-8\r\n\r\n" +
+                JSON.stringify(metadata) +
+                "\r\n" + delimiter +
+                "Content-Type: " + "application/pdf" + "\r\n\r\n" +
                 data +
                 close_delim;
 
@@ -1187,8 +1187,8 @@ function createFile (name, data) {
                 'method': 'POST',
                 'params': {'uploadType': 'multipart'},
                 'headers': {
-                'Content-Type': 'multipart/related; boundary="' + boundary + '"'
-            }, 'body': multipartRequestBody});
+                    'Content-Type': 'multipart/related; boundary="' + boundary + '"'
+                }, 'body': multipartRequestBody});
             request.execute(resolve);
         }
     }).catch (function (err) {
