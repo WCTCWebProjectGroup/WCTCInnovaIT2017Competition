@@ -204,7 +204,7 @@ function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
         authorizeButton.style.display = 'none';
         signoutButton.style.display = 'block';
-        listFiles();
+        // listFiles();
     } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';

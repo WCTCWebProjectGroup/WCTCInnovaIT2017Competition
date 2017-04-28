@@ -147,7 +147,7 @@ function _journalInit () {
 
                     // Set the date/time to today
                     var today = new Date();
-                    dateEl.value = today.toLocaleDateString().slice(0, 10);
+                    dateEl.value = today.toISOString().slice(0, 10);
                     timeEl.value = today.toTimeString().slice(0, 8);
 
                 } else if (urlParams[0].split('=')[1] == "false") {
@@ -173,7 +173,7 @@ function _journalInit () {
                                 container.querySelector(".tagName").value = tag.name;
                                 container.querySelector(".tagColor").value = tag.color;
                                 container.querySelector(".remove").addEventListener("click", function (evt) {
-                                    entryTagList.removeChild(evt.path[1]);
+                                    entryTagList.removeChild(evt.path[5]);
                                 });
                                 
                                 entryTagList.appendChild(container);

@@ -121,8 +121,10 @@ var calendar = new function () {
     this.HideSidePanel = _hideSidePanel;
     
     function _onDateClickHandler (date, obj) {
-        _showSidePanel(date);
-        console.log(obj);
+        if (date[0] != null) {
+            _showSidePanel(date);
+            // console.log(obj);
+        }
     }
 
     common.ShowPrimaryLoading();
