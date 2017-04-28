@@ -147,7 +147,7 @@ function _journalInit () {
 
                     // Set the date/time to today
                     var today = new Date();
-                    dateEl.value = today.toISOString().slice(0, 10);
+                    dateEl.value = today.toLocaleDateString().slice(0, 10);
                     timeEl.value = today.toTimeString().slice(0, 8);
 
                 } else if (urlParams[0].split('=')[1] == "false") {
@@ -156,13 +156,6 @@ function _journalInit () {
                     
                     editingEntryNumber = Number(urlParams[1].split('=')[1]);
                     console.log("Editing " + editingEntryNumber);
-
-                    document.getElementById("deleteEntry").addEventListener("click", function () {
-                        common.RemoveEntryFromDB()
-                            .then(function () {
-                                history.back();
-                            });
-                    });
 
                     common.GetEntryInDB(Number(editingEntryNumber))
                         .then(function (entry) {
@@ -185,6 +178,13 @@ function _journalInit () {
                                 
                                 entryTagList.appendChild(container);
                             });
+
+                            document.getElementById("deleteEntry").addEventListener("click", function () {
+                            common.RemoveEntryFromDB(entry.uid)
+                                .then(function () {
+                                    history.back();
+                                });
+                        });
                         });
                 } else {
                     // Error occurred
@@ -281,6 +281,7 @@ function _journalInit () {
                         datetime.setHours( timeEl.value.slice(0,2));
                         datetime.setMinutes(timeEl.value.slice(3, 5));
                         datetime.setSeconds(timeEl.value.slice(6, 8));
+                        datetime.setDate(datetime.getDate() + 1);
                         _db_entry.date = datetime;
 
                         var tagEls = document.querySelectorAll("#entryTags > li");

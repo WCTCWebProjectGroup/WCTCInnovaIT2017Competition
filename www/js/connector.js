@@ -316,6 +316,10 @@ var connector = (new function(){
                         liEl.appendChild(checkboxEl);
                         tagEls.appendChild(liEl);
                     });
+
+                    if (uniqueTags.length == 0) {
+                        document.getElementById("tagFilterInfo").style.display = "none";
+                    }
                 });
         }
     }

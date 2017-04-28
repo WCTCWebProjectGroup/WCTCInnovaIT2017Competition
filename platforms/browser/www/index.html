@@ -171,6 +171,13 @@
                                 <div class="languages german">Auf GDrive hochladen</div>
                                 <div class="languages gaelic">Subir ao GDrive</div>
                             </button>
+                            <div id="uploadToGDriveHidden">
+                            </div>
+                            <button id="download" class="MButton margin">
+                                <div class="languages english">Download</div>
+                                <div class="languages german">Auf GDrive hochladen</div>
+                                <div class="languages gaelic">Subir ao GDrive</div>
+                            </button>
                             <!--<button id="submitToBlackboard" class="MButton margin">
                                 <div class="languages english">Submit to Blackboard</div>
                                 <div class="languages german">Senden an Blackboard</div>
@@ -228,7 +235,7 @@
                                 <div class="inline languages gaelic">Filtrar Resultados</div>
                             </summary>
                             <ul class="listNoBullet">
-                                <li>
+                                <li id="tagFilterInfo">
                                     <label class="" for="filterByTag">
                                         <div class="languages english">Filter by Tag</div>
                                         <div class="languages german">Nach Tag Filtern</div>
@@ -312,12 +319,15 @@
         <script type="text/javascript" src="js/moment.min.js"></script>
         <script type="text/javascript" src="js/pignose.calendar.min.js"></script>
         <!--IGNORESTART-->
+        <script type="text/javascript" src="js/html2pdf.js"></script>
+        <script type="text/javascript" src="js/jspdf.min.js"></script>
         <script type="text/javascript" src="js/calendar.js"></script>
         <script type="text/javascript" src="js/connector.js"></script>
         <script type="text/javascript" src="js/html-docx-js/html-docx.js"></script>
-        <script async defer src="https://apis.google.com/js/api.js"></script> <script async defer src="https://apis.google.com/js/api.js"
+        <script async defer src="https://apis.google.com/js/api.js"
             onload="this.onload=function(){};handleClientLoad()"
             onreadystatechange="if (this.readyState === 'complete') this.onload()"></script> 
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
         <!--IGNOREEND-->
         <script type="text/javascript" src="js/index.js"></script>
     </body>

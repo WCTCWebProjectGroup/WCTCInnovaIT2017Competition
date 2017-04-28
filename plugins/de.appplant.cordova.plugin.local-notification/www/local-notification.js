@@ -329,7 +329,7 @@ exports.registerPermission = function (callback, scope) {
  * Schedule a new local notification.
  */
 exports.add = function () {
-    console.warn('Deprecated: Please use `notification.local.schedule` instead.');
+    console.warn('Depreated: Please use `notification.local.schedule` instead.');
 
     this.schedule.apply(this, arguments);
 };
@@ -339,7 +339,7 @@ exports.add = function () {
  * if not already granted.
  */
 exports.promptForPermission = function () {
-    console.warn('Deprecated: Please use `notification.local.registerPermission` instead.');
+    console.warn('Depreated: Please use `notification.local.registerPermission` instead.');
 
     this.registerPermission.apply(this, arguments);
 };
@@ -372,5 +372,5 @@ exports.on = function (event, callback, scope) {
  *      The function to be exec as callback
  */
 exports.un = function (event, callback) {
-    this.core.un(event, callback);
+    this.core.un(event, callback, scope);
 };

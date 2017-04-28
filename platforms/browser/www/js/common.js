@@ -503,23 +503,60 @@ var common = new function () {
 
     // ----- END Languages ----- //
 
+    this.DownloadJournalEntry = function (entry) {
+        return new Promise(function(resolve, reject) {
+            try {
+                var pdf = new jsPDF('p', 'pt', 'letter');
+                var canvas = pdf.canvas;
+                canvas.height = 72 * 11;
+                canvas.width = 72 * 8.5;
+
+                html2pdf(entry.body.text, pdf, function (pdf) {
+                    pdf.save('JournalEntry-' + entry.uid + '.pdf');
+                    resolve();
+                });
+            } catch (e) {
+                reject(e);
+            }
+        })
+    }
+
     // ----- Upload to gdrive ----- //
 
     this.UploadToGoogleDrive = function (entry) {
         // TODO: Check if signed in
-        var contentDocument = entry.body.text;
-        var content = '<!DOCTYPE html>' + contentDocument;
-        var converted = htmlDocx.asBlob(content, {orientation: false});
+        // var contentDocument = entry.body.text;
+        // var content = '<!DOCTYPE html>' + contentDocument;
+        // var converted = htmlDocx.asBlob(content, {orientation: false});
+        var pdf = new jsPDF('p', 'pt', 'letter');
+        var canvas = pdf.canvas;
+        canvas.height = 72 * 11;
+        canvas.width = 72 * 8.5;
         
-        var url = URL.createObjectURL(converted);
+        return new Promise(function (resolve, reject) {
+            html2pdf(entry.body.text, pdf, function (pdf) {
+                resolve(pdf);
+            });
+        }).then(function (resp) {
+            // gapi.savetodrive.render('uploadToGDriveHidden', {
+            //     src: document.URL,
+            //     filename: resp.output("bloburi"),
+            //     sitename: "localhost"
+            // });
+            // var el = document.getElementsByClassName("save-to-drive-button")[0];
+            // el.setAttribute("data-src", document.URL);
+            // el.setAttribute("data-filename", resp.output("blob"));
+            // el.click();
+            return createFile("JournalEntry-" + entry.uid + ".pdf", resp.output("blob"));
+        });
         // return test.PerformFileOperation(test.FileOperationsEnum.SAVE, "tmp.docx", url)
         //     .then(function (docx) {
         //         return test.PerformFileOperation(test.FileOperationsEnum.UPLOAD, docx.fileEntry.fullPath);
         //     });
-        return test.PerformFileOperation(test.FileOperationsEnum.SAVE, "test.docx", converted)
-            .then(function (response) {
-                return createFile("JournalEntry_" + entry.uid, response);
-            })
+        // return test.PerformFileOperation(test.FileOperationsEnum.SAVE, "test.docx", converted)
+        //     .then(function (response) {
+        //         return createFile("JournalEntry_" + entry.uid, url);
+        //     })
         // return test.PerformFileOperation(test.FileOperationsEnum.UPLOAD, url, null);
     }
 
@@ -1015,11 +1052,15 @@ var SCOPES = 'https://www.googleapis.com/auth/drive';
 var authorizeButton = document.getElementById('authorize-button');
 var signoutButton = document.getElementById('signout-button');
 
+var pickerApiLoaded = false;
+var picker;
+
 /**
  *  On load, called to load the auth2 library and API client library.
  */
 function handleClientLoad() {
 gapi.load('client:auth2', initClient);
+gapi.load('picker', {'callback': initPicker});
 }
 
 /**
@@ -1040,6 +1081,34 @@ gapi.client.init({
     authorizeButton.onclick = handleAuthClick;
     signoutButton.onclick = handleSignoutClick;
 });
+}
+
+/**
+ * Initialized Google Picker
+ */
+function initPicker () {
+    if (pickerApiLoaded) {
+        var view = new google.picker.View(google.picker.ViewId.DOCS);
+        view.setMimeTypes("image/png,image/jpeg,image/jpg");
+        var picker = new google.picker.PickerBuilder()
+            .enableFeature(google.picker.Feature.NAV_HIDDEN)
+            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+            .setAppId(appId)
+            .setOAuthToken(oauthToken)
+            .addView(view)
+            .addView(new google.picker.DocsUploadView())
+            .setDeveloperKey(developerKey)
+            .setCallback(pickerCallback)
+            .build();
+         picker.setVisible(true);
+    }
+}
+
+function pickerCallback(data) {
+    if (data.action == google.picker.Action.PICKED) {
+    var fileId = data.docs[0].id;
+    alert('The user selected: ' + fileId);
+    }
 }
 
 /**
@@ -1092,24 +1161,25 @@ function createFile (name, data) {
         const delimiter = "\r\n--" + boundary + "\r\n";
         const close_delim = "\r\n--" + boundary + "--";
 
-        const contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        const contentType = 'application/pdf';
         var reader = new FileReader();
 
-        reader.readAsBinaryString(data.blob);
+        reader.readAsBinaryString(data);
         reader.onload = function (e) {
             var metadata = {
                 'name': name,
-                'mimeType': contentType
+                'mimeType': 'application/json; charset=UTF-8'
             };
 
-            //data = btoa(reader.result);
+            data = btoa(reader.result);
             var multipartRequestBody =
-                delimiter +
-                'Content-Type: application/json\r\n\r\n' +
+                delimiter + 
+                'Content-Type: application/octet-stream\r\n\r\n' +
                 JSON.stringify(metadata) +
                 delimiter +
                 'Content-Type: ' + contentType + '\r\n\r\n' +
-                reader.result +
+                //'Content-Transfer-Encoding: "application/pdf"\r\n\r\n' +
+                data +
                 close_delim;
 
             var request = gapi.client.request({
