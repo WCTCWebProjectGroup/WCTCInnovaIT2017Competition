@@ -314,7 +314,7 @@ input[type='checkbox'].MCheckbox:checked + label::before {
 
 	vertical-align: middle;
 	
-	height: 20px;
+	/*height: 20px;*/
 	width: 20px;
 }
 
@@ -576,6 +576,14 @@ summary {
 
 .entryTag {
 	padding: 4px;
+}
+
+.entryTag table {
+	width: 100%;
+}
+
+.entryTag input.tagName {
+	width: 100px;
 }
 
 .event {
@@ -872,13 +880,13 @@ li.notificationEntry td:last-child {
     margin-bottom: 20px;
 }
 
-#calendar ul,
+/*#calendar ul,
 #calendar ol,
 #calendar li {
     list-style: none;
     padding: 0;
     margin: 0;
-}
+}*/
 
 #clsPanelBtn {
 	position: absolute;

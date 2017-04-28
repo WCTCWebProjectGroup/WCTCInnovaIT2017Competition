@@ -334,8 +334,15 @@ var connector = (new function(){
 (function(){
     if (document.querySelectorAll("#viewNextEntries").length > 0) {
         // View previous/next entries
-        document.getElementById("viewNextEntries").addEventListener("click", connector.GetNextEntries);
-        document.getElementById("viewPrevEntries").addEventListener("click", connector.GetPrevEntries);
+        common.GetAllEntriesFromDB()
+            .then(function (entries) {
+                if (entries.length > 10) {
+                    document.getElementById("viewNextEntries").addEventListener("click", connector.GetNextEntries);
+                    document.getElementById("viewPrevEntries").addEventListener("click", connector.GetPrevEntries);
+                } else {
+                    document.querySelector(".pagination").style.display = "none";
+                }
+            });
 
         if (document.querySelectorAll("#applyFilters").length > 0) {
             document.getElementById("applyFilters").addEventListener("click", connector.UpdateEntries);
