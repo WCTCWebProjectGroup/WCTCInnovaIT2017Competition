@@ -1006,7 +1006,7 @@ var test = {
 var CLIENT_ID = '6602944139-0te741sl8r5po70uev7sk2c81mh9vk78.apps.googleusercontent.com';
 
 // Array of API discovery doc URLs for APIs used by the quickstart
-var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
+var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v2/rest"];
 
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
