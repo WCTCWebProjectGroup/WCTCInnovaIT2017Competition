@@ -266,7 +266,7 @@ function _journalInit () {
                     }
 
                     if (creatingNewEntry) {
-                        datetime.setDate(datetime.getDate() + 1);
+                        datetime.setDate(datetime.getDate());
                         common.CreateNewEntry(datetime, body, tags)
                             .then(function () {
                                 history.back();
