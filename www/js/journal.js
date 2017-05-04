@@ -147,6 +147,7 @@ function _journalInit () {
 
                     // Set the date/time to today
                     var today = new Date();
+                    today.setDate(today.getDate() - 1);
                     dateEl.value = today.toISOString().slice(0, 10);
                     timeEl.value = today.toTimeString().slice(0, 8);
 
