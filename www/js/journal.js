@@ -160,6 +160,8 @@ function _journalInit () {
                     common.GetEntryInDB(Number(editingEntryNumber))
                         .then(function (entry) {
                             // Set date/time
+                            // var cleanDays = new Date(entry.date.toISOString().slice(0, 10));
+                            // cleanDays.setDate(cleanDays.getDate() - 1);
                             dateEl.value = entry.date.toISOString().slice(0, 10);
                             // timeEl.value = entry.date.toISOString().slice(11, 19);
                             timeEl.value = entry.date.toTimeString().slice(0, 8);
@@ -281,6 +283,7 @@ function _journalInit () {
                         datetime.setHours( timeEl.value.slice(0,2));
                         datetime.setMinutes(timeEl.value.slice(3, 5));
                         datetime.setSeconds(timeEl.value.slice(6, 8));
+                        datetime.setDate(datetime.getDate() + 1);
                         datetime.setDate(datetime.getDate());
                         _db_entry.date = datetime;
 
