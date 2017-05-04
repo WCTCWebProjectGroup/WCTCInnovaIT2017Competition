@@ -281,7 +281,7 @@ function _journalInit () {
                         datetime.setHours( timeEl.value.slice(0,2));
                         datetime.setMinutes(timeEl.value.slice(3, 5));
                         datetime.setSeconds(timeEl.value.slice(6, 8));
-                        datetime.setDate(datetime.getDate() + 1);
+                        datetime.setDate(datetime.getDate());
                         _db_entry.date = datetime;
 
                         var tagEls = document.querySelectorAll("#entryTags > li");
