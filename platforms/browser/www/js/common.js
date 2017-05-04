@@ -402,7 +402,16 @@ var common = new function () {
                 var uniqueTags = [];
                 array.forEach(function (entry) {
                     entry.tags.forEach(function (tag) {
-                        if (!uniqueTags.includes(tag))
+                        var foundSameTagName = false;
+
+                        for (var i = 0; i < uniqueTags.length; i++) {
+                            if (uniqueTags[i].name == tag.name && uniqueTags[i].color == tag.color) {
+                                foundSameTagName = true;
+                                break;
+                            }
+                        }
+
+                        if (!foundSameTagName)
                             uniqueTags.push(tag);
                     });
                 });
