@@ -147,6 +147,7 @@ function _journalInit () {
 
                     // Set the date/time to today
                     var today = new Date();
+                    today.setDate(today.getDate() - 1);
                     dateEl.value = today.toISOString().slice(0, 10);
                     timeEl.value = today.toTimeString().slice(0, 8);
 
@@ -160,7 +161,9 @@ function _journalInit () {
                     common.GetEntryInDB(Number(editingEntryNumber))
                         .then(function (entry) {
                             // Set date/time
-                            dateEl.value = entry.date.toISOString().slice(0, 10);
+                            var cleanDays = new Date(entry.date.toISOString().slice(0, 10));
+                            cleanDays.setDate(cleanDays.getDate() - 1);
+                            dateEl.value = cleanDays.toISOString().slice(0, 10);
                             // timeEl.value = entry.date.toISOString().slice(11, 19);
                             timeEl.value = entry.date.toTimeString().slice(0, 8);
 
@@ -247,7 +250,25 @@ function _journalInit () {
                     // datetime.setMinutes(timeEl.value.slice(3, 5));
                     // datetime.setSeconds(timeEl.value.slice(6, 8));
                     var body = journal.GetEditorHtml();
+                    
+                    // Check that the body isn't empty
+                    // Check for incomplete tags
+                    var validEntry = true;
+                    if (body == "") {
+                        common.DisplayAlert("Journal entry body is empty!");
+                        validEntry = false;
+                    }
 
+                    if (document.getElementById("newTagName").value != "") {
+                        common.DisplayAlert("Please add the tag or remove the text in the tagname field!");
+                        validEntry = false;
+                    }
+
+
+                    if (!validEntry) {
+                        common.HidePrimaryLoading();
+                        return;
+                    }
                     // TODO: Tags
                     var tags = [];
 
@@ -263,6 +284,7 @@ function _journalInit () {
                     }
 
                     if (creatingNewEntry) {
+                        datetime.setDate(datetime.getDate());
                         common.CreateNewEntry(datetime, body, tags)
                             .then(function () {
                                 history.back();
@@ -282,6 +304,7 @@ function _journalInit () {
                         datetime.setMinutes(timeEl.value.slice(3, 5));
                         datetime.setSeconds(timeEl.value.slice(6, 8));
                         datetime.setDate(datetime.getDate() + 1);
+                        datetime.setDate(datetime.getDate());
                         _db_entry.date = datetime;
 
                         var tagEls = document.querySelectorAll("#entryTags > li");
